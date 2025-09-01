@@ -22,9 +22,6 @@ final class DayLog {
 
     var didMove: Bool { !unwrappedItems.isEmpty }
 
-    var intensityScore: Double {
-        unwrappedItems.reduce(0) { $0 + $1.intensityScore }
-    }
 }
 
 enum UnitCategory: String, Codable, CaseIterable, Identifiable {
@@ -103,7 +100,6 @@ final class ExerciseItem {
         self.modifiedAt = Date()
     }
 
-    var intensityScore: Double { Double(intensity) }
 }
 
 extension Date {
@@ -132,4 +128,122 @@ struct SeedDefaults {
         ("Squats", 5.0, 0.25, 10.0, "figure.strengthtraining.functional"),
         ("Other", 4.0, 0.15, 10.0, "square.grid.2x2")
     ]
+}
+
+// MARK: - Services & Helpers (in-module to ensure inclusion in all targets)
+import SwiftData
+
+struct SeedService {
+    static func seedDefaultExercises(context: ModelContext) {
+        do {
+            let defaults = SeedDefaults.exerciseTypes
+            var existing = try context.fetch(FetchDescriptor<ExerciseType>())
+            for (rawName, met, repW, pace, icon) in defaults {
+                let name = rawName.trimmingCharacters(in: .whitespaces)
+                if existing.first(where: { $0.name.lowercased() == name.lowercased() }) == nil {
+                    let e = ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon)
+                    context.insert(e)
+                    existing.append(e)
+                }
+            }
+            try context.save()
+        } catch {
+            print("ERROR: SeedService.seedDefaultExercises failed: \(error)")
+        }
+    }
+
+    static func seedDefaultUnits(context: ModelContext) {
+        do {
+            let defaults = SeedDefaults.unitTypes
+            var existing = try context.fetch(FetchDescriptor<UnitType>())
+            for (rawName, rawAbbr, cat) in defaults {
+                let name = rawName.trimmingCharacters(in: .whitespaces)
+                let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
+                if let found = existing.first(where: { $0.name.lowercased() == name.lowercased() }) {
+                    if found.abbreviation.trimmingCharacters(in: .whitespaces).isEmpty {
+                        found.abbreviation = abbr
+                    }
+                } else {
+                    let u = UnitType(name: name, abbreviation: abbr, category: cat)
+                    context.insert(u)
+                    existing.append(u)
+                }
+            }
+            try context.save()
+        } catch {
+            print("ERROR: SeedService.seedDefaultUnits failed: \(error)")
+        }
+    }
+}
+
+struct DedupService {
+    static func cleanupDuplicateDayLogs(context: ModelContext) {
+        do {
+            let descriptor = FetchDescriptor<DayLog>(sortBy: [SortDescriptor(\.date)])
+            let allLogs = try context.fetch(descriptor)
+            let grouped = Dictionary(grouping: allLogs) { $0.date.startOfDay() }
+            var changed = false
+            for (_, dayLogs) in grouped where dayLogs.count > 1 {
+                let toKeep = dayLogs.first { !$0.unwrappedItems.isEmpty } ?? dayLogs.first!
+                for d in dayLogs where d !== toKeep {
+                    context.delete(d)
+                    changed = true
+                }
+            }
+            if changed { try context.save() }
+        } catch {
+            print("ERROR: DedupService.cleanupDuplicateDayLogs failed: \(error)")
+        }
+    }
+
+    static func cleanupDuplicateExerciseTypes(context: ModelContext) {
+        do {
+            let all = try context.fetch(FetchDescriptor<ExerciseType>())
+            let grouped = Dictionary(grouping: all) { $0.name.lowercased() }
+            var changed = false
+            for (_, duplicates) in grouped where duplicates.count > 1 {
+                let toKeep = duplicates.max { $0.createdAt < $1.createdAt } ?? duplicates.first!
+                for dup in duplicates where dup !== toKeep {
+                    if let items = dup.exerciseItems {
+                        for item in items { item.exercise = toKeep }
+                    }
+                    context.delete(dup)
+                    changed = true
+                }
+            }
+            if changed { try context.save() }
+        } catch {
+            print("ERROR: DedupService.cleanupDuplicateExerciseTypes failed: \(error)")
+        }
+    }
+
+    static func cleanupDuplicateUnitTypes(context: ModelContext) {
+        do {
+            let all = try context.fetch(FetchDescriptor<UnitType>())
+            let grouped = Dictionary(grouping: all) { $0.name.lowercased() }
+            var changed = false
+            for (_, duplicates) in grouped where duplicates.count > 1 {
+                let toKeep = duplicates.max { $0.createdAt < $1.createdAt } ?? duplicates.first!
+                for dup in duplicates where dup !== toKeep {
+                    if let items = dup.exerciseItems {
+                        for item in items { item.unit = toKeep }
+                    }
+                    context.delete(dup)
+                    changed = true
+                }
+            }
+            if changed { try context.save() }
+        } catch {
+            print("ERROR: DedupService.cleanupDuplicateUnitTypes failed: \(error)")
+        }
+    }
+}
+
+func stepForUnitCategory(_ category: UnitCategory?) -> Double {
+    switch category {
+    case .reps, .steps: return 1
+    case .distanceMi: return 0.1
+    case .minutes: return 0.5
+    default: return 0.5
+    }
 }

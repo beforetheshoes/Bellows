@@ -1,0 +1,82 @@
+{
+  "": {
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/master.swiftdeps"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/Analytics.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/AppRootView.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/BellowsApp.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/DayDetailView.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/DesignSystem.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/ExerciseSheets.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/HistoryView.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/HomeView.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/Models.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakHeaderView.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakVisuals.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.dia"
+  }
+}

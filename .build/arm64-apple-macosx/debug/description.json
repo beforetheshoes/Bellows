@@ -1,0 +1,851 @@
+{
+  "builtTestProducts" : [
+    {
+      "binaryPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.xctest/Contents/MacOS/BellowsPackageTests",
+      "packagePath" : "/Users/ryan/Developer/Swift/Bellows",
+      "productName" : "BellowsPackageTests"
+    }
+  ],
+  "copyCommands" : {
+
+  },
+  "explicitTargetDependencyImportCheckingMode" : {
+    "none" : {
+
+    }
+  },
+  "generatedSourceTargetSet" : [
+
+  ],
+  "pluginDescriptions" : [
+
+  ],
+  "swiftCommands" : {
+    "C.BellowsCore-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/sources",
+      "importPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/Analytics.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/AppRootView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/BellowsApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/DayDetailView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/DesignSystem.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/ExerciseSheets.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/HistoryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/HomeView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/Models.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakHeaderView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakVisuals.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "BellowsCore",
+      "moduleOutputPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsCore.swiftmodule",
+      "objects" : [
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/include/BellowsCore-Swift.h",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "bellows"
+      ],
+      "outputFileMapPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsCore.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/Analytics.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/AppRootView.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/BellowsApp.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/DayDetailView.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/DesignSystem.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/ExerciseSheets.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/HistoryView.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/HomeView.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/Models.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakHeaderView.swift",
+        "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakVisuals.swift"
+      ],
+      "tempsPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.BellowsCoreTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/sources",
+      "importPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/AnalyticsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/BellowsAppTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/DesignSystemTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ModelsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/StreakVisualsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ViewTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsCore.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "BellowsCoreTests",
+      "moduleOutputPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsCoreTests.swiftmodule",
+      "objects" : [
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.swift.o",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-swift-version",
+        "5",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "bellows"
+      ],
+      "outputFileMapPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsCoreTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/ryan/Developer/Swift/Bellows/BellowsTests/AnalyticsTests.swift",
+        "/Users/ryan/Developer/Swift/Bellows/BellowsTests/BellowsAppTests.swift",
+        "/Users/ryan/Developer/Swift/Bellows/BellowsTests/DesignSystemTests.swift",
+        "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ModelsTests.swift",
+        "/Users/ryan/Developer/Swift/Bellows/BellowsTests/StreakVisualsTests.swift",
+        "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ViewTests.swift"
+      ],
+      "tempsPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build",
+      "wholeModuleOptimization" : false
+    },
+    "C.BellowsPackageTests-arm64-apple-macosx26.0-debug.module" : {
+      "executable" : "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "fileList" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/sources",
+      "importPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules",
+      "inputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.derived/runner.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsCoreTests.swiftmodule"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/sources"
+        }
+      ],
+      "isLibrary" : true,
+      "moduleName" : "BellowsPackageTests",
+      "moduleOutputPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsPackageTests.swiftmodule",
+      "objects" : [
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/runner.swift.o"
+      ],
+      "otherArguments" : [
+        "-target",
+        "arm64-apple-macosx14.0",
+        "-incremental",
+        "-enable-batch-mode",
+        "-serialize-diagnostics",
+        "-index-store-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/index/store",
+        "-Onone",
+        "-enable-testing",
+        "-Xfrontend",
+        "-enable-cross-import-overlays",
+        "-j12",
+        "-DSWIFT_PACKAGE",
+        "-DDEBUG",
+        "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+        "-module-cache-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/ModuleCache",
+        "-parseable-output",
+        "-parse-as-library",
+        "-emit-objc-header",
+        "-emit-objc-header-path",
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/include/BellowsPackageTests-Swift.h",
+        "-I",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-L",
+        "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+        "-plugin-path",
+        "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+        "-sdk",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-g",
+        "-Xcc",
+        "-isysroot",
+        "-Xcc",
+        "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+        "-Xcc",
+        "-fPIC",
+        "-Xcc",
+        "-g",
+        "-package-name",
+        "bellows"
+      ],
+      "outputFileMapPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/output-file-map.json",
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/runner.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules/BellowsPackageTests.swiftmodule"
+        }
+      ],
+      "prepareForIndexing" : false,
+      "sources" : [
+        "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.derived/runner.swift"
+      ],
+      "tempsPath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build",
+      "wholeModuleOptimization" : false
+    }
+  },
+  "swiftFrontendCommands" : {
+
+  },
+  "swiftTargetScanArgs" : {
+    "BellowsCore" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "BellowsCore",
+      "-package-name",
+      "bellows",
+      "-c",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/Analytics.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/AppRootView.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/BellowsApp.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/DayDetailView.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/DesignSystem.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/ExerciseSheets.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/HistoryView.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/HomeView.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/Models.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakHeaderView.swift",
+      "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakVisuals.swift",
+      "-I",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/include/BellowsCore-Swift.h",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "bellows",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "BellowsCoreTests" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "BellowsCoreTests",
+      "-package-name",
+      "bellows",
+      "-c",
+      "/Users/ryan/Developer/Swift/Bellows/BellowsTests/AnalyticsTests.swift",
+      "/Users/ryan/Developer/Swift/Bellows/BellowsTests/BellowsAppTests.swift",
+      "/Users/ryan/Developer/Swift/Bellows/BellowsTests/DesignSystemTests.swift",
+      "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ModelsTests.swift",
+      "/Users/ryan/Developer/Swift/Bellows/BellowsTests/StreakVisualsTests.swift",
+      "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ViewTests.swift",
+      "-I",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-swift-version",
+      "5",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "bellows",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ],
+    "BellowsPackageTests" : [
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc",
+      "-module-name",
+      "BellowsPackageTests",
+      "-package-name",
+      "bellows",
+      "-c",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.derived/runner.swift",
+      "-I",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/Modules",
+      "-target",
+      "arm64-apple-macosx14.0",
+      "-incremental",
+      "-enable-batch-mode",
+      "-serialize-diagnostics",
+      "-index-store-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/index/store",
+      "-Onone",
+      "-enable-testing",
+      "-Xfrontend",
+      "-enable-cross-import-overlays",
+      "-j12",
+      "-DSWIFT_PACKAGE",
+      "-DDEBUG",
+      "-DSWIFT_MODULE_RESOURCE_BUNDLE_UNAVAILABLE",
+      "-module-cache-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/ModuleCache",
+      "-parseable-output",
+      "-parse-as-library",
+      "-emit-objc-header",
+      "-emit-objc-header-path",
+      "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/include/BellowsPackageTests-Swift.h",
+      "-I",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-L",
+      "/Library/Developer/CommandLineTools/Library/Developer/Frameworks",
+      "-plugin-path",
+      "/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing",
+      "-sdk",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-g",
+      "-Xcc",
+      "-isysroot",
+      "-Xcc",
+      "/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk",
+      "-Xcc",
+      "-fPIC",
+      "-Xcc",
+      "-g",
+      "-package-name",
+      "bellows",
+      "-driver-use-frontend-path",
+      "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+    ]
+  },
+  "targetDependencyMap" : {
+    "BellowsCore" : [
+
+    ],
+    "BellowsCoreTests" : [
+      "BellowsCore"
+    ],
+    "BellowsPackageTests" : [
+      "BellowsCoreTests",
+      "BellowsCore"
+    ]
+  },
+  "testDiscoveryCommands" : {
+
+  },
+  "testEntryPointCommands" : {
+    "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.derived/runner.swift" : {
+      "inputs" : [
+
+      ],
+      "outputs" : [
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.derived/runner.swift"
+        }
+      ]
+    }
+  },
+  "traitConfiguration" : {
+    "default" : {
+
+    }
+  },
+  "writeCommands" : {
+    "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/Analytics.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/AppRootView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/BellowsApp.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/DayDetailView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/DesignSystem.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/ExerciseSheets.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/HistoryView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/HomeView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/Models.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakHeaderView.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakVisuals.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/sources"
+    },
+    "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/AnalyticsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/BellowsAppTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/DesignSystemTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ModelsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/StreakVisualsTests.swift"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ViewTests.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/sources"
+    },
+    "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/sources" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<sources-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.derived/runner.swift"
+        }
+      ],
+      "outputFilePath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/sources"
+    },
+    "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.product/Objects.LinkFileList" : {
+      "alwaysOutOfDate" : false,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<link-file-list>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Analytics.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/AppRootView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/BellowsApp.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DayDetailView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/DesignSystem.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/ExerciseSheets.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HistoryView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/HomeView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakVisuals.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.swift.o"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/runner.swift.o"
+        }
+      ],
+      "outputFilePath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.product/Objects.LinkFileList"
+    },
+    "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt" : {
+      "alwaysOutOfDate" : true,
+      "inputs" : [
+        {
+          "kind" : "virtual",
+          "name" : "<swift-get-version>"
+        },
+        {
+          "kind" : "file",
+          "name" : "/Library/Developer/CommandLineTools/usr/bin/swiftc"
+        }
+      ],
+      "outputFilePath" : "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/swift-version--1AB21518FC5DEDBE.txt"
+    }
+  }
+}

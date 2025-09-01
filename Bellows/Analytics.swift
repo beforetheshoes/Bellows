@@ -4,7 +4,13 @@ struct Analytics {
     static func currentStreak(days: [DayLog], calendar: Calendar = .current) -> Int {
         let byDate = Dictionary(grouping: days, by: { $0.date.startOfDay(calendar: calendar) })
         var streak = 0
-        var d = Date().startOfDay(calendar: calendar)
+        let today = Date().startOfDay(calendar: calendar)
+        
+        // Start checking from yesterday, not today
+        // This allows today to be empty without breaking the streak
+        guard let yesterday = calendar.date(byAdding: .day, value: -1, to: today) else { return 0 }
+        
+        var d = yesterday
         while true {
             if let logs = byDate[d], logs.first?.didMove == true {
                 streak += 1
@@ -14,6 +20,12 @@ struct Analytics {
                 break
             }
         }
+        
+        // If today has activity, include it in the streak
+        if let todayLogs = byDate[today], todayLogs.first?.didMove == true {
+            streak += 1
+        }
+        
         return streak
     }
 

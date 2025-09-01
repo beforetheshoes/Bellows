@@ -25,67 +25,82 @@ struct AppRootView: View {
 
     // Idempotent seeding: ensure defaults exist without creating duplicates.
     private func seedDefaultsIfNeeded() {
-        seedDefaultExercises()
-        seedDefaultUnits()
-    }
-
-    private func seedDefaultExercises() {
-        // Ensure each default exists (case-insensitive by name)
-        let defaults = SeedDefaults.exerciseTypes
-
-        for (rawName, met, repW, pace, icon) in defaults {
-            let name = rawName.trimmingCharacters(in: .whitespaces)
-            if let existing = exerciseTypes.first(where: { $0.name.lowercased() == name.lowercased() }) {
-                _ = existing // already present; avoid duplicate
-            } else {
-                let e = ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon)
-                modelContext.insert(e)
-            }
-        }
-        do { try modelContext.save() } catch { print("ERROR: Seed exercises save failed: \(error)") }
-    }
-
-    private func seedDefaultUnits() {
-        // Ensure each default exists (case-insensitive by name). If present but abbreviation empty, fill it in.
-        let defaults = SeedDefaults.unitTypes
-
-        for (rawName, rawAbbr, cat) in defaults {
-            let name = rawName.trimmingCharacters(in: .whitespaces)
-            let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
-            if let existing = unitTypes.first(where: { $0.name.lowercased() == name.lowercased() }) {
-                if existing.abbreviation.trimmingCharacters(in: .whitespaces).isEmpty {
-                    existing.abbreviation = abbr
-                }
-                // Keep existing category to respect user edits
-            } else {
-                let u = UnitType(name: name, abbreviation: abbr, category: cat)
-                modelContext.insert(u)
-            }
-        }
-        do { try modelContext.save() } catch { print("ERROR: Seed units save failed: \(error)") }
+        SeedService.seedDefaultExercises(context: modelContext)
+        SeedService.seedDefaultUnits(context: modelContext)
     }
 }
 
 @MainActor
+func __test_seed_defaults(context: ModelContext) {
+    SeedService.seedDefaultExercises(context: context)
+    SeedService.seedDefaultUnits(context: context)
+}
+
+@MainActor
+func __test_cleanup_daylogs(context: ModelContext) {
+    DedupService.cleanupDuplicateDayLogs(context: context)
+}
+
+@MainActor
 private struct PhoneLayout: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         TabView {
-            HomeView()
+            NavigationStack {
+                HomeView()
+            }
                 .tabItem { Label("Today", systemImage: "sun.max.fill") }
-            HistoryView()
+            NavigationStack {
+                HistoryView()
+                    .navigationDestination(for: Date.self) { date in
+                        DayDetailView(date: date)
+                    }
+            }
                 .tabItem { Label("History", systemImage: "calendar") }
         }
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                // Clean up any duplicates that might have been created by CloudKit sync
+                DedupService.cleanupDuplicateDayLogs(context: modelContext)
+                DedupService.cleanupDuplicateExerciseTypes(context: modelContext)
+                DedupService.cleanupDuplicateUnitTypes(context: modelContext)
+            }
+        }
+    }
+    
+    private func cleanupAllDuplicateDayLogs() {
+        DedupService.cleanupDuplicateDayLogs(context: modelContext)
     }
 }
 
 @MainActor
 private struct SplitLayout: View {
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         NavigationSplitView {
             HistoryView()
+                .navigationDestination(for: Date.self) { date in
+                    DayDetailView(date: date)
+                }
         } detail: {
             HomeView()
         }
         .navigationSplitViewColumnWidth(min: 260, ideal: 300, max: 360)
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                // Clean up any duplicates that might have been created by CloudKit sync
+                DedupService.cleanupDuplicateDayLogs(context: modelContext)
+                DedupService.cleanupDuplicateExerciseTypes(context: modelContext)
+                DedupService.cleanupDuplicateUnitTypes(context: modelContext)
+            }
+        }
+    }
+    
+    private func cleanupAllDuplicateDayLogs() {
+        DedupService.cleanupDuplicateDayLogs(context: modelContext)
     }
 }

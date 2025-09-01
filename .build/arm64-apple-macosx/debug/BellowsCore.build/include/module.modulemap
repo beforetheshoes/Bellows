@@ -1,0 +1,3 @@
+module BellowsCore {
+    header "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/include/BellowsCore-Swift.h"
+}

@@ -1,0 +1,47 @@
+{
+  "": {
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/master.swiftdeps"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/BellowsTests/AnalyticsTests.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/AnalyticsTests.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/BellowsTests/BellowsAppTests.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/BellowsAppTests.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/BellowsTests/DesignSystemTests.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/DesignSystemTests.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ModelsTests.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ModelsTests.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/BellowsTests/StreakVisualsTests.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/StreakVisualsTests.dia"
+  },
+  "/Users/ryan/Developer/Swift/Bellows/BellowsTests/ViewTests.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCoreTests.build/ViewTests.dia"
+  }
+}

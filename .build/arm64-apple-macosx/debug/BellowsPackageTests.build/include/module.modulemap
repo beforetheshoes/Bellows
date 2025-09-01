@@ -1,0 +1,3 @@
+module BellowsPackageTests {
+    header "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsPackageTests.build/include/BellowsPackageTests-Swift.h"
+}
