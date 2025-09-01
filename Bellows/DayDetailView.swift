@@ -93,6 +93,10 @@ struct DayDetailView: View {
                             Text(label(for: item))
                                 .font(.body)
                             
+                            Text(timeString(item.createdAt))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            
                             if let note = item.note, !note.isEmpty {
                                 Text(note)
                                     .font(.caption)
@@ -189,6 +193,12 @@ struct DayDetailView: View {
         let formatter = DateFormatter()
         formatter.dateStyle = .full
         return formatter.string(from: date)
+    }
+    
+    private func timeString(_ d: Date) -> String {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f.string(from: d)
     }
     
     private func dailyAverages(for dayLog: DayLog) -> (enjoyment: Double, intensity: Double)? {

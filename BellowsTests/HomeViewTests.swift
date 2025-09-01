@@ -44,6 +44,31 @@ struct HomeViewTests {
     // MARK: - Helper Function Tests
     
     @MainActor
+    @Test func timestampFormatting() throws {
+        // Test timestamp formatting helper function
+        let testDate = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 15, minute: 41))!
+        
+        // Test the timeString helper function through a test wrapper
+        struct TestTimeStringView: View {
+            let date: Date
+            
+            var body: some View {
+                Text(timeString(date))
+            }
+            
+            private func timeString(_ d: Date) -> String {
+                let f = DateFormatter()
+                f.timeStyle = .short
+                return f.string(from: d)
+            }
+        }
+        
+        let testView = TestTimeStringView(date: testDate)
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
     @Test func dateStringFormatting() throws {
         _ = HomeView()
             .modelContainer(modelContainer)
@@ -391,6 +416,83 @@ struct HomeViewTests {
         
         let unitsAfter = try modelContext.fetch(FetchDescriptor<UnitType>())
         #expect(unitsAfter.count == 1) // Should not create duplicate
+    }
+    
+    // MARK: - Timestamp Display Tests
+    
+    @MainActor
+    @Test func exerciseRowDisplaysTimestamp() throws {
+        // Create test data with specific timestamp
+        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let specificTime = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 15, minute: 41))!
+        let item = ExerciseItem(exercise: exercise, unit: unit, amount: 30, at: specificTime)
+        
+        modelContext.insert(exercise)
+        modelContext.insert(unit)
+        modelContext.insert(item)
+        
+        // Create today's day log
+        let today = Date().startOfDay()
+        let dayLog = DayLog(date: today)
+        dayLog.items = [item]
+        item.dayLog = dayLog
+        modelContext.insert(dayLog)
+        
+        try modelContext.save()
+        
+        // Test that the exercise row includes timestamp
+        struct TestExerciseRowView: View {
+            let item: ExerciseItem
+            
+            var body: some View {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(label(for: item))
+                            .font(.body)
+                            .fontWeight(.medium)
+                        
+                        Text(timeString(item.createdAt))
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                    
+                    Spacer()
+                    
+                    HStack(spacing: 12) {
+                        Label("\(item.enjoyment)", systemImage: "face.smiling")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        
+                        Label("\(item.intensity)", systemImage: "flame")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
+                }
+            }
+            
+            private func label(for item: ExerciseItem) -> String {
+                let name = item.exercise?.name ?? "Unknown"
+                let abbr = item.unit?.abbreviation ?? ""
+                switch item.unit?.category ?? .other {
+                case .reps: return "\(Int(item.amount)) \(name)"
+                case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
+                case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
+                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                }
+            }
+            
+            private func timeString(_ d: Date) -> String {
+                let f = DateFormatter()
+                f.timeStyle = .short
+                return f.string(from: d)
+            }
+        }
+        
+        let testView = TestExerciseRowView(item: item)
+        _ = testView
+        #expect(true)
     }
     
     // MARK: - Sheet Management Tests

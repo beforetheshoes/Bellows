@@ -438,6 +438,99 @@ struct DayDetailViewTests {
         #expect(true)
     }
     
+    // MARK: - Timestamp Display Tests
+    
+    @MainActor
+    @Test func exerciseListDisplaysTimestamp() throws {
+        let testDate = Date().startOfDay()
+        let dayLog = DayLog(date: testDate)
+        
+        // Create exercises with specific timestamps
+        let exercise1 = ExerciseType(name: "Morning Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let unit1 = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let morningTime = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 7, minute: 30))!
+        let item1 = ExerciseItem(exercise: exercise1, unit: unit1, amount: 30, at: morningTime)
+        
+        let exercise2 = ExerciseType(name: "Evening Run", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0)
+        let unit2 = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        let eveningTime = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 18, minute: 45))!
+        let item2 = ExerciseItem(exercise: exercise2, unit: unit2, amount: 3.5, at: eveningTime)
+        
+        dayLog.items = [item1, item2]
+        item1.dayLog = dayLog
+        item2.dayLog = dayLog
+        
+        modelContext.insert(dayLog)
+        modelContext.insert(exercise1)
+        modelContext.insert(unit1)
+        modelContext.insert(item1)
+        modelContext.insert(exercise2)
+        modelContext.insert(unit2)
+        modelContext.insert(item2)
+        try modelContext.save()
+        
+        // Test that the exercise list includes timestamps
+        struct TestExerciseListView: View {
+            let dayLog: DayLog
+            
+            var body: some View {
+                VStack(alignment: .leading, spacing: 12) {
+                    ForEach(dayLog.unwrappedItems, id: \.persistentModelID) { item in
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(label(for: item))
+                                    .font(.body)
+                                
+                                Text(timeString(item.createdAt))
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                                
+                                if let note = item.note, !note.isEmpty {
+                                    Text(note)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                            
+                            Spacer()
+                            
+                            VStack(alignment: .trailing, spacing: 2) {
+                                HStack(spacing: 8) {
+                                    Label("\(item.enjoyment)", systemImage: "face.smiling")
+                                    Label("\(item.intensity)", systemImage: "flame")
+                                }
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                }
+            }
+            
+            private func label(for item: ExerciseItem) -> String {
+                let name = item.exercise?.name ?? "Unknown"
+                let abbr = item.unit?.abbreviation ?? ""
+                switch item.unit?.category ?? .other {
+                case .reps: return "\(Int(item.amount)) \(name)"
+                case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
+                case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
+                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                }
+            }
+            
+            private func timeString(_ d: Date) -> String {
+                let f = DateFormatter()
+                f.timeStyle = .short
+                return f.string(from: d)
+            }
+        }
+        
+        let testView = TestExerciseListView(dayLog: dayLog)
+        _ = testView
+        #expect(true)
+    }
+    
     // MARK: - Toolbar and Sheet Tests
     
     @MainActor

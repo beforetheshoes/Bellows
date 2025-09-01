@@ -116,6 +116,10 @@ struct HomeView: View {
                     .font(.body)
                     .fontWeight(.medium)
                 
+                Text(timeString(item.createdAt))
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                
                 if let note = item.note, !note.isEmpty {
                     Text(note)
                         .font(.caption)
@@ -245,6 +249,12 @@ struct HomeView: View {
 
     private func dateString(_ d: Date) -> String {
         let f = DateFormatter(); f.dateStyle = .full; return f.string(from: d)
+    }
+    
+    private func timeString(_ d: Date) -> String {
+        let f = DateFormatter()
+        f.timeStyle = .short
+        return f.string(from: d)
     }
 }
 
