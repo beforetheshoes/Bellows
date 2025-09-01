@@ -130,11 +130,11 @@ struct HomeView: View {
             Spacer()
             
             HStack(spacing: 12) {
-                Label("\(item.enjoyment)", systemImage: "face.smiling")
+                Label("\(item.enjoyment)", systemImage: "face.smiling.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
                 
-                Label("\(item.intensity)", systemImage: "flame")
+                Label("\(item.intensity)", systemImage: "flame.fill")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

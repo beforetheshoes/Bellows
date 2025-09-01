@@ -496,8 +496,8 @@ struct DayDetailViewTests {
                             
                             VStack(alignment: .trailing, spacing: 2) {
                                 HStack(spacing: 8) {
-                                    Label("\(item.enjoyment)", systemImage: "face.smiling")
-                                    Label("\(item.intensity)", systemImage: "flame")
+                                    Label("\(item.enjoyment)", systemImage: "face.smiling.fill")
+                                    Label("\(item.intensity)", systemImage: "flame.fill")
                                 }
                                 .font(.caption)
                                 .foregroundStyle(.secondary)

@@ -108,8 +108,8 @@ struct DayDetailView: View {
                         
                         VStack(alignment: .trailing, spacing: 2) {
                             HStack(spacing: 8) {
-                                Label("\(item.enjoyment)", systemImage: "face.smiling")
-                                Label("\(item.intensity)", systemImage: "flame")
+                                Label("\(item.enjoyment)", systemImage: "face.smiling.fill")
+                                Label("\(item.intensity)", systemImage: "flame.fill")
                             }
                             .font(.caption)
                             .foregroundStyle(.secondary)
@@ -154,7 +154,7 @@ struct DayDetailView: View {
                     Text("Average Enjoyment")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Label(String(format: "%.1f", averages.enjoyment), systemImage: "face.smiling")
+                    Label(String(format: "%.1f", averages.enjoyment), systemImage: "face.smiling.fill")
                         .font(.title3)
                         .fontWeight(.medium)
                 }
@@ -163,7 +163,7 @@ struct DayDetailView: View {
                     Text("Average Intensity")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Label(String(format: "%.1f", averages.intensity), systemImage: "flame")
+                    Label(String(format: "%.1f", averages.intensity), systemImage: "flame.fill")
                         .font(.title3)
                         .fontWeight(.medium)
                 }

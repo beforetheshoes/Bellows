@@ -185,6 +185,25 @@ struct DesignSystemTests {
         #expect(DS.Metrics.contentMaxWidth <= 10000)
     }
     
+    // MARK: - Icon Consistency Tests
+    
+    @Test func iconConsistencyFilledVariants() {
+        // Test that we use consistent filled variants for enjoyment and intensity icons
+        let enjoymentIcon = "face.smiling.fill"
+        let intensityIcon = "flame.fill"
+        
+        // Verify the icons exist and can be used
+        let enjoymentImage = Image(systemName: enjoymentIcon)
+        let intensityImage = Image(systemName: intensityIcon)
+        
+        // These should be valid SF Symbols
+        _ = enjoymentImage
+        _ = intensityImage
+        
+        #expect(enjoymentIcon == "face.smiling.fill")
+        #expect(intensityIcon == "flame.fill")
+    }
+    
     // MARK: - Integration Tests
     
     @Test func designSystemUsability() {

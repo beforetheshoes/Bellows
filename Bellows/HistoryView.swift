@@ -29,14 +29,14 @@ struct HistoryView: View {
                                         Text("\(dateString(day.date))")
                                             .font(.body)
                                         Spacer()
-                                        Label("\(Int(round(avgs.enjoyment)))", systemImage: "face.smiling")
+                                        Label("\(Int(round(avgs.enjoyment)))", systemImage: "face.smiling.fill")
                                     }
                                     HStack {
                                         Text("\(day.unwrappedItems.count) logged exercises")
                                             .font(.footnote)
                                             .foregroundStyle(.secondary)
                                         Spacer()
-                                        Label("\(Int(round(avgs.intensity)))", systemImage: "flame")
+                                        Label("\(Int(round(avgs.intensity)))", systemImage: "flame.fill")
                                     }
                                 } else {
                                     Text(dateString(day.date))
@@ -81,14 +81,14 @@ struct HistoryView: View {
                                     Text("\(dateString(day.date))")
                                         .font(.body)
                                     Spacer()
-                                    Label("\(Int(round(avgs.enjoyment)))", systemImage: "face.smiling")
+                                    Label("\(Int(round(avgs.enjoyment)))", systemImage: "face.smiling.fill")
                                 }
                                 HStack {
                                     Text("\(day.unwrappedItems.count) logged exercises")
                                         .font(.footnote)
                                         .foregroundStyle(.secondary)
                                     Spacer()
-                                    Label("\(Int(round(avgs.intensity)))", systemImage: "flame")
+                                    Label("\(Int(round(avgs.intensity)))", systemImage: "flame.fill")
                                 }
                             } else {
                                 Text(dateString(day.date))

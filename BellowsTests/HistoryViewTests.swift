@@ -464,7 +464,7 @@ struct HistoryViewTests {
                 VStack {
                     // Avoid binding an unused value; only check boolean condition
                     if dailyAverages(for: dayLog) != nil {
-                        HStack { Label("OK", systemImage: "face.smiling"); Label("OK", systemImage: "flame") }
+                        HStack { Label("OK", systemImage: "face.smiling.fill"); Label("OK", systemImage: "flame.fill") }
                     }
                 }
             }
