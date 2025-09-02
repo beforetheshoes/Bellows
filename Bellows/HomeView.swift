@@ -70,7 +70,7 @@ struct HomeView: View {
     }
 
     private var streakHeader: some View {
-        StreakHeaderView(streak: Analytics.currentStreak(days: logs))
+        StreakHeaderView(streak: Analytics.currentStreak(days: logs), days: logs)
     }
     
     private var logExerciseButton: some View {

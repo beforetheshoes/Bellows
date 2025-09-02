@@ -105,14 +105,14 @@ struct ViewTests {
     
     @MainActor
     @Test func streakHeaderViewInitialization() {
-        let streakHeaderView = StreakHeaderView(streak: 5)
+        let streakHeaderView = StreakHeaderView(streak: 5, days: [])
         
         #expect(streakHeaderView.streak == 5)
     }
     
     @MainActor
     @Test func streakHeaderViewZeroStreak() {
-        let streakHeaderView = StreakHeaderView(streak: 0)
+        let streakHeaderView = StreakHeaderView(streak: 0, days: [])
         
         #expect(streakHeaderView.streak == 0)
         
@@ -123,7 +123,7 @@ struct ViewTests {
     
     @MainActor
     @Test func streakHeaderViewLargeStreak() {
-        let streakHeaderView = StreakHeaderView(streak: 365)
+        let streakHeaderView = StreakHeaderView(streak: 365, days: [])
         
         #expect(streakHeaderView.streak == 365)
         
@@ -133,7 +133,7 @@ struct ViewTests {
     
     @MainActor
     @Test func streakHeaderViewNegativeValues() {
-        let streakHeaderView = StreakHeaderView(streak: -5)
+        let streakHeaderView = StreakHeaderView(streak: -5, days: [])
         
         #expect(streakHeaderView.streak == -5)
         
@@ -265,7 +265,7 @@ struct ViewTests {
         let homeView = HomeView().modelContainer(modelContainer)
         let historyView = HistoryView().modelContainer(modelContainer)
         let dayDetailView = DayDetailView(date: Date()).modelContainer(modelContainer)
-        let streakView = StreakHeaderView(streak: 10)
+        let streakView = StreakHeaderView(streak: 10, days: [])
         
         // Test view creation without accessing body on @Query views
         _ = homeView

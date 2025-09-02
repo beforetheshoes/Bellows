@@ -3,6 +3,7 @@ import SwiftUI
 @MainActor
 struct StreakHeaderView: View {
     let streak: Int
+    let days: [DayLog]
 
     @State private var rotate = false
     @State private var lastStreak: Int = 0
@@ -13,8 +14,7 @@ struct StreakHeaderView: View {
     @State private var innerGlow: Double = 0.0
 
     private var emberIntensity: Double {
-        if streak == 0 { return 0.0 }
-        return min(1.0, Double(streak) / 30.0) // Full intensity at 30 days
+        return Analytics.enhancedEmberIntensity(streak: streak, days: days)
     }
 
     private var emberColors: [Color] {
