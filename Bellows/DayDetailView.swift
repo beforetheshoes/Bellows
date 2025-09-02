@@ -5,6 +5,7 @@ import SwiftData
 struct DayDetailView: View {
     let date: Date
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.dismiss) private var dismiss
     @Query private var logs: [DayLog]
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
@@ -72,6 +73,14 @@ struct DayDetailView: View {
                     Image(systemName: "plus")
                 }
             }
+            #if os(macOS)
+            ToolbarItem(placement: .navigation) {
+                Button("Today") {
+                    dismiss()
+                }
+                .help("Return to Today view")
+            }
+            #endif
         }
         .sheet(item: $editingItem) { item in
             EditExerciseItemSheet(item: item)

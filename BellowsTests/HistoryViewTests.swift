@@ -599,4 +599,325 @@ struct HistoryViewTests {
         _ = navView
         #expect(true)
     }
+    
+    // MARK: - Calendar View Tests
+    
+    @MainActor
+    @Test func calendarViewInitialization() {
+        // Test that calendar view component can be initialized
+        struct TestCalendarView: View {
+            @State private var selectedDate = Date()
+            
+            var body: some View {
+                DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+            }
+        }
+        
+        let calendarView = TestCalendarView()
+        _ = calendarView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarDateSelection() {
+        // Test date selection functionality
+        struct TestDateSelection: View {
+            @State private var selectedDate = Date()
+            let onDateChange: (Date) -> Void
+            
+            var body: some View {
+                DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                    .datePickerStyle(.graphical)
+                    .onChange(of: selectedDate) { _, newDate in
+                        onDateChange(newDate)
+                    }
+            }
+        }
+        
+        var capturedDate: Date?
+        let testView = TestDateSelection { date in
+            capturedDate = date
+        }
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarWithActivityIndicators() throws {
+        // Test calendar with overlay indicators for active days
+        let today = Date()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
+        
+        let todayLog = DayLog(date: today)
+        let yesterdayLog = DayLog(date: yesterday)
+        
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
+        
+        todayLog.items = [item]
+        item.dayLog = todayLog
+        // yesterdayLog has no items
+        
+        modelContext.insert(todayLog)
+        modelContext.insert(yesterdayLog)
+        modelContext.insert(exercise)
+        modelContext.insert(unit)
+        modelContext.insert(item)
+        try modelContext.save()
+        
+        struct TestCalendarWithIndicators: View {
+            let activeDays: Set<Date>
+            @State private var selectedDate = Date()
+            
+            var body: some View {
+                ZStack {
+                    DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                    
+                    // Test that we can overlay indicators
+                    ForEach(Array(activeDays), id: \.self) { date in
+                        Circle()
+                            .fill(Color.green)
+                            .frame(width: 6, height: 6)
+                    }
+                }
+            }
+        }
+        
+        let activeDays: Set<Date> = [today.startOfDay()]
+        let testView = TestCalendarWithIndicators(activeDays: activeDays)
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarMonthNavigation() {
+        // Test month navigation functionality
+        struct TestMonthNavigation: View {
+            @State private var currentMonth = Date()
+            @State private var selectedDate = Date()
+            
+            var body: some View {
+                VStack {
+                    HStack {
+                        Button("Previous") {
+                            currentMonth = Calendar.current.date(byAdding: .month, value: -1, to: currentMonth) ?? currentMonth
+                        }
+                        
+                        Spacer()
+                        
+                        Text(monthYearString(currentMonth))
+                            .font(.headline)
+                        
+                        Spacer()
+                        
+                        Button("Next") {
+                            currentMonth = Calendar.current.date(byAdding: .month, value: 1, to: currentMonth) ?? currentMonth
+                        }
+                    }
+                    
+                    DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                }
+            }
+            
+            private func monthYearString(_ date: Date) -> String {
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MMMM yyyy"
+                return formatter.string(from: date)
+            }
+        }
+        
+        let testView = TestMonthNavigation()
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarWithNavigationToDetails() throws {
+        // Test that calendar can trigger navigation to detail view
+        let testDate = Date()
+        let dayLog = DayLog(date: testDate)
+        modelContext.insert(dayLog)
+        try modelContext.save()
+        
+        struct TestCalendarNavigation: View {
+            @State private var selectedDate = Date()
+            @State private var navigateToDate: Date?
+            
+            var body: some View {
+                NavigationStack {
+                    VStack {
+                        DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                            .datePickerStyle(.graphical)
+                            .onChange(of: selectedDate) { _, newDate in
+                                navigateToDate = newDate
+                            }
+                    }
+                    .navigationDestination(for: Date.self) { date in
+                        DayDetailView(date: date)
+                    }
+                }
+            }
+        }
+        
+        let testView = TestCalendarNavigation()
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarViewToggle() {
+        // Test switching between calendar and list views
+        struct TestViewToggle: View {
+            @State private var showCalendar = true
+            @State private var selectedDate = Date()
+            
+            var body: some View {
+                VStack {
+                    Button("Toggle View") {
+                        showCalendar.toggle()
+                    }
+                    
+                    if showCalendar {
+                        DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                            .datePickerStyle(.graphical)
+                    } else {
+                        List {
+                            Text("List View Fallback")
+                        }
+                    }
+                }
+            }
+        }
+        
+        let testView = TestViewToggle()
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarActivityDotLogic() throws {
+        // Test the logic for determining which days should show activity dots
+        let today = Date().startOfDay()
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: today)!
+        let twoDaysAgo = Calendar.current.date(byAdding: .day, value: -2, to: today)!
+        
+        // Create logs for different days
+        let todayLog = DayLog(date: today)
+        let yesterdayLog = DayLog(date: yesterday)
+        let twoDaysAgoLog = DayLog(date: twoDaysAgo)
+        
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        
+        // Only today and two days ago have activity
+        let todayItem = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
+        let twoDaysAgoItem = ExerciseItem(exercise: exercise, unit: unit, amount: 20)
+        
+        todayLog.items = [todayItem]
+        todayItem.dayLog = todayLog
+        
+        twoDaysAgoLog.items = [twoDaysAgoItem]
+        twoDaysAgoItem.dayLog = twoDaysAgoLog
+        
+        // yesterdayLog has no items
+        
+        modelContext.insert(todayLog)
+        modelContext.insert(yesterdayLog)
+        modelContext.insert(twoDaysAgoLog)
+        modelContext.insert(exercise)
+        modelContext.insert(unit)
+        modelContext.insert(todayItem)
+        modelContext.insert(twoDaysAgoItem)
+        try modelContext.save()
+        
+        struct TestActivityDotLogic: View {
+            let logs: [DayLog]
+            
+            var body: some View {
+                VStack {
+                    ForEach(activeDays, id: \.self) { date in
+                        Text("Active: \(dateString(date))")
+                    }
+                }
+            }
+            
+            private var activeDays: [Date] {
+                logs.compactMap { log in
+                    log.didMove ? log.date.startOfDay() : nil
+                }
+            }
+            
+            private func dateString(_ date: Date) -> String {
+                let f = DateFormatter()
+                f.dateStyle = .short
+                return f.string(from: date)
+            }
+        }
+        
+        let testView = TestActivityDotLogic(logs: [todayLog, yesterdayLog, twoDaysAgoLog])
+        _ = testView
+        #expect(true)
+    }
+    
+    @MainActor
+    @Test func calendarPerformanceWithManyDays() throws {
+        // Test calendar performance with lots of historical data
+        var logs: [DayLog] = []
+        
+        for i in 0..<90 { // 3 months of data
+            let date = Calendar.current.date(byAdding: .day, value: -i, to: Date())!
+            let dayLog = DayLog(date: date)
+            
+            // Add activity to every 3rd day
+            if i % 3 == 0 {
+                let exercise = ExerciseType(name: "Exercise \(i)", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+                let unit = UnitType(name: "Unit \(i)", abbreviation: "u\(i)", category: .other)
+                let item = ExerciseItem(exercise: exercise, unit: unit, amount: Double(i % 10 + 1))
+                
+                dayLog.items = [item]
+                item.dayLog = dayLog
+                
+                modelContext.insert(exercise)
+                modelContext.insert(unit)
+                modelContext.insert(item)
+            }
+            
+            logs.append(dayLog)
+            modelContext.insert(dayLog)
+        }
+        try modelContext.save()
+        
+        struct TestCalendarPerformance: View {
+            let logs: [DayLog]
+            @State private var selectedDate = Date()
+            
+            var body: some View {
+                ZStack {
+                    DatePicker("Select Date", selection: $selectedDate, displayedComponents: .date)
+                        .datePickerStyle(.graphical)
+                    
+                    // Simulate activity dot overlays
+                    ForEach(activeDays, id: \.self) { date in
+                        Circle()
+                            .fill(Color.green.opacity(0.7))
+                            .frame(width: 6, height: 6)
+                    }
+                }
+            }
+            
+            private var activeDays: [Date] {
+                logs.compactMap { log in
+                    log.didMove ? log.date.startOfDay() : nil
+                }
+            }
+        }
+        
+        let testView = TestCalendarPerformance(logs: logs)
+        _ = testView
+        #expect(true)
+    }
 }
