@@ -640,7 +640,11 @@ struct HistoryViewTests {
             capturedDate = date
         }
         _ = testView
-        #expect(true)
+        
+        // Simulate date change to verify callback works
+        let expectedDate = Date()
+        testView.onDateChange(expectedDate)
+        #expect(capturedDate == expectedDate)
     }
     
     @MainActor
