@@ -56,11 +56,11 @@ struct AppRootViewTests {
         try modelContext.save()
 
         // Perform seeding explicitly (independent of SwiftUI lifecycle)
-        for (rawName, met, repW, pace, icon) in SeedDefaults.exerciseTypes {
+        for (rawName, met, repW, pace, icon, _) in SeedDefaults.exerciseTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let fetch = try modelContext.fetch(FetchDescriptor<ExerciseType>())
             if fetch.first(where: { $0.name.lowercased() == name.lowercased() }) == nil {
-                let e = ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon)
+                let e = ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon, defaultUnit: nil)
                 modelContext.insert(e)
             }
         }
@@ -86,7 +86,7 @@ struct AppRootViewTests {
         try modelContext.save()
 
         // Perform seeding explicitly (independent of SwiftUI lifecycle)
-        for (rawName, rawAbbr, cat) in SeedDefaults.unitTypes {
+        for (rawName, rawAbbr, stepSize, displayAsInteger) in SeedDefaults.unitTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
             let fetch = try modelContext.fetch(FetchDescriptor<UnitType>())
@@ -95,7 +95,7 @@ struct AppRootViewTests {
                     existing.abbreviation = abbr
                 }
             } else {
-                let u = UnitType(name: name, abbreviation: abbr, category: cat)
+                let u = UnitType(name: name, abbreviation: abbr, stepSize: stepSize, displayAsInteger: displayAsInteger)
                 modelContext.insert(u)
             }
         }
@@ -152,28 +152,28 @@ struct AppRootViewTests {
             .modelContainer(modelContainer)
 
         // Create some existing data first
-        let existingExercise = ExerciseType(name: "Custom Exercise", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let existingUnit = UnitType(name: "Custom Unit", abbreviation: "cu", category: .other)
+        let existingExercise = ExerciseType(name: "Custom Exercise", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let existingUnit = UnitType(name: "Custom Unit", abbreviation: "cu", stepSize: 1.0, displayAsInteger: false)
         modelContext.insert(existingExercise)
         modelContext.insert(existingUnit)
         try modelContext.save()
 
         // Run seeding explicitly
-        for (rawName, met, repW, pace, icon) in SeedDefaults.exerciseTypes {
+        for (rawName, met, repW, pace, icon, _) in SeedDefaults.exerciseTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let fetch = try modelContext.fetch(FetchDescriptor<ExerciseType>())
             if fetch.first(where: { $0.name.lowercased() == name.lowercased() }) == nil {
-                modelContext.insert(ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon))
+                modelContext.insert(ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon, defaultUnit: nil))
             }
         }
-        for (rawName, rawAbbr, cat) in SeedDefaults.unitTypes {
+        for (rawName, rawAbbr, stepSize, displayAsInteger) in SeedDefaults.unitTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
             let fetch = try modelContext.fetch(FetchDescriptor<UnitType>())
             if let existing = fetch.first(where: { $0.name.lowercased() == name.lowercased() }) {
                 if existing.abbreviation.trimmingCharacters(in: .whitespaces).isEmpty { existing.abbreviation = abbr }
             } else {
-                modelContext.insert(UnitType(name: name, abbreviation: abbr, category: cat))
+                modelContext.insert(UnitType(name: name, abbreviation: abbr, stepSize: stepSize, displayAsInteger: displayAsInteger))
             }
         }
         try modelContext.save()
@@ -192,12 +192,12 @@ struct AppRootViewTests {
             .modelContainer(modelContainer)
 
         // Create an existing unit with empty abbreviation (should be filled)
-        let existingUnit = UnitType(name: "Minutes", abbreviation: "", category: .other)
+        let existingUnit = UnitType(name: "Minutes", abbreviation: "", stepSize: 1.0, displayAsInteger: false)
         modelContext.insert(existingUnit)
         try modelContext.save()
 
         // Seeding should fill blank abbreviation
-        for (rawName, rawAbbr, cat) in SeedDefaults.unitTypes {
+        for (rawName, rawAbbr, stepSize, displayAsInteger) in SeedDefaults.unitTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
             let fetch = try modelContext.fetch(FetchDescriptor<UnitType>())
@@ -205,7 +205,7 @@ struct AppRootViewTests {
                 if existing.abbreviation.trimmingCharacters(in: .whitespaces).isEmpty { existing.abbreviation = abbr }
                 // Respect existing category edits
             } else {
-                modelContext.insert(UnitType(name: name, abbreviation: abbr, category: cat))
+                modelContext.insert(UnitType(name: name, abbreviation: abbr, stepSize: stepSize, displayAsInteger: displayAsInteger))
             }
         }
         try modelContext.save()
@@ -276,11 +276,13 @@ struct AppRootViewTests {
         #expect(unitTypes.count > 0)
         
         // Verify structure matches what seeding expects
-        for (name, _, category) in unitTypes {
+        for (name, _, stepSize, displayAsInteger) in unitTypes {
             #expect(!name.isEmpty)
             // abbreviation can be empty
-            // category should be valid UnitCategory
-            _ = category
+            // stepSize should be positive
+            #expect(stepSize > 0)
+            // displayAsInteger should be bool
+            _ = displayAsInteger
         }
     }
     
@@ -290,13 +292,15 @@ struct AppRootViewTests {
         #expect(exerciseTypes.count > 0)
         
         // Verify structure matches what seeding expects
-        for (name, met, repWeight, pace, icon) in exerciseTypes {
+        for (name, met, repWeight, pace, icon, defaultUnit) in exerciseTypes {
             #expect(!name.isEmpty)
             #expect(met > 0)
             #expect(repWeight > 0)
             #expect(pace > 0)
             // icon can be nil
             _ = icon
+            // defaultUnit can be nil
+            _ = defaultUnit
         }
     }
     
@@ -330,18 +334,18 @@ struct AppRootViewTests {
         try modelContext.save()
 
         // Perform seeding explicitly
-        for (rawName, met, repW, pace, icon) in SeedDefaults.exerciseTypes {
+        for (rawName, met, repW, pace, icon, _) in SeedDefaults.exerciseTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let existing = try modelContext.fetch(FetchDescriptor<ExerciseType>()).first { $0.name.lowercased() == name.lowercased() }
-            if existing == nil { modelContext.insert(ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon)) }
+            if existing == nil { modelContext.insert(ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon, defaultUnit: nil)) }
         }
-        for (rawName, rawAbbr, cat) in SeedDefaults.unitTypes {
+        for (rawName, rawAbbr, stepSize, displayAsInteger) in SeedDefaults.unitTypes {
             let name = rawName.trimmingCharacters(in: .whitespaces)
             let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
             if let existing = try modelContext.fetch(FetchDescriptor<UnitType>()).first(where: { $0.name.lowercased() == name.lowercased() }) {
                 if existing.abbreviation.trimmingCharacters(in: .whitespaces).isEmpty { existing.abbreviation = abbr }
             } else {
-                modelContext.insert(UnitType(name: name, abbreviation: abbr, category: cat))
+                modelContext.insert(UnitType(name: name, abbreviation: abbr, stepSize: stepSize, displayAsInteger: displayAsInteger))
             }
         }
         try modelContext.save()

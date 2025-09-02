@@ -52,11 +52,11 @@ struct ViewHooksTests {
     }
 
     @Test func labelHooksCoverAllCategories() {
-        let ex = ExerciseType(name: "Test", baseMET: 5, repWeight: 0.2, defaultPaceMinPerMi: 10)
+        let ex = ExerciseType(name: "Test", baseMET: 5, repWeight: 0.2, defaultPaceMinPerMi: 10, defaultUnit: nil)
         let reps = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
-        let minutes = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let minutes = UnitType(name: "Minutes", abbreviation: "min", category: .time)
         let steps = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
-        let miles = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        let miles = UnitType(name: "Miles", abbreviation: "mi", category: .distance)
         let other = UnitType(name: "Other", abbreviation: "", category: .other)
 
         let items: [ExerciseItem] = [

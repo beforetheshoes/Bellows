@@ -62,7 +62,7 @@ struct ServicesTests {
         let a = DayLog(date: today)
         let b = DayLog(date: today)
         let c = DayLog(date: today)
-        let ex = ExerciseType(name: "Test", baseMET: 4, repWeight: 0.1, defaultPaceMinPerMi: 10)
+        let ex = ExerciseType(name: "Test", baseMET: 4, repWeight: 0.1, defaultPaceMinPerMi: 10, defaultUnit: nil)
         let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
         let item = ExerciseItem(exercise: ex, unit: unit, amount: 10)
         b.items = [item]; item.dayLog = b
@@ -78,8 +78,8 @@ struct ServicesTests {
     }
 
     @Test @MainActor func exerciseTypeDeduplication() throws {
-        let e1 = ExerciseType(name: "Walking", baseMET: 3.0, repWeight: 0.1, defaultPaceMinPerMi: 12)
-        let e2 = ExerciseType(name: "walking", baseMET: 4.0, repWeight: 0.2, defaultPaceMinPerMi: 10)
+        let e1 = ExerciseType(name: "Walking", baseMET: 3.0, repWeight: 0.1, defaultPaceMinPerMi: 12, defaultUnit: nil)
+        let e2 = ExerciseType(name: "walking", baseMET: 4.0, repWeight: 0.2, defaultPaceMinPerMi: 10, defaultUnit: nil)
         context.insert(e1); context.insert(e2)
         try context.save()
         DedupService.cleanupDuplicateExerciseTypes(context: context)
@@ -88,8 +88,8 @@ struct ServicesTests {
     }
 
     @Test @MainActor func unitTypeDeduplication() throws {
-        let u1 = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
-        let u2 = UnitType(name: "minutes", abbreviation: "mins", category: .minutes)
+        let u1 = UnitType(name: "Minutes", abbreviation: "min", category: .time)
+        let u2 = UnitType(name: "minutes", abbreviation: "mins", category: .time)
         context.insert(u1); context.insert(u2)
         try context.save()
         DedupService.cleanupDuplicateUnitTypes(context: context)
@@ -101,16 +101,16 @@ struct ServicesTests {
     @Test func stepForUnitCategoryHelper() {
         #expect(stepForUnitCategory(.reps) == 1)
         #expect(stepForUnitCategory(.steps) == 1)
-        #expect(stepForUnitCategory(.distanceMi) == 0.1)
-        #expect(stepForUnitCategory(.minutes) == 0.5)
+        #expect(stepForUnitCategory(.distance) == 0.1)
+        #expect(stepForUnitCategory(.time) == 0.5)
         #expect(stepForUnitCategory(.other) == 0.5)
         #expect(stepForUnitCategory(nil) == 0.5)
     }
 
     @Test func amountOnlyStringHelper() {
-        let minutes = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
-        let reps = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
-        #expect(amountOnlyString(12.34, unit: nil) == "12")
+        let minutes = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+        let reps = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
+        #expect(amountOnlyString(12.34, unit: nil) == "12.3")
         #expect(amountOnlyString(12.34, unit: minutes) == "12.3")
         #expect(amountOnlyString(5.0, unit: reps) == "5")
     }

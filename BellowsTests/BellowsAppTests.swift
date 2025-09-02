@@ -141,7 +141,7 @@ struct BellowsAppTests {
         
         // Create test data to verify relationships work
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test Exercise", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test Exercise", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test Unit", abbreviation: "tu", category: .other)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
@@ -201,7 +201,7 @@ struct BellowsAppTests {
         
         // Test that all model types can be created
         let dayLog = DayLog(date: Date())
-        let exerciseType = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exerciseType = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unitType = UnitType(name: "Test", abbreviation: "t", category: .other)
         let exerciseItem = ExerciseItem(exercise: exerciseType, unit: unitType, amount: 10)
         
@@ -244,16 +244,16 @@ struct BellowsAppTests {
         // CreatedAt is always present
         // ModifiedAt is always present
         
-        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         #expect(exercise.name == "Walking")
         #expect(exercise.baseMET == 3.3)
         #expect(exercise.repWeight == 0.15)
         #expect(exercise.defaultPaceMinPerMi == 12.0)
         
-        let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
+        let unit = UnitType(name: "Steps", abbreviation: "steps", stepSize: 1.0, displayAsInteger: true)
         #expect(unit.name == "Steps")
         #expect(unit.abbreviation == "steps")
-        #expect(unit.category == .steps)
+        #expect(unit.displayAsInteger == true)
         
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 1000)
         #expect(item.amount == 1000)
@@ -306,10 +306,11 @@ struct BellowsAppTests {
             baseMET: 3.3,
             repWeight: 0.15,
             defaultPaceMinPerMi: 12.0,
-            iconSystemName: "figure.walk"
+            iconSystemName: "figure.walk",
+            defaultUnit: nil
         )
         
-        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
         
         let walkingItem = ExerciseItem(
             exercise: walkingExercise,
@@ -334,7 +335,7 @@ struct BellowsAppTests {
         #expect(dayLog.unwrappedItems.count == 1)
         #expect(dayLog.didMove)
         #expect(walkingItem.exercise?.name == "Walking")
-        #expect(walkingItem.unit?.category == .minutes)
+        #expect(walkingItem.unit?.displayAsInteger == false)
         
         // Test saving
         try context.save()
@@ -377,7 +378,8 @@ struct BellowsAppTests {
             name: "Extreme",
             baseMET: 20.0,
             repWeight: 10.0,
-            defaultPaceMinPerMi: 1.0
+            defaultPaceMinPerMi: 1.0,
+            defaultUnit: nil
         )
         
         let extremeUnit = UnitType(name: "Extreme Unit", abbreviation: "ex", category: .other)

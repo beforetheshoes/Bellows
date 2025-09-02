@@ -147,7 +147,7 @@ struct HistoryViewTests {
     @Test func dailyAveragesWithSingleItem() throws {
         // Test dailyAverages with one item
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10, enjoyment: 4, intensity: 3)
         
@@ -189,7 +189,7 @@ struct HistoryViewTests {
     @Test func dailyAveragesWithMultipleItems() throws {
         // Test dailyAverages with multiple items
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         
         let item1 = ExerciseItem(exercise: exercise, unit: unit, amount: 10, enjoyment: 5, intensity: 4)
@@ -243,7 +243,7 @@ struct HistoryViewTests {
     @Test func dailyAveragesEdgeCases() throws {
         // Test with extreme values
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         
         // Items with min and max values
@@ -304,8 +304,8 @@ struct HistoryViewTests {
         let yesterdayLog = DayLog(date: yesterday)
         let lastWeekLog = DayLog(date: lastWeek)
         
-        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .time)
         
         // Add items to make some days active
         let todayItem = ExerciseItem(exercise: exercise, unit: unit, amount: 30, enjoyment: 4, intensity: 3)
@@ -367,7 +367,7 @@ struct HistoryViewTests {
         let activeDayLog = DayLog(date: activeDate)
         let inactiveDayLog = DayLog(date: inactiveDate)
         
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
@@ -409,7 +409,7 @@ struct HistoryViewTests {
     @MainActor
     @Test func exerciseCountDisplay() throws {
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         
         // Create multiple items
@@ -444,7 +444,7 @@ struct HistoryViewTests {
     @MainActor
     @Test func averageScoreLabels() throws {
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10, enjoyment: 4, intensity: 3)
         
@@ -516,7 +516,7 @@ struct HistoryViewTests {
     @Test func handlingCorruptedData() throws {
         // Create a day log with corrupted relationships
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "", baseMET: 0, repWeight: 0, defaultPaceMinPerMi: 0)
+        let exercise = ExerciseType(name: "", baseMET: 0, repWeight: 0, defaultPaceMinPerMi: 0, defaultUnit: nil)
         let item = ExerciseItem(exercise: exercise, note: nil, enjoyment: 3, intensity: 3)
         modelContext.insert(exercise)
         
@@ -547,7 +547,7 @@ struct HistoryViewTests {
             
             // Add some items to some days
             if i % 3 == 0 {
-                let exercise = ExerciseType(name: "Exercise \\(i)", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0)
+                let exercise = ExerciseType(name: "Exercise \\(i)", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
                 let unit = UnitType(name: "Unit \\(i)", abbreviation: "u\\(i)", category: .other)
                 let item = ExerciseItem(exercise: exercise, unit: unit, amount: Double(i % 10 + 1), enjoyment: (i % 5) + 1, intensity: (i % 4) + 1)
                 

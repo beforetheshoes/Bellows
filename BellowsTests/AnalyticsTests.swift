@@ -35,7 +35,7 @@ struct AnalyticsTests {
         let dayLog = DayLog(date: yesterday)
         
         // Add exercise to make it count
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 1000)
         dayLog.items = [item]
@@ -49,7 +49,7 @@ struct AnalyticsTests {
         let dayLog = DayLog(date: today)
         
         // Add exercise to make it count
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 1000)
         dayLog.items = [item]
@@ -60,7 +60,7 @@ struct AnalyticsTests {
     
     @Test func currentStreakConsecutiveDays() {
         var dayLogs: [DayLog] = []
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         
         // Create 5 consecutive days ending yesterday
@@ -78,7 +78,7 @@ struct AnalyticsTests {
     
     @Test func currentStreakWithTodayIncluded() {
         var dayLogs: [DayLog] = []
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         
         // Create 3 consecutive days ending yesterday
@@ -102,7 +102,7 @@ struct AnalyticsTests {
     
     @Test func currentStreakBrokenYesterday() {
         var dayLogs: [DayLog] = []
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         
         // Create activity 3 days ago
@@ -119,7 +119,7 @@ struct AnalyticsTests {
     
     @Test func currentStreakWithGap() {
         var dayLogs: [DayLog] = []
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         
         // Create activity yesterday
@@ -153,7 +153,7 @@ struct AnalyticsTests {
     
     @Test func currentStreakMultipleDayLogsPerDay() {
         var dayLogs: [DayLog] = []
-        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
+        let exercise = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
         let unit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
         
         let yesterday = calendar.date(byAdding: .day, value: -1, to: Date())!
@@ -345,8 +345,8 @@ struct AnalyticsTests {
     
     @Test func currentStreakWithRealDates() {
         var dayLogs: [DayLog] = []
-        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 8.0)
-        let unit = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 8.0, defaultUnit: nil)
+        let unit = UnitType(name: "Miles", abbreviation: "mi", category: .distance)
         
         // Create a week of consecutive activity
         for i in 0...6 {

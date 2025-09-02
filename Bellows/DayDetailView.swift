@@ -179,12 +179,24 @@ struct DayDetailView: View {
     private func label(for item: ExerciseItem) -> String {
         let name = item.exercise?.name ?? "Unknown"
         let abbr = item.unit?.abbreviation ?? ""
-        switch item.unit?.category ?? .other {
-        case .reps: return "\(Int(item.amount)) \(name)"
-        case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
-        case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
-        case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-        case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+        
+        // Use the unit's display settings
+        let amountStr: String
+        if let unit = item.unit {
+            if unit.displayAsInteger {
+                amountStr = String(Int(item.amount.rounded()))
+            } else {
+                amountStr = String(format: "%.1f", item.amount)
+            }
+        } else {
+            amountStr = String(format: "%.1f", item.amount)
+        }
+        
+        // For units without abbreviation (like "Reps"), don't show abbreviation
+        if abbr.isEmpty {
+            return "\(amountStr) \(name)"
+        } else {
+            return "\(amountStr) \(abbr) \(name)"
         }
     }
     
@@ -213,12 +225,24 @@ struct DayDetailView: View {
 func __test_daydetail_label(for item: ExerciseItem) -> String {
     let name = item.exercise?.name ?? "Unknown"
     let abbr = item.unit?.abbreviation ?? ""
-    switch item.unit?.category ?? .other {
-    case .reps: return "\(Int(item.amount)) \(name)"
-    case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
-    case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
-    case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-    case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+    
+    // Use the unit's display settings
+    let amountStr: String
+    if let unit = item.unit {
+        if unit.displayAsInteger {
+            amountStr = String(Int(item.amount.rounded()))
+        } else {
+            amountStr = String(format: "%.1f", item.amount)
+        }
+    } else {
+        amountStr = String(format: "%.1f", item.amount)
+    }
+    
+    // For units without abbreviation (like "Reps"), don't show abbreviation
+    if abbr.isEmpty {
+        return "\(amountStr) \(name)"
+    } else {
+        return "\(amountStr) \(abbr) \(name)"
     }
 }
 

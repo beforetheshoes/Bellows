@@ -184,8 +184,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 30, note: "Morning walk", enjoyment: 4, intensity: 2)
         
         dayLog.items = [item]
@@ -209,11 +209,11 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let walkingExercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let pushupsExercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0)
+        let walkingExercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let pushupsExercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         
-        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
-        let repsUnit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+        let repsUnit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         
         let walkingItem = ExerciseItem(exercise: walkingExercise, unit: minutesUnit, amount: 30, enjoyment: 4, intensity: 2)
         let pushupsItem = ExerciseItem(exercise: pushupsExercise, unit: repsUnit, amount: 20, enjoyment: 3, intensity: 4)
@@ -245,8 +245,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 8.0)
-        let unit = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 8.0, defaultUnit: nil)
+        let unit = UnitType(name: "Miles", abbreviation: "mi", stepSize: 0.1, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 3.2)
         
         dayLog.items = [item]
@@ -268,12 +268,21 @@ struct DayDetailViewTests {
             private func label(for item: ExerciseItem) -> String {
                 let name = item.exercise?.name ?? "Unknown"
                 let abbr = item.unit?.abbreviation ?? ""
-                switch item.unit?.category ?? .other {
-                case .reps: return "\\(Int(item.amount)) \\(name)"
-                case .minutes: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .steps: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                let amountStr: String
+                if let unit = item.unit {
+                    if unit.displayAsInteger {
+                        amountStr = String(Int(item.amount.rounded()))
+                    } else {
+                        amountStr = String(format: "%.1f", item.amount)
+                    }
+                } else {
+                    amountStr = String(format: "%.1f", item.amount)
+                }
+                
+                if abbr.isEmpty {
+                    return "\(amountStr) \(name)"
+                } else {
+                    return "\(amountStr) \(abbr) \(name)"
                 }
             }
         }
@@ -289,7 +298,7 @@ struct DayDetailViewTests {
         let dayLog = DayLog(date: testDate)
         
         // Create item with missing unit references
-        let exercise = ExerciseType(name: "", baseMET: 0, repWeight: 0, defaultPaceMinPerMi: 0)
+        let exercise = ExerciseType(name: "", baseMET: 0, repWeight: 0, defaultPaceMinPerMi: 0, defaultUnit: nil)
         let item = ExerciseItem(exercise: exercise, note: nil, enjoyment: 3, intensity: 3)
         modelContext.insert(exercise)
         
@@ -310,12 +319,21 @@ struct DayDetailViewTests {
             private func label(for item: ExerciseItem) -> String {
                 let name = item.exercise?.name ?? "Unknown"
                 let abbr = item.unit?.abbreviation ?? ""
-                switch item.unit?.category ?? .other {
-                case .reps: return "\\(Int(item.amount)) \\(name)"
-                case .minutes: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .steps: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                let amountStr: String
+                if let unit = item.unit {
+                    if unit.displayAsInteger {
+                        amountStr = String(Int(item.amount.rounded()))
+                    } else {
+                        amountStr = String(format: "%.1f", item.amount)
+                    }
+                } else {
+                    amountStr = String(format: "%.1f", item.amount)
+                }
+                
+                if abbr.isEmpty {
+                    return "\(amountStr) \(name)"
+                } else {
+                    return "\(amountStr) \(abbr) \(name)"
                 }
             }
         }
@@ -332,8 +350,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         
         let item1 = ExerciseItem(exercise: exercise, unit: unit, amount: 10, enjoyment: 5, intensity: 3)
         let item2 = ExerciseItem(exercise: exercise, unit: unit, amount: 20, enjoyment: 3, intensity: 4)
@@ -383,8 +401,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Solo Exercise", baseMET: 6.0, repWeight: 0.3, defaultPaceMinPerMi: 9.0)
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let exercise = ExerciseType(name: "Solo Exercise", baseMET: 6.0, repWeight: 0.3, defaultPaceMinPerMi: 9.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 15, enjoyment: 4, intensity: 3)
         
         dayLog.items = [item]
@@ -446,13 +464,13 @@ struct DayDetailViewTests {
         let dayLog = DayLog(date: testDate)
         
         // Create exercises with specific timestamps
-        let exercise1 = ExerciseType(name: "Morning Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let unit1 = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let exercise1 = ExerciseType(name: "Morning Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let unit1 = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
         let morningTime = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 7, minute: 30))!
         let item1 = ExerciseItem(exercise: exercise1, unit: unit1, amount: 30, at: morningTime)
         
-        let exercise2 = ExerciseType(name: "Evening Run", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0)
-        let unit2 = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        let exercise2 = ExerciseType(name: "Evening Run", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0, defaultUnit: nil)
+        let unit2 = UnitType(name: "Miles", abbreviation: "mi", stepSize: 0.1, displayAsInteger: false)
         let eveningTime = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 18, minute: 45))!
         let item2 = ExerciseItem(exercise: exercise2, unit: unit2, amount: 3.5, at: eveningTime)
         
@@ -510,12 +528,21 @@ struct DayDetailViewTests {
             private func label(for item: ExerciseItem) -> String {
                 let name = item.exercise?.name ?? "Unknown"
                 let abbr = item.unit?.abbreviation ?? ""
-                switch item.unit?.category ?? .other {
-                case .reps: return "\(Int(item.amount)) \(name)"
-                case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
-                case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
-                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                let amountStr: String
+                if let unit = item.unit {
+                    if unit.displayAsInteger {
+                        amountStr = String(Int(item.amount.rounded()))
+                    } else {
+                        amountStr = String(format: "%.1f", item.amount)
+                    }
+                } else {
+                    amountStr = String(format: "%.1f", item.amount)
+                }
+                
+                if abbr.isEmpty {
+                    return "\(amountStr) \(name)"
+                } else {
+                    return "\(amountStr) \(abbr) \(name)"
                 }
             }
             
@@ -570,8 +597,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Edit Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let exercise = ExerciseType(name: "Edit Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
         dayLog.items = [item]
@@ -611,8 +638,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Context Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let exercise = ExerciseType(name: "Context Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
         dayLog.items = [item]
@@ -681,8 +708,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Modify Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let exercise = ExerciseType(name: "Modify Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
         dayLog.items = [item]
@@ -713,8 +740,8 @@ struct DayDetailViewTests {
         let testDate = Date()
         let dayLog = DayLog(date: testDate)
         
-        let exercise = ExerciseType(name: "Delete Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let exercise = ExerciseType(name: "Delete Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
         dayLog.items = [item]
@@ -747,8 +774,18 @@ struct DayDetailViewTests {
         
         // Create many exercise items
         for i in 0..<100 {
-            let exercise = ExerciseType(name: "Exercise \\(i)", baseMET: 4.0 + Double(i % 10), repWeight: 0.15, defaultPaceMinPerMi: 10.0)
-            let unit = UnitType(name: "Unit \\(i)", abbreviation: "u\\(i)", category: UnitCategory.allCases[i % UnitCategory.allCases.count])
+            let exercise = ExerciseType(name: "Exercise \\(i)", baseMET: 4.0 + Double(i % 10), repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+            let categoryIndex = i % 5
+            let (stepSize, displayAsInteger): (Double, Bool) = {
+                switch categoryIndex {
+                case 0: return (0.5, false)  // time
+                case 1: return (0.1, false)  // distance
+                case 2: return (1.0, true)   // reps
+                case 3: return (1.0, true)   // steps
+                default: return (1.0, false) // other
+                }
+            }()
+            let unit = UnitType(name: "Unit \\(i)", abbreviation: "u\\(i)", stepSize: stepSize, displayAsInteger: displayAsInteger)
             let item = ExerciseItem(
                 exercise: exercise, 
                 unit: unit, 

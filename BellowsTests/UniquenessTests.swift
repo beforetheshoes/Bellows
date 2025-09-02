@@ -45,9 +45,9 @@ struct UniquenessTests {
     @MainActor
     @Test func cleanupDuplicateExerciseTypes_mergesAndReassigns() throws {
         // Create duplicates by name
-        let a = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let b = ExerciseType(name: "walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let a = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let b = ExerciseType(name: "walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
         let item = ExerciseItem(exercise: a, unit: unit, amount: 10)
         modelContext.insert(a)
         modelContext.insert(b)
@@ -68,9 +68,9 @@ struct UniquenessTests {
     @MainActor
     @Test func cleanupDuplicateUnitTypes_mergesAndReassigns() throws {
         // Create duplicates by name
-        let u1 = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
-        let u2 = UnitType(name: "miles", abbreviation: "m", category: .distanceMi)
-        let ex = ExerciseType(name: "Run", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0)
+        let u1 = UnitType(name: "Miles", abbreviation: "mi", stepSize: 0.1, displayAsInteger: false)
+        let u2 = UnitType(name: "miles", abbreviation: "m", stepSize: 0.1, displayAsInteger: false)
+        let ex = ExerciseType(name: "Run", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0, defaultUnit: nil)
         let item = ExerciseItem(exercise: ex, unit: u1, amount: 3.0)
         modelContext.insert(u1)
         modelContext.insert(u2)
@@ -99,8 +99,8 @@ struct UniquenessTests {
 
     @MainActor
     @Test func newUnitTypeSave_updatesExisting() throws {
-        __test_newUnitTypeSave(context: modelContext, name: "Minutes", abbreviation: "min", category: .minutes)
-        __test_newUnitTypeSave(context: modelContext, name: "minutes", abbreviation: "mins", category: .minutes)
+        __test_newUnitTypeSave(context: modelContext, name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+        __test_newUnitTypeSave(context: modelContext, name: "minutes", abbreviation: "mins", stepSize: 0.5, displayAsInteger: false)
         let all = try modelContext.fetch(FetchDescriptor<UnitType>())
         let minutes = all.filter { $0.name.lowercased() == "minutes" }
         #expect(minutes.count == 1)

@@ -168,7 +168,7 @@ struct ViewTests {
     
     @MainActor
     @Test func editExerciseItemSheetInitialization() {
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
@@ -185,8 +185,8 @@ struct ViewTests {
     @MainActor
     @Test func homeViewWithModelContext() throws {
         // Create some test data
-        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let exercise = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .time)
         let dayLog = DayLog(date: Date())
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 30)
         

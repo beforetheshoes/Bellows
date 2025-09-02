@@ -99,7 +99,7 @@ struct HomeViewTests {
     @MainActor
     @Test func exerciseItemLabelFormatting() throws {
         // Create test data
-        let exercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 20)
         
@@ -119,12 +119,22 @@ struct HomeViewTests {
             private func label(for item: ExerciseItem) -> String {
                 let name = item.exercise?.name ?? "Unknown"
                 let abbr = item.unit?.abbreviation ?? ""
-                switch item.unit?.category ?? .other {
-                case .reps: return "\\(Int(item.amount)) \\(name)"
-                case .minutes: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .steps: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                
+                let amountStr: String
+                if let unit = item.unit {
+                    if unit.displayAsInteger {
+                        amountStr = String(Int(item.amount.rounded()))
+                    } else {
+                        amountStr = String(format: "%.1f", item.amount)
+                    }
+                } else {
+                    amountStr = String(format: "%.1f", item.amount)
+                }
+                
+                if abbr.isEmpty {
+                    return "\(amountStr) \(name)"
+                } else {
+                    return "\(amountStr) \(abbr) \(name)"
                 }
             }
         }
@@ -136,42 +146,42 @@ struct HomeViewTests {
     
     @MainActor
     @Test func labelFormattingForDifferentUnitCategories() throws {
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         modelContext.insert(exercise)
         
-        // Test reps category
-        let repsUnit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        // Test reps unit (integer display)
+        let repsUnit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         let repsItem = ExerciseItem(exercise: exercise, unit: repsUnit, amount: 15)
         modelContext.insert(repsUnit)
         modelContext.insert(repsItem)
         
-        // Test minutes category
-        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        // Test minutes unit (decimal display)
+        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
         let minutesItem = ExerciseItem(exercise: exercise, unit: minutesUnit, amount: 30)
         modelContext.insert(minutesUnit)
         modelContext.insert(minutesItem)
         
-        // Test distance category
-        let milesUnit = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        // Test distance unit (decimal display)
+        let milesUnit = UnitType(name: "Miles", abbreviation: "mi", stepSize: 0.1, displayAsInteger: false)
         let milesItem = ExerciseItem(exercise: exercise, unit: milesUnit, amount: 2.5)
         modelContext.insert(milesUnit)
         modelContext.insert(milesItem)
         
-        // Test steps category
-        let stepsUnit = UnitType(name: "Steps", abbreviation: "steps", category: .steps)
+        // Test steps unit (integer display)
+        let stepsUnit = UnitType(name: "Steps", abbreviation: "steps", stepSize: 1.0, displayAsInteger: true)
         let stepsItem = ExerciseItem(exercise: exercise, unit: stepsUnit, amount: 5000)
         modelContext.insert(stepsUnit)
         modelContext.insert(stepsItem)
         
-        // Test other category
-        let otherUnit = UnitType(name: "Other", abbreviation: "oth", category: .other)
+        // Test other unit (decimal display)
+        let otherUnit = UnitType(name: "Other", abbreviation: "oth", stepSize: 1.0, displayAsInteger: false)
         let otherItem = ExerciseItem(exercise: exercise, unit: otherUnit, amount: 3.7)
         modelContext.insert(otherUnit)
         modelContext.insert(otherItem)
         
         try modelContext.save()
         
-        // Test label formatting for each category
+        // Test label formatting for each unit type
         struct TestAllLabels: View {
             let items: [ExerciseItem]
             
@@ -186,12 +196,22 @@ struct HomeViewTests {
             private func label(for item: ExerciseItem) -> String {
                 let name = item.exercise?.name ?? "Unknown"
                 let abbr = item.unit?.abbreviation ?? ""
-                switch item.unit?.category ?? .other {
-                case .reps: return "\\(Int(item.amount)) \\(name)"
-                case .minutes: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .steps: return "\\(Int(item.amount)) \\(abbr) \\(name)"
-                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                
+                let amountStr: String
+                if let unit = item.unit {
+                    if unit.displayAsInteger {
+                        amountStr = String(Int(item.amount.rounded()))
+                    } else {
+                        amountStr = String(format: "%.1f", item.amount)
+                    }
+                } else {
+                    amountStr = String(format: "%.1f", item.amount)
+                }
+                
+                if abbr.isEmpty {
+                    return "\(amountStr) \(name)"
+                } else {
+                    return "\(amountStr) \(abbr) \(name)"
                 }
             }
         }
@@ -248,7 +268,7 @@ struct HomeViewTests {
         let dayLog3 = DayLog(date: today)
         
         // Add an item to one of them
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
@@ -292,9 +312,9 @@ struct HomeViewTests {
     @MainActor
     @Test func duplicateExerciseTypeCleanup() throws {
         // Create duplicate exercise types
-        let exercise1 = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0)
-        let exercise2 = ExerciseType(name: "walking", baseMET: 3.5, repWeight: 0.15, defaultPaceMinPerMi: 10.0) // Different case and values
-        let exercise3 = ExerciseType(name: "WALKING", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 8.0)
+        let exercise1 = ExerciseType(name: "Walking", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12.0, defaultUnit: nil)
+        let exercise2 = ExerciseType(name: "walking", baseMET: 3.5, repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil) // Different case and values
+        let exercise3 = ExerciseType(name: "WALKING", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 8.0, defaultUnit: nil)
         
         modelContext.insert(exercise1)
         modelContext.insert(exercise2)
@@ -321,9 +341,9 @@ struct HomeViewTests {
     @MainActor
     @Test func duplicateUnitTypeCleanup() throws {
         // Create duplicate unit types
-        let unit1 = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
-        let unit2 = UnitType(name: "minutes", abbreviation: "m", category: .minutes)
-        let unit3 = UnitType(name: "MINUTES", abbreviation: "mins", category: .minutes)
+        let unit1 = UnitType(name: "Minutes", abbreviation: "min", category: .time)
+        let unit2 = UnitType(name: "minutes", abbreviation: "m", category: .time)
+        let unit3 = UnitType(name: "MINUTES", abbreviation: "mins", category: .time)
         
         modelContext.insert(unit1)
         modelContext.insert(unit2)
@@ -364,7 +384,7 @@ struct HomeViewTests {
             if let existing = try context.fetch(FetchDescriptor<ExerciseType>()).first(where: { $0.name.lowercased() == trimmedName.lowercased() }) {
                 return existing
             }
-            let newType = ExerciseType(name: trimmedName, baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0, iconSystemName: nil)
+            let newType = ExerciseType(name: trimmedName, baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0, iconSystemName: nil, defaultUnit: nil)
             context.insert(newType)
             try context.save()
             return newType
@@ -423,8 +443,8 @@ struct HomeViewTests {
     @MainActor
     @Test func exerciseRowDisplaysTimestamp() throws {
         // Create test data with specific timestamp
-        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0)
-        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 6.0, defaultUnit: nil)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .time)
         let specificTime = Calendar.current.date(from: DateComponents(year: 2024, month: 1, day: 15, hour: 15, minute: 41))!
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 30, at: specificTime)
         
@@ -474,12 +494,22 @@ struct HomeViewTests {
             private func label(for item: ExerciseItem) -> String {
                 let name = item.exercise?.name ?? "Unknown"
                 let abbr = item.unit?.abbreviation ?? ""
-                switch item.unit?.category ?? .other {
-                case .reps: return "\(Int(item.amount)) \(name)"
-                case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
-                case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
-                case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-                case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+                
+                let amountStr: String
+                if let unit = item.unit {
+                    if unit.displayAsInteger {
+                        amountStr = String(Int(item.amount.rounded()))
+                    } else {
+                        amountStr = String(format: "%.1f", item.amount)
+                    }
+                } else {
+                    amountStr = String(format: "%.1f", item.amount)
+                }
+                
+                if abbr.isEmpty {
+                    return "\(amountStr) \(name)"
+                } else {
+                    return "\(amountStr) \(abbr) \(name)"
                 }
             }
             
@@ -521,7 +551,7 @@ struct HomeViewTests {
     
     @MainActor
     @Test func editExerciseSheetPresentation() throws {
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
@@ -563,7 +593,7 @@ struct HomeViewTests {
                 Text("Test")
                     .onAppear {
                         // Create invalid state that might cause save to fail
-                        let exercise = ExerciseType(name: "", baseMET: -1, repWeight: -1, defaultPaceMinPerMi: -1)
+                        let exercise = ExerciseType(name: "", baseMET: -1, repWeight: -1, defaultPaceMinPerMi: -1, defaultUnit: nil)
                         context.insert(exercise)
                         
                         // Try to save and handle any errors
@@ -592,7 +622,7 @@ struct HomeViewTests {
         
         // Create many exercise items
         for i in 0..<100 {
-            let exercise = ExerciseType(name: "Exercise \\(i)", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0)
+            let exercise = ExerciseType(name: "Exercise \\(i)", baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
             let unit = UnitType(name: "Unit \\(i)", abbreviation: "u\\(i)", category: .other)
             let item = ExerciseItem(exercise: exercise, unit: unit, amount: Double(i))
             

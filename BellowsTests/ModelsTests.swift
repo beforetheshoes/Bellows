@@ -43,8 +43,8 @@ struct ModelsTests {
         let dayLog = DayLog(date: Date())
         #expect(dayLog.unwrappedItems == [])
         
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
         dayLog.items = [item]
@@ -55,8 +55,8 @@ struct ModelsTests {
         let dayLog = DayLog(date: Date())
         #expect(!dayLog.didMove)
         
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
         dayLog.items = [item]
@@ -73,46 +73,22 @@ struct ModelsTests {
     
     // MARK: - UnitCategory Tests
     
-    @Test func unitCategoryAllCases() {
-        let allCases = UnitCategory.allCases
-        #expect(allCases.count == 5)
-        #expect(allCases.contains(.minutes))
-        #expect(allCases.contains(.reps))
-        #expect(allCases.contains(.steps))
-        #expect(allCases.contains(.distanceMi))
-        #expect(allCases.contains(.other))
-    }
-    
-    @Test func unitCategoryIdentifiable() {
-        #expect(UnitCategory.minutes.id == "minutes")
-        #expect(UnitCategory.reps.id == "reps")
-        #expect(UnitCategory.steps.id == "steps")
-        #expect(UnitCategory.distanceMi.id == "distanceMi")
-        #expect(UnitCategory.other.id == "other")
-    }
-    
-    @Test func unitCategoryRawValues() {
-        #expect(UnitCategory.minutes.rawValue == "minutes")
-        #expect(UnitCategory.reps.rawValue == "reps")
-        #expect(UnitCategory.steps.rawValue == "steps")
-        #expect(UnitCategory.distanceMi.rawValue == "distanceMi")
-        #expect(UnitCategory.other.rawValue == "other")
-    }
+    // MARK: - Legacy UnitCategory tests removed - now using property-based approach
     
     // MARK: - UnitType Tests
     
     @Test func unitTypeInitialization() {
-        let unit = UnitType(name: "Minutes", abbreviation: "min", category: .minutes)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
         
         #expect(unit.name == "Minutes")
         #expect(unit.abbreviation == "min")
-        #expect(unit.category == .minutes)
+        #expect(unit.displayAsInteger == false)
         // CreatedAt is always present
         #expect(unit.exerciseItems != nil)
     }
     
     @Test func unitTypeDefaultValues() {
-        let unit = UnitType(name: "Test", abbreviation: "t", category: .other)
+        let unit = UnitType(name: "Test", abbreviation: "t", stepSize: 1.0, displayAsInteger: false)
         #expect((unit.exerciseItems?.count ?? 0) == 0)
     }
     
@@ -124,7 +100,8 @@ struct ModelsTests {
             baseMET: 9.8,
             repWeight: 0.15,
             defaultPaceMinPerMi: 8.0,
-            iconSystemName: "figure.run"
+            iconSystemName: "figure.run",
+            defaultUnit: nil
         )
         
         #expect(exercise.name == "Running")
@@ -140,17 +117,81 @@ struct ModelsTests {
             name: "Test",
             baseMET: 5.0,
             repWeight: 0.2,
-            defaultPaceMinPerMi: 10.0
+            defaultPaceMinPerMi: 10.0,
+            defaultUnit: nil
         )
         
         #expect(exercise.iconSystemName == nil)
     }
     
+    @Test func exerciseTypeWithDefaultUnit() {
+        let unit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+        let exercise = ExerciseType(
+            name: "Running",
+            baseMET: 9.8,
+            repWeight: 0.15,
+            defaultPaceMinPerMi: 8.0,
+            iconSystemName: "figure.run",
+            defaultUnit: unit
+        )
+        
+        #expect(exercise.defaultUnit?.name == "Minutes")
+    }
+    
+    @Test func exerciseTypeWithoutDefaultUnit() {
+        let exercise = ExerciseType(
+            name: "Test",
+            baseMET: 5.0,
+            repWeight: 0.2,
+            defaultPaceMinPerMi: 10.0,
+            defaultUnit: nil
+        )
+        
+        #expect(exercise.defaultUnit == nil)
+    }
+    
+    @Test func exerciseTypeDefaultUnitOptions() {
+        let minutesUnit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+        let repsUnit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
+        let milesUnit = UnitType(name: "Miles", abbreviation: "mi", stepSize: 0.1, displayAsInteger: false)
+        
+        let walkExercise = ExerciseType(
+            name: "Walk",
+            baseMET: 3.3,
+            repWeight: 0.15,
+            defaultPaceMinPerMi: 12.0,
+            iconSystemName: "figure.walk",
+            defaultUnit: minutesUnit
+        )
+        
+        let pushupsExercise = ExerciseType(
+            name: "Pushups",
+            baseMET: 8.0,
+            repWeight: 0.6,
+            defaultPaceMinPerMi: 10.0,
+            iconSystemName: "figure.strengthtraining.traditional",
+            defaultUnit: repsUnit
+        )
+        
+        let runExercise = ExerciseType(
+            name: "Run",
+            baseMET: 9.8,
+            repWeight: 0.15,
+            defaultPaceMinPerMi: 6.0,
+            iconSystemName: "figure.run",
+            defaultUnit: milesUnit
+        )
+        
+        #expect(walkExercise.defaultUnit?.name == "Minutes")
+        #expect(pushupsExercise.defaultUnit?.name == "Reps")
+        #expect(runExercise.defaultUnit?.name == "Miles")
+    }
+    
     // MARK: - ExerciseItem Tests
     
     @Test func exerciseItemFullInitialization() {
-        let exercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         let item = ExerciseItem(
             exercise: exercise,
             unit: unit,
@@ -171,7 +212,7 @@ struct ModelsTests {
     }
     
     @Test func exerciseItemIntensityOnlyInitialization() {
-        let exercise = ExerciseType(name: "Yoga", baseMET: 2.5, repWeight: 0.15, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Yoga", baseMET: 2.5, repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let item = ExerciseItem(
             exercise: exercise,
             note: "Morning session",
@@ -188,8 +229,8 @@ struct ModelsTests {
     }
     
     @Test func exerciseItemEnjoymentBounds() {
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         
         // Test lower bound
         let item1 = ExerciseItem(exercise: exercise, unit: unit, amount: 10, enjoyment: 0, intensity: 3)
@@ -205,8 +246,8 @@ struct ModelsTests {
     }
     
     @Test func exerciseItemIntensityBounds() {
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         
         // Test lower bound
         let item1 = ExerciseItem(exercise: exercise, unit: unit, amount: 10, enjoyment: 3, intensity: -5)
@@ -223,8 +264,8 @@ struct ModelsTests {
     
     @Test func exerciseItemCustomDate() {
         let customDate = Date().addingTimeInterval(-86400) // Yesterday
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10, at: customDate)
         
         #expect(item.createdAt == customDate)
@@ -261,20 +302,20 @@ struct ModelsTests {
     @Test func seedDefaultsUnitTypes() {
         let unitTypes = SeedDefaults.unitTypes
         
-        #expect(unitTypes.count == 5)
+        #expect(unitTypes.count == 7)
         
-        // Check first unit type
+        // Check first unit type structure (name, abbreviation, stepSize, displayAsInteger)
         #expect(unitTypes[0].0 == "Minutes")
         #expect(unitTypes[0].1 == "min")
-        #expect(unitTypes[0].2 == .minutes)
+        #expect(unitTypes[0].2 == 0.5) // stepSize
+        #expect(unitTypes[0].3 == false) // displayAsInteger
         
-        // Check all categories are present
-        let categories = unitTypes.map { $0.2 }
-        #expect(categories.contains(.minutes))
-        #expect(categories.contains(.reps))
-        #expect(categories.contains(.steps))
-        #expect(categories.contains(.distanceMi))
-        #expect(categories.contains(.other))
+        // Check that we have different stepSizes and displayAsInteger values
+        let stepSizes = Set(unitTypes.map { $0.2 })
+        let displayAsIntegers = Set(unitTypes.map { $0.3 })
+        #expect(stepSizes.count > 1) // Should have different step sizes
+        #expect(displayAsIntegers.contains(true)) // Should have some integer display units
+        #expect(displayAsIntegers.contains(false)) // Should have some decimal display units
     }
     
     @Test func seedDefaultsExerciseTypes() {
@@ -288,6 +329,7 @@ struct ModelsTests {
         #expect(exerciseTypes[0].2 == 0.15)
         #expect(exerciseTypes[0].3 == 12.0)
         #expect(exerciseTypes[0].4 == "figure.walk")
+        #expect(exerciseTypes[0].5 == "Minutes")
         
         // Check that all have names
         for exercise in exerciseTypes {
@@ -295,15 +337,22 @@ struct ModelsTests {
             #expect(exercise.1 > 0) // baseMET should be positive
             #expect(exercise.2 > 0) // repWeight should be positive
             #expect(exercise.3 > 0) // defaultPaceMinPerMi should be positive
+            // defaultUnitCategory can be nil for "Other"
         }
+        
+        // Check specific default unit names
+        #expect(exerciseTypes.first { $0.0 == "Pushups" }?.5 == "Reps")
+        #expect(exerciseTypes.first { $0.0 == "Squats" }?.5 == "Reps")
+        #expect(exerciseTypes.first { $0.0 == "Run" }?.5 == "Minutes")
+        #expect(exerciseTypes.first { $0.0 == "Other" }?.5 == nil)
     }
     
     // MARK: - Integration Tests
     
     @Test func dayLogWithExerciseItems() {
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 8.0)
-        let unit = UnitType(name: "Miles", abbreviation: "mi", category: .distanceMi)
+        let exercise = ExerciseType(name: "Running", baseMET: 9.8, repWeight: 0.15, defaultPaceMinPerMi: 8.0, defaultUnit: nil)
+        let unit = UnitType(name: "Miles", abbreviation: "mi", stepSize: 0.1, displayAsInteger: false)
         
         let item1 = ExerciseItem(exercise: exercise, unit: unit, amount: 3.5)
         let item2 = ExerciseItem(exercise: exercise, unit: unit, amount: 2.0)
@@ -319,8 +368,8 @@ struct ModelsTests {
     }
     
     @Test func exerciseTypeWithMultipleItems() {
-        let exercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0)
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
+        let exercise = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
         
         let item1 = ExerciseItem(exercise: exercise, unit: unit, amount: 20)
         let item2 = ExerciseItem(exercise: exercise, unit: unit, amount: 15)
@@ -332,9 +381,9 @@ struct ModelsTests {
     }
     
     @Test func unitTypeWithMultipleItems() {
-        let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
-        let exercise1 = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0)
-        let exercise2 = ExerciseType(name: "Squats", baseMET: 5.0, repWeight: 0.25, defaultPaceMinPerMi: 10.0)
+        let unit = UnitType(name: "Reps", abbreviation: "reps", stepSize: 1.0, displayAsInteger: true)
+        let exercise1 = ExerciseType(name: "Pushups", baseMET: 8.0, repWeight: 0.6, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+        let exercise2 = ExerciseType(name: "Squats", baseMET: 5.0, repWeight: 0.25, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         
         let item1 = ExerciseItem(exercise: exercise1, unit: unit, amount: 20)
         let item2 = ExerciseItem(exercise: exercise2, unit: unit, amount: 15)

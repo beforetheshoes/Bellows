@@ -12,6 +12,7 @@ struct HomeView: View {
     @State private var editingItem: ExerciseItem?
 
     @State private var showingAddSheet = false
+    @State private var showingSettings = false
     
     var body: some View {
         NavigationStack {
@@ -29,11 +30,23 @@ struct HomeView: View {
                 .padding(.bottom, 40)
             }
             .navigationTitle("Bellows")
+            .toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button {
+                        showingSettings = true
+                    } label: {
+                        Image(systemName: "gearshape")
+                    }
+                }
+            }
             .sheet(item: $editingItem) { item in
                 EditExerciseItemSheet(item: item)
             }
             .sheet(isPresented: $showingAddSheet) {
                 AddExerciseItemSheet(date: Date(), dayLog: today)
+            }
+            .sheet(isPresented: $showingSettings) {
+                SettingsView()
             }
             .navigationDestination(for: Date.self) { date in
                 DayDetailView(date: date)
@@ -162,12 +175,24 @@ struct HomeView: View {
     private func label(for item: ExerciseItem) -> String {
         let name = item.exercise?.name ?? "Unknown"
         let abbr = item.unit?.abbreviation ?? ""
-        switch item.unit?.category ?? .other {
-        case .reps: return "\(Int(item.amount)) \(name)"
-        case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
-        case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
-        case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-        case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+        
+        // Use the unit's display settings
+        let amountStr: String
+        if let unit = item.unit {
+            if unit.displayAsInteger {
+                amountStr = String(Int(item.amount.rounded()))
+            } else {
+                amountStr = String(format: "%.1f", item.amount)
+            }
+        } else {
+            amountStr = String(format: "%.1f", item.amount)
+        }
+        
+        // For units without abbreviation (like "Reps"), don't show abbreviation
+        if abbr.isEmpty {
+            return "\(amountStr) \(name)"
+        } else {
+            return "\(amountStr) \(abbr) \(name)"
         }
     }
     
@@ -212,7 +237,8 @@ struct HomeView: View {
             baseMET: 4.0,
             repWeight: 0.15,
             defaultPaceMinPerMi: 10.0,
-            iconSystemName: nil
+            iconSystemName: nil,
+            defaultUnit: nil
         )
         modelContext.insert(newType)
         
@@ -276,12 +302,24 @@ func __test_home_ensureToday(context: ModelContext) {
 func __test_home_label(for item: ExerciseItem) -> String {
     let name = item.exercise?.name ?? "Unknown"
     let abbr = item.unit?.abbreviation ?? ""
-    switch item.unit?.category ?? .other {
-    case .reps: return "\(Int(item.amount)) \(name)"
-    case .minutes: return "\(Int(item.amount)) \(abbr) \(name)"
-    case .steps: return "\(Int(item.amount)) \(abbr) \(name)"
-    case .distanceMi: return String(format: "%.1f %@ %@", item.amount, abbr, name)
-    case .other: return String(format: "%.1f %@ %@", item.amount, abbr, name)
+    
+    // Use the unit's display settings
+    let amountStr: String
+    if let unit = item.unit {
+        if unit.displayAsInteger {
+            amountStr = String(Int(item.amount.rounded()))
+        } else {
+            amountStr = String(format: "%.1f", item.amount)
+        }
+    } else {
+        amountStr = String(format: "%.1f", item.amount)
+    }
+    
+    // For units without abbreviation (like "Reps"), don't show abbreviation
+    if abbr.isEmpty {
+        return "\(amountStr) \(name)"
+    } else {
+        return "\(amountStr) \(abbr) \(name)"
     }
 }
 
@@ -289,10 +327,13 @@ func __test_home_label(for item: ExerciseItem) -> String {
 struct NewExerciseTypeSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var ctx
+    @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
     var onSaved: ((ExerciseType) -> Void)? = nil
     @State private var name = ""
     @State private var selectedIcon: String? = nil
     @State private var iconQuery: String = ""
+    @State private var selectedDefaultUnit: UnitType? = nil
+    @State private var showingNewUnitType = false
     private let fitnessSymbols: [String] = [
         "figure.walk",
         "figure.run",
@@ -318,6 +359,16 @@ struct NewExerciseTypeSheet: View {
         "star",
         "flame"
     ]
+    
+    
+    private var filteredUnitTypes: [UnitType] {
+        let grouped = Dictionary(grouping: unitTypes) { $0.name.lowercased() }
+        let unique = grouped.compactMap { _, dups in 
+            dups.max { $0.createdAt < $1.createdAt } 
+        }
+        return unique.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -327,6 +378,24 @@ struct NewExerciseTypeSheet: View {
                             .textFieldStyle(.roundedBorder)
                     }
                 }
+                
+                Section("Default Unit (optional)") {
+                    LabeledContent("Default Unit") {
+                        Picker("", selection: $selectedDefaultUnit) {
+                            Text("None").tag(nil as UnitType?)
+                            ForEach(filteredUnitTypes) { unit in
+                                Text(unit.name).tag(Optional(unit))
+                            }
+                        }
+                        .pickerStyle(.menu)
+                    }
+                    
+                    Button("Add New Unit") {
+                        showingNewUnitType = true
+                    }
+                    .foregroundStyle(.accent)
+                }
+                
                 Section("Icon (optional)") {
                     TextField("Search symbols", text: $iconQuery)
                         .textFieldStyle(.roundedBorder)
@@ -374,7 +443,8 @@ struct NewExerciseTypeSheet: View {
                                     baseMET: 4.0,
                                     repWeight: 0.15,
                                     defaultPaceMinPerMi: 10.0,
-                                    iconSystemName: selectedIcon
+                                    iconSystemName: selectedIcon,
+                                    defaultUnit: selectedDefaultUnit
                                 )
                                 ctx.insert(e)
                             }
@@ -385,6 +455,11 @@ struct NewExerciseTypeSheet: View {
                         }
                         dismiss()
                     }.disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+            .sheet(isPresented: $showingNewUnitType) {
+                NewUnitTypeSheet { newUnit in
+                    selectedDefaultUnit = newUnit
                 }
             }
 #if os(iOS)
@@ -404,27 +479,57 @@ struct NewUnitTypeSheet: View {
     var onSaved: ((UnitType) -> Void)? = nil
     @State private var name = ""
     @State private var abbr = ""
-    @State private var category: UnitCategory = .other
+    @State private var stepSize: Double = 1.0
+    @State private var displayAsInteger: Bool = false
+    
     var body: some View {
         NavigationStack {
             Form {
-                Section("Unit") {
+                Section("Unit Details") {
                     LabeledContent("Name") {
-                        TextField("", text: $name)
+                        TextField("e.g. Minutes, Reps, Miles", text: $name)
                             .textFieldStyle(.roundedBorder)
                     }
                     LabeledContent("Abbreviation") {
-                        TextField("", text: $abbr)
+                        TextField("e.g. min, reps, mi", text: $abbr)
                             .textFieldStyle(.roundedBorder)
                     }
                 }
-                Section("Category") {
-                    LabeledContent("Category") {
-                        Picker("Category", selection: $category) {
-                            ForEach(UnitCategory.allCases) { c in Text(c.rawValue).tag(c) }
+                
+                Section("Display Settings") {
+                    LabeledContent("Step Size") {
+                        HStack {
+                            TextField("1.0", value: $stepSize, format: .number)
+                                .textFieldStyle(.roundedBorder)
+                                .frame(width: 80)
+                            Text("Amount to add/subtract with stepper")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
                         }
-                        .labelsHidden()
                     }
+                    
+                    LabeledContent("Display Format") {
+                        Toggle("Show as whole numbers", isOn: $displayAsInteger)
+                    }
+                }
+                
+                Section {
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Examples:")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                        Text("• Time units: step size 0.5, decimal display")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                        Text("• Distance: step size 0.1, decimal display")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                        Text("• Counts/Reps: step size 1.0, whole numbers")
+                            .font(.caption2)
+                            .foregroundStyle(.tertiary)
+                    }
+                } header: {
+                    Text("Common Settings")
                 }
             }
             .navigationTitle("New Unit")
@@ -440,10 +545,11 @@ struct NewUnitTypeSheet: View {
                             let u: UnitType
                             if let existing = all.first(where: { $0.name.lowercased() == trimmedName.lowercased() }) {
                                 existing.abbreviation = trimmedAbbr
-                                existing.category = category
+                                existing.stepSize = stepSize
+                                existing.displayAsInteger = displayAsInteger
                                 u = existing
                             } else {
-                                u = UnitType(name: trimmedName, abbreviation: trimmedAbbr, category: category)
+                                u = UnitType(name: trimmedName, abbreviation: trimmedAbbr, stepSize: stepSize, displayAsInteger: displayAsInteger)
                                 ctx.insert(u)
                             }
                             try ctx.save()
@@ -452,7 +558,7 @@ struct NewUnitTypeSheet: View {
                             print("ERROR: UnitType save failed: \(error)")
                         }
                         dismiss()
-                    }.disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                    }.disabled(name.trimmingCharacters(in: .whitespaces).isEmpty || stepSize <= 0)
                 }
             }
 #if os(iOS)
@@ -464,6 +570,294 @@ struct NewUnitTypeSheet: View {
 #endif
         }
     }
+}
+
+struct EditExerciseTypeSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var ctx
+    @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
+    let exerciseType: ExerciseType
+    var onSaved: ((ExerciseType) -> Void)? = nil
+    
+    @State private var name = ""
+    @State private var selectedIcon: String? = nil
+    @State private var iconQuery: String = ""
+    @State private var selectedDefaultUnit: UnitType? = nil
+    @State private var showingNewUnitType = false
+    
+    private let fitnessSymbols: [String] = [
+        "figure.walk",
+        "figure.run",
+        "figure.mind.and.body",
+        "figure.core.training",
+        "figure.strengthtraining.traditional",
+        "figure.strengthtraining.functional",
+        "figure.elliptical",
+        "figure.cross.training",
+        "figure.hiking",
+        "figure.skiing.downhill",
+        "figure.surfing",
+        "figure.climbing",
+        "figure.disc.sports",
+        "figure.golf",
+        "bicycle",
+        "dumbbell",
+        "sportscourt",
+        "soccerball",
+        "basketball",
+        "tennis.racket",
+        "medal",
+        "star",
+        "flame"
+    ]
+    
+    
+    private var filteredUnitTypes: [UnitType] {
+        let grouped = Dictionary(grouping: unitTypes) { $0.name.lowercased() }
+        let unique = grouped.compactMap { _, dups in 
+            dups.max { $0.createdAt < $1.createdAt } 
+        }
+        return unique.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Exercise") {
+                    LabeledContent("Name") {
+                        TextField("", text: $name)
+                            .textFieldStyle(.roundedBorder)
+                    }
+                }
+                
+                Section("Default Unit (optional)") {
+                    LabeledContent("Default Unit") {
+                        Picker("", selection: $selectedDefaultUnit) {
+                            Text("None").tag(nil as UnitType?)
+                            ForEach(filteredUnitTypes) { unit in
+                                Text(unit.name).tag(Optional(unit))
+                            }
+                        }
+                        .pickerStyle(.menu)
+                    }
+                    
+                    Button("Add New Unit") {
+                        showingNewUnitType = true
+                    }
+                    .foregroundStyle(.accent)
+                }
+                
+                Section("Icon (optional)") {
+                    TextField("Search symbols", text: $iconQuery)
+                        .textFieldStyle(.roundedBorder)
+                    let choices = (iconQuery.trimmingCharacters(in: .whitespaces).isEmpty ? fitnessSymbols : fitnessSymbols.filter { $0.localizedCaseInsensitiveContains(iconQuery) })
+                    let cols = [GridItem(.adaptive(minimum: 44, maximum: 72), spacing: 12)]
+                    LazyVGrid(columns: cols, spacing: 12) {
+                        ForEach(choices, id: \.self) { sym in
+                            Button(action: { selectedIcon = selectedIcon == sym ? nil : sym }) {
+                                ZStack {
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(selectedIcon == sym ? Color.accentColor.opacity(0.2) : Color.clear)
+                                    Image(systemName: sym)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .padding(8)
+                                        .frame(width: 36, height: 36)
+                                        .foregroundStyle(selectedIcon == sym ? .accent : .primary)
+                                }
+                            }
+                            .buttonStyle(.plain)
+                            .frame(width: 44, height: 44)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                    .stroke(selectedIcon == sym ? Color.accentColor : Color.secondary.opacity(0.3), lineWidth: selectedIcon == sym ? 2 : 1)
+                            )
+                            .help(sym)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Edit Exercise")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) { Button("Cancel") { dismiss() } }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        let trimmedName = name.trimmingCharacters(in: .whitespaces)
+                        
+                        // Update the existing exercise type
+                        exerciseType.name = trimmedName
+                        exerciseType.iconSystemName = selectedIcon
+                        exerciseType.defaultUnit = selectedDefaultUnit
+                        
+                        do {
+                            try ctx.save()
+                            onSaved?(exerciseType)
+                        } catch {
+                            print("ERROR: ExerciseType update failed: \(error)")
+                        }
+                        dismiss()
+                    }.disabled(name.trimmingCharacters(in: .whitespaces).isEmpty)
+                }
+            }
+            .sheet(isPresented: $showingNewUnitType) {
+                NewUnitTypeSheet { newUnit in
+                    selectedDefaultUnit = newUnit
+                }
+            }
+            .onAppear {
+                // Pre-populate with existing values
+                name = exerciseType.name
+                selectedIcon = exerciseType.iconSystemName
+                selectedDefaultUnit = exerciseType.defaultUnit
+            }
+#if os(iOS)
+            .presentationDetents([.medium, .large])
+#elseif os(macOS)
+            .formStyle(.grouped)
+            .macPresentationFitted()
+            .frame(minWidth: 380, idealWidth: 460, maxWidth: 560)
+#endif
+        }
+    }
+}
+
+// MARK: - Settings View
+@MainActor
+struct SettingsView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var showingManageExerciseTypes = false
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Exercise Types") {
+                    Button("Manage Exercise Types") {
+                        showingManageExerciseTypes = true
+                    }
+                    .foregroundStyle(.primary)
+                }
+                
+                Section("Appearance") {
+                    LabeledContent("Theme") {
+                        Text("System")
+                            .foregroundStyle(.secondary)
+                    }
+                    // TODO: Add theme toggle when requested
+                }
+                
+                Section("Data") {
+                    LabeledContent("Import Data") {
+                        Text("Coming Soon")
+                            .foregroundStyle(.secondary)
+                    }
+                    LabeledContent("Export Data") {
+                        Text("Coming Soon")
+                            .foregroundStyle(.secondary)
+                    }
+                    // TODO: Add import/export when requested
+                }
+            }
+            .navigationTitle("Settings")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .sheet(isPresented: $showingManageExerciseTypes) {
+                ManageExerciseTypesView()
+            }
+#if os(macOS)
+            .formStyle(.grouped)
+            .macPresentationFitted()
+            .frame(minWidth: 380, idealWidth: 460, maxWidth: 560)
+#endif
+        }
+    }
+}
+
+// MARK: - Manage Exercise Types View  
+@MainActor
+struct ManageExerciseTypesView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
+    
+    @State private var editingExerciseType: ExerciseType?
+    
+    private var filteredExerciseTypes: [ExerciseType] {
+        // De-duplicate by case-insensitive name, prefer latest createdAt
+        let unique = Dictionary(grouping: exerciseTypes) { $0.name.lowercased() }
+            .compactMap { _, dups in dups.max { $0.createdAt < $1.createdAt } }
+        return unique.filter { $0.name.lowercased() != "other" }.sorted { $0.name.localizedCaseInsensitiveCompare($1.name) == .orderedAscending }
+    }
+    
+    var body: some View {
+        NavigationStack {
+            Form {
+                ForEach(filteredExerciseTypes) { exerciseType in
+                    HStack {
+                        if let iconName = exerciseType.iconSystemName {
+                            Image(systemName: iconName)
+                                .frame(width: 20)
+                                .foregroundStyle(.secondary)
+                        } else {
+                            Rectangle()
+                                .fill(Color.clear)
+                                .frame(width: 20, height: 20)
+                        }
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(exerciseType.name)
+                                .font(.body)
+                            
+                            if let defaultUnit = exerciseType.defaultUnit {
+                                Text("Default unit: \(defaultUnit.name)")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            } else {
+                                Text("No default unit")
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                        
+                        Spacer()
+                        
+                        Button("Edit") {
+                            editingExerciseType = exerciseType
+                        }
+                        .buttonStyle(.borderless)
+                        .foregroundStyle(.accent)
+                    }
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        editingExerciseType = exerciseType
+                    }
+                }
+            }
+            .navigationTitle("Exercise Types")
+            #if os(iOS)
+            .navigationBarTitleDisplayMode(.inline)
+            #endif
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Done") { dismiss() }
+                }
+            }
+            .sheet(item: $editingExerciseType) { exerciseType in
+                EditExerciseTypeSheet(exerciseType: exerciseType)
+            }
+#if os(macOS)
+            .formStyle(.grouped)
+            .macPresentationFitted()
+            .frame(minWidth: 480, idealWidth: 580, maxWidth: 680)
+#endif
+        }
+    }
+    
 }
 
 #if os(macOS)

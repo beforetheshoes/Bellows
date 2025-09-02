@@ -24,24 +24,86 @@ final class DayLog {
 
 }
 
-enum UnitCategory: String, Codable, CaseIterable, Identifiable {
-    case minutes, reps, steps, distanceMi, other
+enum UnitCategory: String, CaseIterable, Identifiable {
+    case time, reps, steps, distance, other
+    
     var id: String { rawValue }
+    
+    var displayName: String {
+        switch self {
+        case .time: return "Time"
+        case .reps: return "Reps"
+        case .steps: return "Steps"
+        case .distance: return "Distance"
+        case .other: return "Other"
+        }
+    }
+}
+
+// Custom Codable conformance to handle migration from old enum values
+extension UnitCategory: Codable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        
+        // Handle migration from old enum values
+        switch rawValue {
+        case "minutes":
+            self = .time
+        case "distanceMi":
+            self = .distance
+        case "time", "reps", "steps", "distance", "other":
+            self = UnitCategory(rawValue: rawValue) ?? .other
+        default:
+            self = .other
+        }
+    }
+    
+    func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(self.rawValue)
+    }
 }
 
 @Model
 final class UnitType {
     var name: String = "Unknown"
     var abbreviation: String = ""
-    var category: UnitCategory = UnitCategory.other
+    var stepSize: Double = 1.0
+    var displayAsInteger: Bool = false
     @Relationship(inverse: \ExerciseItem.unit) var exerciseItems: [ExerciseItem]? = []
+    @Relationship(inverse: \ExerciseType.defaultUnit) var exerciseTypesUsingAsDefault: [ExerciseType]? = []
     var createdAt: Date = Date()
 
+    init(name: String, abbreviation: String, stepSize: Double, displayAsInteger: Bool) {
+        self.name = name
+        self.abbreviation = abbreviation
+        self.stepSize = stepSize
+        self.displayAsInteger = displayAsInteger
+        self.createdAt = Date()
+    }
+    
+    // Migration support: keep category-based init for backward compatibility during transition
     init(name: String, abbreviation: String, category: UnitCategory) {
         self.name = name
         self.abbreviation = abbreviation
-        self.category = category
         self.createdAt = Date()
+        
+        // Convert old category to new properties
+        switch category {
+        case .time:
+            self.stepSize = 0.5
+            self.displayAsInteger = false
+        case .distance:
+            self.stepSize = 0.1
+            self.displayAsInteger = false
+        case .reps, .steps:
+            self.stepSize = 1.0
+            self.displayAsInteger = true
+        case .other:
+            self.stepSize = 1.0
+            self.displayAsInteger = false
+        }
     }
 }
 
@@ -53,14 +115,31 @@ final class ExerciseType {
     var defaultPaceMinPerMi: Double = 10.0
     @Relationship(inverse: \ExerciseItem.exercise) var exerciseItems: [ExerciseItem]? = []
     var iconSystemName: String?
+    var defaultUnit: UnitType?
     var createdAt: Date = Date()
+    
+    // Migration support: keep category-based init for backward compatibility
+    var defaultUnitCategory: UnitCategory?
 
-    init(name: String, baseMET: Double, repWeight: Double, defaultPaceMinPerMi: Double, iconSystemName: String? = nil) {
+    init(name: String, baseMET: Double, repWeight: Double, defaultPaceMinPerMi: Double, iconSystemName: String? = nil, defaultUnit: UnitType? = nil) {
         self.name = name
         self.baseMET = baseMET
         self.repWeight = repWeight
         self.defaultPaceMinPerMi = defaultPaceMinPerMi
         self.iconSystemName = iconSystemName
+        self.defaultUnit = defaultUnit
+        self.defaultUnitCategory = nil  // Explicitly set to nil when using direct unit reference
+        self.createdAt = Date()
+    }
+    
+    // Migration support: keep category-based init for backward compatibility during transition
+    init(name: String, baseMET: Double, repWeight: Double, defaultPaceMinPerMi: Double, iconSystemName: String? = nil, defaultUnitCategory: UnitCategory? = nil) {
+        self.name = name
+        self.baseMET = baseMET
+        self.repWeight = repWeight
+        self.defaultPaceMinPerMi = defaultPaceMinPerMi
+        self.iconSystemName = iconSystemName
+        self.defaultUnitCategory = defaultUnitCategory
         self.createdAt = Date()
     }
 }
@@ -110,23 +189,25 @@ extension Date {
 
 // Seed helpers
 struct SeedDefaults {
-    static let unitTypes: [(String, String, UnitCategory)] = [
-        ("Minutes", "min", .minutes),
-        ("Reps", "reps", .reps),
-        ("Steps", "steps", .steps),
-        ("Miles", "mi", .distanceMi),
-        ("Other", "", .other)
+    static let unitTypes: [(String, String, Double, Bool)] = [
+        ("Minutes", "min", 0.5, false),  // Time units: 0.5 increments, decimal display
+        ("Seconds", "sec", 1.0, false),  // Time units: 1.0 increments, decimal display  
+        ("Reps", "reps", 1.0, true),     // Count units: 1.0 increments, integer display
+        ("Steps", "steps", 1.0, true),   // Count units: 1.0 increments, integer display
+        ("Miles", "mi", 0.1, false),     // Distance units: 0.1 increments, decimal display
+        ("Kilometers", "km", 0.1, false), // Distance units: 0.1 increments, decimal display
+        ("Laps", "laps", 1.0, true),     // Can be distance or count - user chooses integer display
     ]
 
-    static let exerciseTypes: [(String, Double, Double, Double, String?)] = [
-        ("Walk", 3.3, 0.15, 12.0, "figure.walk"),
-        ("Run", 9.8, 0.15, 6.0, "figure.run"),
-        ("Cycling", 6.8, 0.15, 2.0, "bicycle"),
-        ("Yoga", 2.5, 0.15, 10.0, "figure.mind.and.body"),
-        ("Plank", 3.8, 0.15, 10.0, "figure.core.training"),
-        ("Pushups", 8.0, 0.6, 10.0, "figure.strengthtraining.traditional"),
-        ("Squats", 5.0, 0.25, 10.0, "figure.strengthtraining.functional"),
-        ("Other", 4.0, 0.15, 10.0, "square.grid.2x2")
+    static let exerciseTypes: [(String, Double, Double, Double, String?, String?)] = [
+        ("Walk", 3.3, 0.15, 12.0, "figure.walk", "Minutes"),
+        ("Run", 9.8, 0.15, 6.0, "figure.run", "Minutes"),
+        ("Cycling", 6.8, 0.15, 2.0, "bicycle", "Minutes"),
+        ("Yoga", 2.5, 0.15, 10.0, "figure.mind.and.body", "Minutes"),
+        ("Plank", 3.8, 0.15, 10.0, "figure.core.training", "Minutes"),
+        ("Pushups", 8.0, 0.6, 10.0, "figure.strengthtraining.traditional", "Reps"),
+        ("Squats", 5.0, 0.25, 10.0, "figure.strengthtraining.functional", "Reps"),
+        ("Other", 4.0, 0.15, 10.0, "square.grid.2x2", nil)
     ]
 }
 
@@ -138,10 +219,17 @@ struct SeedService {
         do {
             let defaults = SeedDefaults.exerciseTypes
             var existing = try context.fetch(FetchDescriptor<ExerciseType>())
-            for (rawName, met, repW, pace, icon) in defaults {
+            let allUnits = try context.fetch(FetchDescriptor<UnitType>())
+            
+            for (rawName, met, repW, pace, icon, defaultUnitName) in defaults {
                 let name = rawName.trimmingCharacters(in: .whitespaces)
                 if existing.first(where: { $0.name.lowercased() == name.lowercased() }) == nil {
-                    let e = ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon)
+                    // Find the default unit by name
+                    let defaultUnit = defaultUnitName.map { unitName in
+                        allUnits.first { $0.name.lowercased() == unitName.lowercased() }
+                    } ?? nil
+                    
+                    let e = ExerciseType(name: name, baseMET: met, repWeight: repW, defaultPaceMinPerMi: pace, iconSystemName: icon, defaultUnit: defaultUnit)
                     context.insert(e)
                     existing.append(e)
                 }
@@ -156,15 +244,19 @@ struct SeedService {
         do {
             let defaults = SeedDefaults.unitTypes
             var existing = try context.fetch(FetchDescriptor<UnitType>())
-            for (rawName, rawAbbr, cat) in defaults {
+            for (rawName, rawAbbr, stepSize, displayAsInteger) in defaults {
                 let name = rawName.trimmingCharacters(in: .whitespaces)
                 let abbr = rawAbbr.trimmingCharacters(in: .whitespaces)
                 if let found = existing.first(where: { $0.name.lowercased() == name.lowercased() }) {
+                    // Update existing unit with new properties if they're using defaults
                     if found.abbreviation.trimmingCharacters(in: .whitespaces).isEmpty {
                         found.abbreviation = abbr
                     }
+                    // Update step size and display format for existing units
+                    found.stepSize = stepSize
+                    found.displayAsInteger = displayAsInteger
                 } else {
-                    let u = UnitType(name: name, abbreviation: abbr, category: cat)
+                    let u = UnitType(name: name, abbreviation: abbr, stepSize: stepSize, displayAsInteger: displayAsInteger)
                     context.insert(u)
                     existing.append(u)
                 }
@@ -239,11 +331,16 @@ struct DedupService {
     }
 }
 
+func stepForUnit(_ unit: UnitType?) -> Double {
+    return unit?.stepSize ?? 1.0
+}
+
+// Keep old function for compatibility during migration
 func stepForUnitCategory(_ category: UnitCategory?) -> Double {
     switch category {
     case .reps, .steps: return 1
-    case .distanceMi: return 0.1
-    case .minutes: return 0.5
+    case .distance: return 0.1
+    case .time: return 0.5
     default: return 0.5
     }
 }

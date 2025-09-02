@@ -245,7 +245,7 @@ struct NavigationTests {
     @Test func navigationWithModelContainer() throws {
         // Create test data
         let dayLog = DayLog(date: Date())
-        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0)
+        let exercise = ExerciseType(name: "Test", baseMET: 5.0, repWeight: 0.2, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
         let unit = UnitType(name: "Reps", abbreviation: "reps", category: .reps)
         let item = ExerciseItem(exercise: exercise, unit: unit, amount: 10)
         
