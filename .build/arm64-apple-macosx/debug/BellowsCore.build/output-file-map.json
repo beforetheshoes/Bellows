@@ -65,6 +65,13 @@
     "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.swiftdeps",
     "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/Models.dia"
   },
+  "/Users/ryan/Developer/Swift/Bellows/Bellows/SFFitnessSymbols.swift": {
+    "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/SFFitnessSymbols.d",
+    "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/SFFitnessSymbols.swift.o",
+    "swiftmodule": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/SFFitnessSymbols~partial.swiftmodule",
+    "swift-dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/SFFitnessSymbols.swiftdeps",
+    "diagnostics": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/SFFitnessSymbols.dia"
+  },
   "/Users/ryan/Developer/Swift/Bellows/Bellows/StreakHeaderView.swift": {
     "dependencies": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.d",
     "object": "/Users/ryan/Developer/Swift/Bellows/.build/arm64-apple-macosx/debug/BellowsCore.build/StreakHeaderView.swift.o",

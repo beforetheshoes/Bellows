@@ -3,6 +3,7 @@ import SwiftData
 
 @MainActor
 struct HistoryView: View {
+    @ObservedObject private var themeManager = ThemeManager.shared
     @Query(sort: \DayLog.date, order: .reverse) private var logs: [DayLog]
     @State private var showCalendarView = true
     @State private var selectedDate = Date()
@@ -11,11 +12,11 @@ struct HistoryView: View {
     init() {}
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: DS.Metrics.spacing) {
             if showCalendarView {
-                calendarView
+                SectionCard { calendarView }
             } else {
-                listView
+                SectionCard { listView }
             }
         }
         .navigationTitle("History")
@@ -27,11 +28,11 @@ struct HistoryView: View {
                 HStack(spacing: 12) {
                     Button(action: { showCalendarView = true }) {
                         Image(systemName: "calendar")
-                            .foregroundColor(showCalendarView ? .accentColor : .secondary)
+                            .foregroundColor(showCalendarView ? DS.ColorToken.accent : .secondary)
                     }
                     Button(action: { showCalendarView = false }) {
                         Image(systemName: "list.bullet")
-                            .foregroundColor(showCalendarView ? .secondary : .accentColor)
+                            .foregroundColor(showCalendarView ? .secondary : DS.ColorToken.accent)
                     }
                 }
                 #if os(iOS)
@@ -101,7 +102,7 @@ struct HistoryView: View {
                             ZStack {
                                 if isSelected {
                                     Circle()
-                                        .fill(Color.accentColor.opacity(0.15))
+                                        .fill(DS.ColorToken.accent.opacity(0.15))
                                         .frame(width: 32, height: 32)
                                 }
                                 Text("\(Calendar.current.component(.day, from: day))")
@@ -128,7 +129,7 @@ struct HistoryView: View {
                             ZStack {
                                 if isSelected {
                                     Circle()
-                                        .fill(Color.accentColor.opacity(0.15))
+                                        .fill(DS.ColorToken.accent.opacity(0.15))
                                         .frame(width: 32, height: 32)
                                 }
                                 Text("\(Calendar.current.component(.day, from: day))")

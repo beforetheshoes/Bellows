@@ -5,6 +5,7 @@ import SwiftData
 struct AppRootView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var hSizeClass
+    @ObservedObject private var themeManager = ThemeManager.shared
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
 
@@ -20,6 +21,8 @@ struct AppRootView: View {
             SplitLayout()
             #endif
         }
+        .background(DS.ColorToken.background)
+        .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         .onAppear { seedDefaultsIfNeeded() }
     }
 

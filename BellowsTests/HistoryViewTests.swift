@@ -639,7 +639,6 @@ struct HistoryViewTests {
         let testView = TestDateSelection { date in
             capturedDate = date
         }
-        _ = testView
         
         // Simulate date change to verify callback works
         let expectedDate = Date()

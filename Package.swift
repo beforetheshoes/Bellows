@@ -9,44 +9,29 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "BellowsCore",
-            targets: ["BellowsCore"]
+            name: "Bellows",
+            targets: ["Bellows"]
         )
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "BellowsCore",
+            name: "Bellows",
             path: "Bellows",
-            sources: [
-                "Models.swift",
-                "Analytics.swift",
-                "DesignSystem.swift",
-                "StreakVisuals.swift",
-                "StreakHeaderView.swift",
-                "HomeView.swift",
-                "SFFitnessSymbols.swift",
-                "AppRootView.swift",
-                "HistoryView.swift",
-                "DayDetailView.swift",
-                "ExerciseSheets.swift",
-                "BellowsApp.swift"
+            exclude: [
+                "Assets.xcassets",
+                "Bellows.entitlements",
+                "Info.plist",
+                "HomeView_old.swift",
+                // Old monolithic files replaced by Views/* and Helpers/*
+                "BellowsComponents.swift",
+                "ExerciseSheets.swift"
             ]
         ),
         .testTarget(
-            name: "BellowsCoreTests",
-            dependencies: ["BellowsCore"],
-            path: "BellowsTests",
-            sources: [
-                "ModelsTests.swift",
-                "AnalyticsTests.swift",
-                "DesignSystemTests.swift",
-                "StreakVisualsTests.swift",
-                "ViewTests.swift",
-                "BellowsAppTests.swift",
-                "ExerciseSheetsTests.swift",
-                "UniquenessTests.swift"
-            ]
+            name: "BellowsTests",
+            dependencies: ["Bellows"],
+            path: "BellowsTests"
         )
     ]
 )

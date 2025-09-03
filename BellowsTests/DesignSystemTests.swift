@@ -6,6 +6,7 @@ struct DesignSystemTests {
     
     // MARK: - Color Token Tests
     
+    @MainActor
     @Test func colorTokensExist() {
         // Verify all color tokens are accessible
         _ = DS.ColorToken.background
@@ -31,14 +32,14 @@ struct DesignSystemTests {
         // GradientEnd color exists
     }
     
+    @MainActor
     @Test func gradientColorsAreDifferent() {
-        // Gradient colors should be different
+        // Gradient colors should be different - this now depends on current theme
         let startColor = DS.ColorToken.gradientStart
         let endColor = DS.ColorToken.gradientEnd
         
-        // While we can't directly compare Color values, we can verify they're defined differently
-        #expect(String(describing: startColor) == String(describing: Color.blue))
-        #expect(String(describing: endColor) == String(describing: Color.purple))
+        // Colors should be accessible and different
+        #expect(String(describing: startColor) != String(describing: endColor))
     }
     
     // MARK: - Metrics Tests
@@ -132,6 +133,7 @@ struct DesignSystemTests {
     
     // MARK: - Design System Consistency Tests
     
+    @MainActor
     @Test func colorTokenConsistency() {
         // Verify that system colors are being used consistently
         let background = DS.ColorToken.background
@@ -224,6 +226,7 @@ struct DesignSystemTests {
         #expect(true)
     }
     
+    @MainActor
     @Test func gradientCreation() {
         // Test that gradient colors can be used to create a gradient
         _ = LinearGradient(
@@ -236,6 +239,7 @@ struct DesignSystemTests {
         #expect(true)
     }
     
+    @MainActor
     @Test func allTokensAccessible() {
         // Comprehensive test to ensure all tokens are accessible
         // This helps ensure 100% coverage

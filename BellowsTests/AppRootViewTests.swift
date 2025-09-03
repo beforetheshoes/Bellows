@@ -9,12 +9,18 @@ struct AppRootViewTests {
     let modelContext: ModelContext
     
     init() {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let schema = Schema([
+            DayLog.self,
+            ExerciseType.self,
+            UnitType.self,
+            ExerciseItem.self
+        ])
+        let config = ModelConfiguration(
+            schema: schema,
+            isStoredInMemoryOnly: true
+        )
         do {
-            modelContainer = try ModelContainer(
-                for: DayLog.self, ExerciseType.self, UnitType.self, ExerciseItem.self,
-                configurations: config
-            )
+            modelContainer = try ModelContainer(for: schema, configurations: [config])
             modelContext = ModelContext(modelContainer)
         } catch {
             fatalError("Failed to create model container: \(error)")

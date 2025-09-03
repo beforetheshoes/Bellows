@@ -31,34 +31,27 @@ struct DayDetailView: View {
             VStack(alignment: .leading, spacing: 16) {
                 if let dayLog = dayLog {
                     if dayLog.unwrappedItems.isEmpty {
-                        VStack(spacing: 12) {
-                            Text("No exercises logged")
-                                .font(.headline)
-                            Text("No activities were recorded for this day.")
-                                .foregroundStyle(.secondary)
+                        SectionCard {
+                            VStack(spacing: 12) {
+                                Text("No exercises logged").font(.headline)
+                                Text("No activities were recorded for this day.").foregroundStyle(.secondary)
+                            }
+                            .frame(maxWidth: .infinity, minHeight: 120)
                         }
-                        .frame(maxWidth: .infinity, minHeight: 120)
-                        .padding()
-                        .background(.regularMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     } else {
-                        exercisesList(for: dayLog)
-                        
+                        SectionCard { exercisesListContent(for: dayLog) }
                         if let averages = dailyAverages(for: dayLog) {
-                            summaryCard(averages: averages)
+                            SectionCard { summaryCardContent(averages: averages) }
                         }
                     }
                 } else {
-                    VStack(spacing: 12) {
-                        Text("No data")
-                            .font(.headline)
-                        Text("No log entry exists for this date.")
-                            .foregroundStyle(.secondary)
+                    SectionCard {
+                        VStack(spacing: 12) {
+                            Text("No data").font(.headline)
+                            Text("No log entry exists for this date.").foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: 120)
                     }
-                    .frame(maxWidth: .infinity, minHeight: 120)
-                    .padding()
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
                 }
             }
             .padding()
@@ -90,7 +83,7 @@ struct DayDetailView: View {
         }
     }
     
-    private func exercisesList(for dayLog: DayLog) -> some View {
+    private func exercisesListContent(for dayLog: DayLog) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Exercises")
                 .font(.headline)
@@ -125,7 +118,7 @@ struct DayDetailView: View {
                         }
                     }
                     .padding()
-                    .background(.regularMaterial)
+                    .background(DS.ColorToken.card)
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                     .contentShape(Rectangle())
                     .onTapGesture {
@@ -148,12 +141,10 @@ struct DayDetailView: View {
                 }
             }
         }
-        .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(.top, 4)
     }
     
-    private func summaryCard(averages: (enjoyment: Double, intensity: Double)) -> some View {
+    private func summaryCardContent(averages: (enjoyment: Double, intensity: Double)) -> some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Daily Summary")
                 .font(.headline)
@@ -180,9 +171,7 @@ struct DayDetailView: View {
                 Spacer()
             }
         }
-        .padding()
-        .background(.regularMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .padding(.top, 4)
     }
     
     private func label(for item: ExerciseItem) -> String {

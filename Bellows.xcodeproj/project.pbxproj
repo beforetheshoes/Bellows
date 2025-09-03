@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		948475212E65FC7200A1AE4B /* DayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9484751F2E65FC7200A1AE4B /* DayDetailView.swift */; };
-		948475242E65FC8100A1AE4B /* ExerciseSheets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948475222E65FC8100A1AE4B /* ExerciseSheets.swift */; };
+		9484757E2E67A6B500A1AE4B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9484757D2E67A6B100A1AE4B /* SettingsView.swift */; };
 		E50000101A00000100000001 /* BellowsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000AA1A00000100000001 /* BellowsApp.swift */; };
 		E50000111A00000100000001 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E500001A1A00000100000001 /* HomeView.swift */; };
 		E50000121A00000100000001 /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = E500001B1A00000100000001 /* Models.swift */; };
@@ -19,6 +19,22 @@
 		E50000231A00000100000001 /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000281A00000100000001 /* HistoryView.swift */; };
 		E500002A1A00000100000001 /* StreakVisuals.swift in Sources */ = {isa = PBXBuildFile; fileRef = E500002B1A00000100000001 /* StreakVisuals.swift */; };
 		E50000311A00000100000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E50000301A00000100000001 /* Assets.xcassets */; };
+		E50010B11A00000100000001 /* Views/Sheets/AddExerciseItemSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A11A00000100000001 /* Views/Sheets/AddExerciseItemSheet.swift */; };
+		E50010B21A00000100000001 /* Views/Sheets/EditExerciseItemSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A21A00000100000001 /* Views/Sheets/EditExerciseItemSheet.swift */; };
+		E50010B31A00000100000001 /* Views/Sheets/EditExerciseTypeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A31A00000100000001 /* Views/Sheets/EditExerciseTypeSheet.swift */; };
+		E50010B41A00000100000001 /* Views/Sheets/NewExerciseTypeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A41A00000100000001 /* Views/Sheets/NewExerciseTypeSheet.swift */; };
+		E50010B51A00000100000001 /* Views/Sheets/NewUnitTypeSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A51A00000100000001 /* Views/Sheets/NewUnitTypeSheet.swift */; };
+		E50010B61A00000100000001 /* Views/ManageExerciseTypesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A61A00000100000001 /* Views/ManageExerciseTypesView.swift */; };
+		E50010B71A00000100000001 /* Views/Components/ExerciseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A71A00000100000001 /* Views/Components/ExerciseRowView.swift */; };
+		E50010B81A00000100000001 /* Views/Components/ExerciseSelectionSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A81A00000100000001 /* Views/Components/ExerciseSelectionSection.swift */; };
+		E50010B91A00000100000001 /* Views/Components/HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010A91A00000100000001 /* Views/Components/HomeHeaderView.swift */; };
+		E50010BA1A00000100000001 /* Views/Components/LogExerciseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AA1A00000100000001 /* Views/Components/LogExerciseButton.swift */; };
+		E50010BB1A00000100000001 /* Views/Components/NoteSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AB1A00000100000001 /* Views/Components/NoteSection.swift */; };
+		E50010BC1A00000100000001 /* Views/Components/RatingsSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AC1A00000100000001 /* Views/Components/RatingsSection.swift */; };
+		E50010BD1A00000100000001 /* Views/Components/TodaysExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AD1A00000100000001 /* Views/Components/TodaysExercisesView.swift */; };
+		E50010BE1A00000100000001 /* Helpers/ExerciseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AE1A00000100000001 /* Helpers/ExerciseHelpers.swift */; };
+		E50010BF1A00000100000001 /* Services/SeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AF1A00000100000001 /* Services/SeedService.swift */; };
+		E50010C01A00000100000001 /* Services/DedupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010B01A00000100000001 /* Services/DedupService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +51,7 @@
 		940055DE2E64678F006840C8 /* Bellows.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bellows.entitlements; sourceTree = "<group>"; };
 		948475082E65FAFE00A1AE4B /* BellowsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BellowsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9484751F2E65FC7200A1AE4B /* DayDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailView.swift; sourceTree = "<group>"; };
-		948475222E65FC8100A1AE4B /* ExerciseSheets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseSheets.swift; sourceTree = "<group>"; };
+		9484757D2E67A6B100A1AE4B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		E50000051A00000100000001 /* Bellows.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bellows.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E50000151A00000100000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E500001A1A00000100000001 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
@@ -48,6 +64,22 @@
 		E500002B1A00000100000001 /* StreakVisuals.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakVisuals.swift; sourceTree = "<group>"; };
 		E50000301A00000100000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E50000AA1A00000100000001 /* BellowsApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BellowsApp.swift; sourceTree = "<group>"; };
+		E50010A11A00000100000001 /* Views/Sheets/AddExerciseItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Sheets/AddExerciseItemSheet.swift; sourceTree = "<group>"; };
+		E50010A21A00000100000001 /* Views/Sheets/EditExerciseItemSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Sheets/EditExerciseItemSheet.swift; sourceTree = "<group>"; };
+		E50010A31A00000100000001 /* Views/Sheets/EditExerciseTypeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Sheets/EditExerciseTypeSheet.swift; sourceTree = "<group>"; };
+		E50010A41A00000100000001 /* Views/Sheets/NewExerciseTypeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Sheets/NewExerciseTypeSheet.swift; sourceTree = "<group>"; };
+		E50010A51A00000100000001 /* Views/Sheets/NewUnitTypeSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Sheets/NewUnitTypeSheet.swift; sourceTree = "<group>"; };
+		E50010A61A00000100000001 /* Views/ManageExerciseTypesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ManageExerciseTypesView.swift; sourceTree = "<group>"; };
+		E50010A71A00000100000001 /* Views/Components/ExerciseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ExerciseRowView.swift; sourceTree = "<group>"; };
+		E50010A81A00000100000001 /* Views/Components/ExerciseSelectionSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/ExerciseSelectionSection.swift; sourceTree = "<group>"; };
+		E50010A91A00000100000001 /* Views/Components/HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/HomeHeaderView.swift; sourceTree = "<group>"; };
+		E50010AA1A00000100000001 /* Views/Components/LogExerciseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/LogExerciseButton.swift; sourceTree = "<group>"; };
+		E50010AB1A00000100000001 /* Views/Components/NoteSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/NoteSection.swift; sourceTree = "<group>"; };
+		E50010AC1A00000100000001 /* Views/Components/RatingsSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/RatingsSection.swift; sourceTree = "<group>"; };
+		E50010AD1A00000100000001 /* Views/Components/TodaysExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/Components/TodaysExercisesView.swift; sourceTree = "<group>"; };
+		E50010AE1A00000100000001 /* Helpers/ExerciseHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/ExerciseHelpers.swift; sourceTree = "<group>"; };
+		E50010AF1A00000100000001 /* Services/SeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SeedService.swift; sourceTree = "<group>"; };
+		E50010B01A00000100000001 /* Services/DedupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/DedupService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -93,6 +125,7 @@
 		E50000181A00000100000001 /* Bellows */ = {
 			isa = PBXGroup;
 			children = (
+				9484757D2E67A6B100A1AE4B /* SettingsView.swift */,
 				E500001C1A00000100000001 /* Analytics.swift */,
 				E50000261A00000100000001 /* AppRootView.swift */,
 				E50000301A00000100000001 /* Assets.xcassets */,
@@ -100,13 +133,28 @@
 				E50000AA1A00000100000001 /* BellowsApp.swift */,
 				9484751F2E65FC7200A1AE4B /* DayDetailView.swift */,
 				E50000251A00000100000001 /* DesignSystem.swift */,
-				948475222E65FC8100A1AE4B /* ExerciseSheets.swift */,
 				E50000281A00000100000001 /* HistoryView.swift */,
 				E500001A1A00000100000001 /* HomeView.swift */,
 				E50000151A00000100000001 /* Info.plist */,
 				E500001B1A00000100000001 /* Models.swift */,
 				E50000271A00000100000001 /* StreakHeaderView.swift */,
 				E500002B1A00000100000001 /* StreakVisuals.swift */,
+				E50010AE1A00000100000001 /* Helpers/ExerciseHelpers.swift */,
+				E50010AF1A00000100000001 /* Services/SeedService.swift */,
+				E50010B01A00000100000001 /* Services/DedupService.swift */,
+				E50010A71A00000100000001 /* Views/Components/ExerciseRowView.swift */,
+				E50010A81A00000100000001 /* Views/Components/ExerciseSelectionSection.swift */,
+				E50010A91A00000100000001 /* Views/Components/HomeHeaderView.swift */,
+				E50010AA1A00000100000001 /* Views/Components/LogExerciseButton.swift */,
+				E50010AB1A00000100000001 /* Views/Components/NoteSection.swift */,
+				E50010AC1A00000100000001 /* Views/Components/RatingsSection.swift */,
+				E50010AD1A00000100000001 /* Views/Components/TodaysExercisesView.swift */,
+				E50010A11A00000100000001 /* Views/Sheets/AddExerciseItemSheet.swift */,
+				E50010A21A00000100000001 /* Views/Sheets/EditExerciseItemSheet.swift */,
+				E50010A31A00000100000001 /* Views/Sheets/EditExerciseTypeSheet.swift */,
+				E50010A41A00000100000001 /* Views/Sheets/NewExerciseTypeSheet.swift */,
+				E50010A51A00000100000001 /* Views/Sheets/NewUnitTypeSheet.swift */,
+				E50010A61A00000100000001 /* Views/ManageExerciseTypesView.swift */,
 			);
 			path = Bellows;
 			sourceTree = SOURCE_ROOT;
@@ -231,8 +279,24 @@
 				948475212E65FC7200A1AE4B /* DayDetailView.swift in Sources */,
 				E50000221A00000100000001 /* StreakHeaderView.swift in Sources */,
 				E50000231A00000100000001 /* HistoryView.swift in Sources */,
+				9484757E2E67A6B500A1AE4B /* SettingsView.swift in Sources */,
 				E500002A1A00000100000001 /* StreakVisuals.swift in Sources */,
-				948475242E65FC8100A1AE4B /* ExerciseSheets.swift in Sources */,
+				E50010BF1A00000100000001 /* Services/SeedService.swift in Sources */,
+				E50010C01A00000100000001 /* Services/DedupService.swift in Sources */,
+				E50010BE1A00000100000001 /* Helpers/ExerciseHelpers.swift in Sources */,
+				E50010B11A00000100000001 /* Views/Sheets/AddExerciseItemSheet.swift in Sources */,
+				E50010B21A00000100000001 /* Views/Sheets/EditExerciseItemSheet.swift in Sources */,
+				E50010B31A00000100000001 /* Views/Sheets/EditExerciseTypeSheet.swift in Sources */,
+				E50010B41A00000100000001 /* Views/Sheets/NewExerciseTypeSheet.swift in Sources */,
+				E50010B51A00000100000001 /* Views/Sheets/NewUnitTypeSheet.swift in Sources */,
+				E50010B61A00000100000001 /* Views/ManageExerciseTypesView.swift in Sources */,
+				E50010B71A00000100000001 /* Views/Components/ExerciseRowView.swift in Sources */,
+				E50010B81A00000100000001 /* Views/Components/ExerciseSelectionSection.swift in Sources */,
+				E50010B91A00000100000001 /* Views/Components/HomeHeaderView.swift in Sources */,
+				E50010BA1A00000100000001 /* Views/Components/LogExerciseButton.swift in Sources */,
+				E50010BB1A00000100000001 /* Views/Components/NoteSection.swift in Sources */,
+				E50010BC1A00000100000001 /* Views/Components/RatingsSection.swift in Sources */,
+				E50010BD1A00000100000001 /* Views/Components/TodaysExercisesView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
