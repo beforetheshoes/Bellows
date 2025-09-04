@@ -5,6 +5,7 @@ struct NewExerciseTypeSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var ctx
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
+    @Bindable private var themeManager = ThemeManager.shared
     var onSaved: ((ExerciseType) -> Void)? = nil
     @State private var name = ""
     @State private var selectedIcon: String? = nil
@@ -150,6 +151,7 @@ struct NewExerciseTypeSheet: View {
             .macPresentationFitted()
             .frame(minWidth: 420, idealWidth: 520, maxWidth: 620)
             #endif
+            .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         }
     }
 }

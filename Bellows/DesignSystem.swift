@@ -1,4 +1,5 @@
 import SwiftUI
+import Observation
 
 // Cross‑platform system colors helpers
 private extension Color {
@@ -149,14 +150,15 @@ enum Theme: String, CaseIterable {
 // MARK: - Theme Manager
 
 @MainActor
-class ThemeManager: ObservableObject {
+@Observable
+class ThemeManager {
     static let shared = ThemeManager()
     
-    @AppStorage("selectedTheme") private var storedTheme: String = Theme.classic.rawValue
-    @AppStorage("selectedAppearanceMode") private var storedAppearanceMode: String = AppearanceMode.system.rawValue
+    @ObservationIgnored @AppStorage("selectedTheme") private var storedTheme: String = Theme.classic.rawValue
+    @ObservationIgnored @AppStorage("selectedAppearanceMode") private var storedAppearanceMode: String = AppearanceMode.system.rawValue
     
-    @Published var currentTheme: Theme = .classic
-    @Published var currentAppearanceMode: AppearanceMode = .system
+    var currentTheme: Theme = .classic
+    var currentAppearanceMode: AppearanceMode = .system
     
     private init() {
         // Load theme from stored value
@@ -256,7 +258,7 @@ enum DS {
 
 @MainActor
 struct SectionCard<Content: View>: View {
-    @ObservedObject private var themeManager = ThemeManager.shared
+    private var themeManager = ThemeManager.shared
     private let content: Content
     private let cornerRadius: CGFloat
     private let vPad: CGFloat

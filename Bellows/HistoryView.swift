@@ -3,7 +3,7 @@ import SwiftData
 
 @MainActor
 struct HistoryView: View {
-    @ObservedObject private var themeManager = ThemeManager.shared
+    private var themeManager = ThemeManager.shared
     @Query(sort: \DayLog.date, order: .reverse) private var logs: [DayLog]
     @State private var showCalendarView = true
     @State private var selectedDate = Date()

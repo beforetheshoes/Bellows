@@ -4,7 +4,7 @@ import SwiftData
 @MainActor
 struct HomeView: View {
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject private var themeManager = ThemeManager.shared
+    private var themeManager = ThemeManager.shared
     @Query(sort: \DayLog.date, order: .reverse) private var logs: [DayLog]
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]

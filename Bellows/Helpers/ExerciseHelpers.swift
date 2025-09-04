@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import Foundation
 
 // Helper function for default unit selection
 func findBestMatchingUnit(for exercise: ExerciseType, from units: [UnitType]) -> UnitType? {
@@ -26,22 +27,30 @@ func findBestMatchingUnit(for exercise: ExerciseType, from units: [UnitType]) ->
             return matchingByName
         }
         
-        // Additional fallback: try partial name matching with preference for the target pattern
-        // First try to find units that contain the expected name
-        if let partialMatch = units.first(where: { unit in
-            let unitName = unit.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            return unitName.contains(defaultUnitName)
-        }) {
-            return partialMatch
+        // Additional fallback: normalized name similarity (handles "mins" vs "minutes", "minute(s)", punctuation)
+        func normalize(_ s: String) -> String {
+            var t = s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            t = t.replacingOccurrences(of: "[^a-z]", with: "", options: .regularExpression)
+            if t.hasSuffix("s") { t.removeLast() } // naive singularization
+            return t
         }
-        
-        // Then try the reverse (default name contains unit name)
-        if let reverseMatch = units.first(where: { unit in
-            let unitName = unit.name.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-            return defaultUnitName.contains(unitName)
-        }) {
-            return reverseMatch
-        }
+        let target = normalize(defaultUnit.name)
+
+        // Exact normalized equality
+        if let eq = units.first(where: { normalize($0.name) == target }) { return eq }
+
+        // Contains (either direction) on normalized forms
+        if let contains = units.first(where: {
+            let n = normalize($0.name)
+            return n.contains(target) || target.contains(n)
+        }) { return contains }
+
+        // Common prefix length heuristic (>= 3)
+        if let pref = units.first(where: {
+            let n = normalize($0.name)
+            let common = String(zip(n, target).prefix { $0 == $1 }.map { $0.0 })
+            return common.count >= 3
+        }) { return pref }
     }
     
     // Migration support: If exercise still has a default unit category, find the first unit that matches the expected properties for that category

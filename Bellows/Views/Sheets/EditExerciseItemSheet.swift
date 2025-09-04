@@ -9,6 +9,7 @@ struct EditExerciseItemSheet: View {
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
+    @Bindable private var themeManager = ThemeManager.shared
     
     @State private var selectedExercise: ExerciseType?
     @State private var selectedUnit: UnitType?
@@ -78,13 +79,21 @@ struct EditExerciseItemSheet: View {
                     Text("Ratings").font(.headline)
                     SectionCard {
                         VStack(alignment: .leading, spacing: 12) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Picker("", selection: $enjoyment) { ForEach(1...5, id: \.self) { Text("\($0)").tag($0) } }
-                                    .pickerStyle(.segmented)
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Enjoyment").font(.caption).foregroundStyle(.secondary)
+                                Picker("Enjoyment", selection: $enjoyment) {
+                                    ForEach(1...5, id: \.self) { Text("\($0)").tag($0) }
+                                }
+                                .pickerStyle(.segmented)
+                                .labelsHidden()
                             }
-                            VStack(alignment: .leading, spacing: 8) {
-                                Picker("", selection: $intensity) { ForEach(1...5, id: \.self) { Text("\($0)").tag($0) } }
-                                    .pickerStyle(.segmented)
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("Intensity").font(.caption).foregroundStyle(.secondary)
+                                Picker("Intensity", selection: $intensity) {
+                                    ForEach(1...5, id: \.self) { Text("\($0)").tag($0) }
+                                }
+                                .pickerStyle(.segmented)
+                                .labelsHidden()
                             }
                         }
                     }
@@ -163,6 +172,7 @@ struct EditExerciseItemSheet: View {
             .macPresentationFitted()
             .frame(minWidth: 380, idealWidth: 460, maxWidth: 560)
             #endif
+            .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         }
     }
     

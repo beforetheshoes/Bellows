@@ -6,6 +6,7 @@ struct ManageExerciseTypesView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
+    @Bindable private var themeManager = ThemeManager.shared
     
     @State private var editingExerciseType: ExerciseType?
     
@@ -72,6 +73,7 @@ struct ManageExerciseTypesView: View {
             .macPresentationFitted()
             .frame(minWidth: 480, idealWidth: 580, maxWidth: 680)
             #endif
+            .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         }
     }
 }

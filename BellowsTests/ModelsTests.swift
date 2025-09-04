@@ -16,7 +16,8 @@ struct ModelsTests {
         ])
         let config = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: true
+            isStoredInMemoryOnly: true,
+            cloudKitDatabase: .none
         )
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [config])

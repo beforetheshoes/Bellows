@@ -5,7 +5,8 @@ import SwiftData
 struct AppRootView: View {
     @Environment(\.modelContext) private var modelContext
     @Environment(\.horizontalSizeClass) private var hSizeClass
-    @ObservedObject private var themeManager = ThemeManager.shared
+    @Bindable private var themeManager = ThemeManager.shared
+    @Bindable private var hkService = HealthKitService.shared
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
 
@@ -24,6 +25,31 @@ struct AppRootView: View {
         .background(DS.ColorToken.background)
         .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         .onAppear { seedDefaultsIfNeeded() }
+        // Tiny toast for first background import
+        .overlay(alignment: .top) {
+            if let msg = hkService.backgroundToastMessage {
+                HStack(spacing: 8) {
+                    Image(systemName: "checkmark.circle.fill").foregroundStyle(.green)
+                    Text(msg).font(.subheadline)
+                }
+                .padding(.horizontal, 14)
+                .padding(.vertical, 10)
+                .background(.thinMaterial, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                .shadow(radius: 8, y: 4)
+                .padding(.top, 16)
+            }
+        }
+        .onChange(of: hkService.backgroundToastMessage) { _, newValue in
+            // Auto-dismiss after a short delay
+            if newValue != nil {
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(2.5))
+                    withAnimation(.easeInOut(duration: 0.25)) {
+                        hkService.backgroundToastMessage = nil
+                    }
+                }
+            }
+        }
     }
 
     // Idempotent seeding: ensure defaults exist without creating duplicates.
@@ -48,6 +74,7 @@ func __test_cleanup_daylogs(context: ModelContext) {
 private struct PhoneLayout: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
+    private let hk = HealthKitService.shared
     
     var body: some View {
         TabView {
@@ -69,6 +96,10 @@ private struct PhoneLayout: View {
                 DedupService.cleanupDuplicateDayLogs(context: modelContext)
                 DedupService.cleanupDuplicateExerciseTypes(context: modelContext)
                 DedupService.cleanupDuplicateUnitTypes(context: modelContext)
+
+                // Start background observers and perform a throttled foreground sync
+                hk.startBackgroundObserversIfPossible(modelContext: modelContext)
+                Task { await hk.foregroundSyncIfNeeded(modelContext: modelContext) }
             }
         }
     }
@@ -82,6 +113,7 @@ private struct PhoneLayout: View {
 private struct SplitLayout: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
+    private let hk = HealthKitService.shared
     
     var body: some View {
         NavigationSplitView {
@@ -99,6 +131,10 @@ private struct SplitLayout: View {
                 DedupService.cleanupDuplicateDayLogs(context: modelContext)
                 DedupService.cleanupDuplicateExerciseTypes(context: modelContext)
                 DedupService.cleanupDuplicateUnitTypes(context: modelContext)
+
+                // Start background observers and perform a throttled foreground sync
+                hk.startBackgroundObserversIfPossible(modelContext: modelContext)
+                Task { await hk.foregroundSyncIfNeeded(modelContext: modelContext) }
             }
         }
     }

@@ -8,7 +8,7 @@ struct ServicesTests {
     let context: ModelContext
 
     init() {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         do {
             container = try ModelContainer(
                 for: DayLog.self, ExerciseType.self, UnitType.self, ExerciseItem.self,
@@ -80,21 +80,37 @@ struct ServicesTests {
     @Test @MainActor func exerciseTypeDeduplication() throws {
         let e1 = ExerciseType(name: "Walking", baseMET: 3.0, repWeight: 0.1, defaultPaceMinPerMi: 12, defaultUnit: nil)
         let e2 = ExerciseType(name: "walking", baseMET: 4.0, repWeight: 0.2, defaultPaceMinPerMi: 10, defaultUnit: nil)
-        context.insert(e1); context.insert(e2)
+        let unit = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+        let item = ExerciseItem(exercise: e2, unit: unit, amount: 15)
+        context.insert(e1); context.insert(e2); context.insert(unit); context.insert(item)
         try context.save()
         DedupService.cleanupDuplicateExerciseTypes(context: context)
         let all = try context.fetch(FetchDescriptor<ExerciseType>())
         #expect(all.filter { $0.name.lowercased() == "walking" }.count == 1)
+
+        // Verify reassignment: the item's exercise should point to the surviving type
+        let items = try context.fetch(FetchDescriptor<ExerciseItem>())
+        #expect(items.count == 1)
+        #expect(items.first?.exercise?.name.lowercased() == "walking")
     }
 
     @Test @MainActor func unitTypeDeduplication() throws {
         let u1 = UnitType(name: "Minutes", abbreviation: "min", category: .time)
         let u2 = UnitType(name: "minutes", abbreviation: "mins", category: .time)
-        context.insert(u1); context.insert(u2)
+        let ex = ExerciseType(name: "Walk", baseMET: 3.3, repWeight: 0.15, defaultPaceMinPerMi: 12, defaultUnit: u2)
+        let item = ExerciseItem(exercise: ex, unit: u2, amount: 30)
+        context.insert(u1); context.insert(u2); context.insert(ex); context.insert(item)
         try context.save()
         DedupService.cleanupDuplicateUnitTypes(context: context)
         let all = try context.fetch(FetchDescriptor<UnitType>())
         #expect(all.filter { $0.name.lowercased() == "minutes" }.count == 1)
+
+        // Verify reassignment on ExerciseItem and ExerciseType default
+        let items = try context.fetch(FetchDescriptor<ExerciseItem>())
+        #expect(items.first?.unit?.name.lowercased() == "minutes")
+        let exercises = try context.fetch(FetchDescriptor<ExerciseType>())
+        let walk = exercises.first { $0.name == "Walk" }
+        #expect(walk?.defaultUnit?.name.lowercased() == "minutes")
     }
 
     // MARK: - Helpers

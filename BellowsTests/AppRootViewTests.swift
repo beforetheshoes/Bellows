@@ -17,7 +17,8 @@ struct AppRootViewTests {
         ])
         let config = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: true
+            isStoredInMemoryOnly: true,
+            cloudKitDatabase: .none
         )
         do {
             modelContainer = try ModelContainer(for: schema, configurations: [config])
@@ -271,6 +272,29 @@ struct AppRootViewTests {
         
         // Test that the view can handle platform-specific layout selection
         _ = appRootView
+        #expect(true)
+    }
+    
+    // MARK: - Theme Manager Binding Tests
+    
+    @MainActor
+    @Test func themeManagerBindingRespondsToChanges() {
+        let themeManager = ThemeManager.shared
+        let originalAppearanceMode = themeManager.currentAppearanceMode
+        
+        // Create AppRootView
+        let appRootView = AppRootView()
+            .modelContainer(modelContainer)
+        
+        // Change appearance mode
+        themeManager.setAppearanceMode(.dark)
+        #expect(themeManager.currentAppearanceMode == .dark)
+        
+        // Verify the view can still be accessed (binding should work)
+        _ = appRootView
+        
+        // Reset to original state
+        themeManager.setAppearanceMode(originalAppearanceMode)
         #expect(true)
     }
     

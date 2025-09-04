@@ -5,6 +5,7 @@ struct EditExerciseTypeSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var ctx
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
+    @Bindable private var themeManager = ThemeManager.shared
     let exerciseType: ExerciseType
     var onSaved: ((ExerciseType) -> Void)? = nil
     
@@ -145,6 +146,7 @@ struct EditExerciseTypeSheet: View {
             .macPresentationFitted()
             .frame(minWidth: 380, idealWidth: 460, maxWidth: 560)
 #endif
+            .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         }
     }
 }

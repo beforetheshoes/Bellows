@@ -11,7 +11,7 @@ struct AnalyticsTests {
     init() {
         calendar = Calendar.current
         
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         do {
             modelContainer = try ModelContainer(
                 for: DayLog.self, ExerciseType.self, UnitType.self, ExerciseItem.self,

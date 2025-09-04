@@ -5,6 +5,7 @@ struct NewUnitTypeSheet: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var ctx
     var onSaved: ((UnitType) -> Void)? = nil
+    @Bindable private var themeManager = ThemeManager.shared
     @State private var name = ""
     @State private var abbr = ""
     @State private var stepSize: Double = 1.0
@@ -90,6 +91,7 @@ struct NewUnitTypeSheet: View {
             .macPresentationFitted()
             .frame(minWidth: 380, idealWidth: 460, maxWidth: 560)
             #endif
+            .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         }
     }
 }

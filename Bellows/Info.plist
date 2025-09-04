@@ -6,5 +6,7 @@
     <array>
         <string>remote-notification</string>
     </array>
+    <key>NSHealthShareUsageDescription</key>
+    <string>Bellows would like to access your workout data from Apple Health to automatically track your exercise activities and help maintain your daily movement streak.</string>
 </dict>
 </plist>

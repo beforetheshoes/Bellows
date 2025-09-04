@@ -17,7 +17,8 @@ struct BellowsAppTests {
         
         let modelConfiguration = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: true // Use in-memory for tests
+            isStoredInMemoryOnly: true, // Use in-memory for tests
+            cloudKitDatabase: .none
         )
         
         do {

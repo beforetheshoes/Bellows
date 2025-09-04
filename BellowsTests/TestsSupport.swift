@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 @testable import Bellows
+import HealthKit
 
 // Re-export minimal helpers for tests to avoid symbol visibility issues.
 @MainActor
@@ -84,4 +85,26 @@ func __test_editExerciseSave(context: ModelContext, item: ExerciseItem, exercise
     item.note = (note ?? "").isEmpty ? nil : note
     item.modifiedAt = Date()
     try? context.save()
+}
+
+// Shared mock for HealthKit workouts used across tests.
+// We avoid HKWorkoutBuilder/HKWorkout construction in unit tests.
+struct MockHKWorkout: WorkoutProtocol {
+    let uuid: UUID
+    let workoutActivityType: HKWorkoutActivityType
+    let startDate: Date
+    let endDate: Date
+    let duration: TimeInterval
+    let totalDistance: HKQuantity?
+    let totalEnergyBurned: HKQuantity?
+
+    init(activityType: HKWorkoutActivityType, start: Date, end: Date, duration: TimeInterval, totalDistance: HKQuantity?, totalEnergyBurned: HKQuantity?, uuid: UUID = UUID()) {
+        self.uuid = uuid
+        self.workoutActivityType = activityType
+        self.startDate = start
+        self.endDate = end
+        self.duration = duration
+        self.totalDistance = totalDistance
+        self.totalEnergyBurned = totalEnergyBurned
+    }
 }

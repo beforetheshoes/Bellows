@@ -9,7 +9,7 @@ struct ExerciseSheetsHookTests {
     let context: ModelContext
 
     init() {
-        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let config = ModelConfiguration(isStoredInMemoryOnly: true, cloudKitDatabase: .none)
         do {
             container = try ModelContainer(
                 for: DayLog.self, ExerciseType.self, UnitType.self, ExerciseItem.self,

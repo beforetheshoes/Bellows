@@ -39,3 +39,8 @@ public func __test_newUnitTypeSave(context: ModelContext, name: String, abbrevia
     }
 }
 
+// Public shim to access internal fitness symbols list from tests without widening access on the enum.
+@inlinable
+public func __test_allFitnessSymbols() -> [String] {
+    return SFFitnessSymbols.all
+}
