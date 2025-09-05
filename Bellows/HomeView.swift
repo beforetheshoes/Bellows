@@ -93,7 +93,7 @@ struct HomeView: View {
             
             if let today = today, !today.unwrappedItems.isEmpty {
                 VStack(spacing: 8) {
-                    ForEach(today.unwrappedItems, id: \.persistentModelID) { item in
+                    ForEach(today.unwrappedItems.sorted(by: { $0.createdAt > $1.createdAt }), id: \.persistentModelID) { item in
                         exerciseRow(item)
                     }
                 }
@@ -130,7 +130,10 @@ struct HomeView: View {
         .onTapGesture { editingItem = item }
         .contextMenu {
             Button("Edit") { editingItem = item }
-            Button("Delete", role: .destructive) { modelContext.delete(item); try? modelContext.save() }
+            Button("Delete", role: .destructive) {
+                DedupService.deleteItemWithTombstone(item, context: modelContext)
+                ensureToday()
+            }
         }
     }
 

@@ -35,6 +35,9 @@
 		E50010BE1A00000100000001 /* Helpers/ExerciseHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AE1A00000100000001 /* Helpers/ExerciseHelpers.swift */; };
 		E50010BF1A00000100000001 /* Services/SeedService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010AF1A00000100000001 /* Services/SeedService.swift */; };
 		E50010C01A00000100000001 /* Services/DedupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50010B01A00000100000001 /* Services/DedupService.swift */; };
+		E50020B11A00000100000001 /* ViewModels/ImportReviewViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50020A11A00000100000001 /* ViewModels/ImportReviewViewModel.swift */; };
+		E50020B21A00000100000001 /* Views/ImportReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50020A21A00000100000001 /* Views/ImportReviewView.swift */; };
+		E50020B31A00000100000001 /* Views/ImportItemDiffView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50020A31A00000100000001 /* Views/ImportItemDiffView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +83,9 @@
 		E50010AE1A00000100000001 /* Helpers/ExerciseHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers/ExerciseHelpers.swift; sourceTree = "<group>"; };
 		E50010AF1A00000100000001 /* Services/SeedService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/SeedService.swift; sourceTree = "<group>"; };
 		E50010B01A00000100000001 /* Services/DedupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services/DedupService.swift; sourceTree = "<group>"; };
+		E50020A11A00000100000001 /* ViewModels/ImportReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModels/ImportReviewViewModel.swift; sourceTree = "<group>"; };
+		E50020A21A00000100000001 /* Views/ImportReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ImportReviewView.swift; sourceTree = "<group>"; };
+		E50020A31A00000100000001 /* Views/ImportItemDiffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ImportItemDiffView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -142,6 +148,7 @@
 				E50010AE1A00000100000001 /* Helpers/ExerciseHelpers.swift */,
 				E50010AF1A00000100000001 /* Services/SeedService.swift */,
 				E50010B01A00000100000001 /* Services/DedupService.swift */,
+				E50020A11A00000100000001 /* ViewModels/ImportReviewViewModel.swift */,
 				E50010A71A00000100000001 /* Views/Components/ExerciseRowView.swift */,
 				E50010A81A00000100000001 /* Views/Components/ExerciseSelectionSection.swift */,
 				E50010A91A00000100000001 /* Views/Components/HomeHeaderView.swift */,
@@ -149,6 +156,8 @@
 				E50010AB1A00000100000001 /* Views/Components/NoteSection.swift */,
 				E50010AC1A00000100000001 /* Views/Components/RatingsSection.swift */,
 				E50010AD1A00000100000001 /* Views/Components/TodaysExercisesView.swift */,
+				E50020A31A00000100000001 /* Views/ImportItemDiffView.swift */,
+				E50020A21A00000100000001 /* Views/ImportReviewView.swift */,
 				E50010A11A00000100000001 /* Views/Sheets/AddExerciseItemSheet.swift */,
 				E50010A21A00000100000001 /* Views/Sheets/EditExerciseItemSheet.swift */,
 				E50010A31A00000100000001 /* Views/Sheets/EditExerciseTypeSheet.swift */,
@@ -297,6 +306,9 @@
 				E50010BB1A00000100000001 /* Views/Components/NoteSection.swift in Sources */,
 				E50010BC1A00000100000001 /* Views/Components/RatingsSection.swift in Sources */,
 				E50010BD1A00000100000001 /* Views/Components/TodaysExercisesView.swift in Sources */,
+				E50020B31A00000100000001 /* Views/ImportItemDiffView.swift in Sources */,
+				E50020B11A00000100000001 /* ViewModels/ImportReviewViewModel.swift in Sources */,
+				E50020B21A00000100000001 /* Views/ImportReviewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -426,7 +438,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bellows;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -460,7 +472,7 @@
 				INFOPLIST_KEY_CFBundleDisplayName = Bellows;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (

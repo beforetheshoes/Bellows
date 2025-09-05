@@ -1,0 +1,117 @@
+{
+  "fill" : {
+    "automatic-gradient" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "hard-light",
+          "fill" : "automatic",
+          "glass" : true,
+          "hidden" : false,
+          "image-name" : "PNG image.png",
+          "name" : "PNG image",
+          "opacity" : 0.7,
+          "position" : {
+            "scale" : 1.54,
+            "translation-in-points" : [
+              31.828125,
+              -23.65625
+            ]
+          }
+        },
+        {
+          "blend-mode" : "overlay",
+          "glass" : false,
+          "image-name" : "PNG image 3.png",
+          "name" : "PNG image 3",
+          "opacity" : 0.7,
+          "position" : {
+            "scale" : 1.5,
+            "translation-in-points" : [
+              31.8,
+              -23.7
+            ]
+          }
+        },
+        {
+          "blend-mode" : "hard-light",
+          "fill" : "automatic",
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "PNG image.png",
+          "name" : "PNG image",
+          "opacity" : 0.7,
+          "position" : {
+            "scale" : 1.54,
+            "translation-in-points" : [
+              31.828125,
+              -23.65625
+            ]
+          }
+        },
+        {
+          "blend-mode" : "darken",
+          "fill" : "automatic",
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "PNG image.png",
+          "name" : "PNG image",
+          "opacity" : 0.6,
+          "position" : {
+            "scale" : 1.54,
+            "translation-in-points" : [
+              31.828125,
+              -23.65625
+            ]
+          }
+        },
+        {
+          "blend-mode" : "screen",
+          "fill" : "automatic",
+          "glass" : false,
+          "hidden" : false,
+          "image-name" : "PNG image.png",
+          "name" : "PNG image",
+          "opacity" : 0.6,
+          "position" : {
+            "scale" : 1.54,
+            "translation-in-points" : [
+              31.828125,
+              -23.65625
+            ]
+          }
+        },
+        {
+          "blend-mode" : "hard-light",
+          "fill" : "none",
+          "hidden" : false,
+          "image-name" : "blackbackground.jpg",
+          "name" : "blackbackground",
+          "position" : {
+            "scale" : 4,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}

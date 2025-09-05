@@ -6,6 +6,7 @@ struct DayDetailView: View {
     let date: Date
     @Environment(\.modelContext) private var modelContext
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var hSizeClass
     @Query private var logs: [DayLog]
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
@@ -66,12 +67,16 @@ struct DayDetailView: View {
                     Image(systemName: "plus")
                 }
             }
+            // Show a "Today" button on macOS, and on iPad (regular width) to quickly return to the Today view
             #if os(macOS)
             ToolbarItem(placement: .navigation) {
-                Button("Today") {
-                    dismiss()
+                Button("Today") { dismiss() }.help("Return to Today view")
+            }
+            #else
+            if hSizeClass == .regular {
+                ToolbarItem(placement: .navigation) {
+                    Button("Today") { dismiss() }
                 }
-                .help("Return to Today view")
             }
             #endif
         }
@@ -81,6 +86,7 @@ struct DayDetailView: View {
         .sheet(isPresented: $showingAddSheet) {
             AddExerciseItemSheet(date: date, dayLog: dayLog)
         }
+        .contextMenu { /* no-op at view level */ }
     }
     
     private func exercisesListContent(for dayLog: DayLog) -> some View {
@@ -89,7 +95,7 @@ struct DayDetailView: View {
                 .font(.headline)
             
             LazyVStack(spacing: 8) {
-                ForEach(dayLog.unwrappedItems, id: \.persistentModelID) { item in
+                ForEach(dayLog.unwrappedItems.sorted(by: { $0.createdAt < $1.createdAt }), id: \.persistentModelID) { item in
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(label(for: item))
@@ -130,8 +136,7 @@ struct DayDetailView: View {
                         }
                         
                         Button("Delete", role: .destructive) {
-                            modelContext.delete(item)
-                            try? modelContext.save()
+                            DedupService.deleteItemWithTombstone(item, context: modelContext)
                         }
                     }
                     

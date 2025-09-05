@@ -153,6 +153,7 @@ final class ExerciseType {
 
 @Model
 final class ExerciseItem {
+    var logicalID: String = UUID().uuidString
     var createdAt: Date = Date()
     var modifiedAt: Date = Date()
     var dayLog: DayLog?
@@ -222,7 +223,14 @@ class HealthKitService {
     var setupState: HealthKitSetupState = .unknown
     var isSyncing = false
     var lastSyncResult: SyncResult?
-    var syncEnabled = true // User preference for auto-sync
+    var syncEnabled = true { // User preference for auto-sync
+        didSet {
+            UserDefaults.standard.set(syncEnabled, forKey: "hk_sync_enabled_v1")
+            let kv = NSUbiquitousKeyValueStore.default
+            kv.set(syncEnabled, forKey: "hk_sync_enabled_v1")
+            kv.synchronize()
+        }
+    }
     var lastSyncDate: Date?
     var debugLogging = false
     var debugLines: [String] = []
@@ -244,7 +252,13 @@ class HealthKitService {
     }
     private let importPreferenceKey = "hk_import_unit_preference_v1"
     var importUnitPreference: ImportUnitPreference = .time {
-        didSet { UserDefaults.standard.set(importUnitPreference.rawValue, forKey: importPreferenceKey) }
+        didSet {
+            UserDefaults.standard.set(importUnitPreference.rawValue, forKey: importPreferenceKey)
+            // Mirror to iCloud KVS so other devices stay in sync
+            let kv = NSUbiquitousKeyValueStore.default
+            kv.set(importUnitPreference.rawValue, forKey: importPreferenceKey)
+            kv.synchronize()
+        }
     }
     
     // For testing - allows injecting mock workouts instead of querying HealthKit
@@ -254,9 +268,11 @@ class HealthKitService {
     private(set) var isObserving = false
     private var observerQuery: HKObserverQuery?
     private let seenWorkoutsDefaultsKey = "hk_seen_workouts_v1"
+    private let deletedWorkoutsDefaultsKey = "hk_deleted_workouts_v1"
     private let lastBackgroundSyncDateKey = "hk_last_background_sync_date"
     private let backgroundToastShownKey = "hk_background_toast_shown_once"
     private var seenWorkoutKeys: Set<String> = []
+    private var deletedWorkoutKeys: Set<String> = []
     private var inflightUUIDs: Set<String> = []
     
     // UI signaling
@@ -267,16 +283,50 @@ class HealthKitService {
         if let d = UserDefaults.standard.object(forKey: lastBackgroundSyncDateKey) as? Date {
             self.lastSyncDate = d
         }
-        if let raw = UserDefaults.standard.string(forKey: importPreferenceKey),
+        // Seed from iCloud KVS first if available, else local defaults
+        NSUbiquitousKeyValueStore.default.synchronize()
+        if let raw = (NSUbiquitousKeyValueStore.default.string(forKey: importPreferenceKey) ?? UserDefaults.standard.string(forKey: importPreferenceKey)),
            let v = ImportUnitPreference(rawValue: raw) {
             self.importUnitPreference = v
         } else {
             // Ensure default is Time for consistent test behavior and backwards compatibility
             self.importUnitPreference = .time
         }
+        if NSUbiquitousKeyValueStore.default.object(forKey: "hk_sync_enabled_v1") != nil {
+            self.syncEnabled = NSUbiquitousKeyValueStore.default.bool(forKey: "hk_sync_enabled_v1")
+        } else if UserDefaults.standard.object(forKey: "hk_sync_enabled_v1") != nil {
+            self.syncEnabled = UserDefaults.standard.bool(forKey: "hk_sync_enabled_v1")
+        }
         // If running under unit tests, force minutes to keep tests deterministic
         if NSClassFromString("XCTestCase") != nil {
             self.importUnitPreference = .time
+        }
+        // Observe iCloud KVS changes
+        NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default, queue: .main) { [weak self] note in
+            guard let self else { return }
+            guard let userInfo = note.userInfo,
+                  let keys = userInfo[NSUbiquitousKeyValueStoreChangedKeysKey] as? [String] else { return }
+            Task { @MainActor in
+                if keys.contains(self.importPreferenceKey) {
+                    if let raw = NSUbiquitousKeyValueStore.default.string(forKey: self.importPreferenceKey),
+                       let pref = ImportUnitPreference(rawValue: raw), pref != self.importUnitPreference {
+                        self.importUnitPreference = pref
+                    }
+                }
+                if keys.contains("hk_sync_enabled_v1") {
+                    let v = NSUbiquitousKeyValueStore.default.bool(forKey: "hk_sync_enabled_v1")
+                    if v != self.syncEnabled { self.syncEnabled = v }
+                }
+                if keys.contains(self.seenWorkoutsDefaultsKey) {
+                    // Merge remote seen keys and persist
+                    self.loadSeenWorkoutKeys()
+                    self.persistSeenWorkoutKeys()
+                }
+                if keys.contains(self.deletedWorkoutsDefaultsKey) {
+                    self.loadDeletedWorkoutKeys()
+                    self.persistDeletedWorkoutKeys()
+                }
+            }
         }
     }
 
@@ -410,9 +460,17 @@ class HealthKitService {
     }
 
     private func loadSeenWorkoutKeys() {
+        // Merge from local defaults and iCloud KVS to build a superset
+        var merged: Set<String> = []
         if let arr = UserDefaults.standard.array(forKey: seenWorkoutsDefaultsKey) as? [String] {
-            seenWorkoutKeys = Set(arr)
+            merged.formUnion(arr)
         }
+        let kv = NSUbiquitousKeyValueStore.default
+        kv.synchronize()
+        if let kvArr = kv.array(forKey: seenWorkoutsDefaultsKey) as? [String] {
+            merged.formUnion(kvArr)
+        }
+        seenWorkoutKeys = merged
         dlog("Loaded seen set count=\(seenWorkoutKeys.count)")
     }
 
@@ -421,8 +479,38 @@ class HealthKitService {
         if seenWorkoutKeys.count > 5000 {
             seenWorkoutKeys = Set(seenWorkoutKeys.prefix(4000))
         }
-        UserDefaults.standard.set(Array(seenWorkoutKeys), forKey: seenWorkoutsDefaultsKey)
+        let arr = Array(seenWorkoutKeys)
+        UserDefaults.standard.set(arr, forKey: seenWorkoutsDefaultsKey)
+        let kv = NSUbiquitousKeyValueStore.default
+        kv.set(arr, forKey: seenWorkoutsDefaultsKey)
+        kv.synchronize()
         dlog("Persisted seen set count=\(seenWorkoutKeys.count)")
+    }
+
+    private func loadDeletedWorkoutKeys() {
+        var merged: Set<String> = []
+        if let arr = UserDefaults.standard.array(forKey: deletedWorkoutsDefaultsKey) as? [String] {
+            merged.formUnion(arr)
+        }
+        let kv = NSUbiquitousKeyValueStore.default
+        kv.synchronize()
+        if let kvArr = kv.array(forKey: deletedWorkoutsDefaultsKey) as? [String] {
+            merged.formUnion(kvArr)
+        }
+        deletedWorkoutKeys = merged
+        dlog("Loaded deleted set count=\(deletedWorkoutKeys.count)")
+    }
+
+    private func persistDeletedWorkoutKeys() {
+        if deletedWorkoutKeys.count > 10000 {
+            deletedWorkoutKeys = Set(deletedWorkoutKeys.prefix(8000))
+        }
+        let arr = Array(deletedWorkoutKeys)
+        UserDefaults.standard.set(arr, forKey: deletedWorkoutsDefaultsKey)
+        let kv = NSUbiquitousKeyValueStore.default
+        kv.set(arr, forKey: deletedWorkoutsDefaultsKey)
+        kv.synchronize()
+        dlog("Persisted deleted set count=\(deletedWorkoutKeys.count)")
     }
 
     private func removeSeenWorkoutKeys(_ uuids: [String]) {
@@ -472,6 +560,7 @@ class HealthKitService {
 
         loadSeenWorkoutKeys()
         _ = purgeStaleSeenKeysIfNeeded(modelContext: modelContext)
+        loadDeletedWorkoutKeys()
 
         let endDate = Date()
         let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate) ?? endDate
@@ -479,6 +568,10 @@ class HealthKitService {
         dlog("Fetched \(workouts.count) workouts between \(startDate) and \(endDate)")
         let newWorkouts = workouts.filter { w in
             let key = workoutKey(w)
+            if deletedWorkoutKeys.contains(key) {
+                // User explicitly deleted/hidden this import across devices; skip
+                return false
+            }
             if seenWorkoutKeys.contains(key) {
                 // If the UUID is marked seen but no item exists anymore, treat it as new
                 let exists = hasImportedWorkout(uuidString: key, modelContext: modelContext)
@@ -532,6 +625,9 @@ class HealthKitService {
                 backgroundToastMessage = "Imported \(insertedTotal) workout\(insertedTotal == 1 ? "" : "s") from Apple Health"
                 UserDefaults.standard.set(true, forKey: backgroundToastShownKey)
             }
+            // Collapse any CloudKit-driven duplicates by HealthKit UUID
+            DedupService.cleanupDuplicateExerciseItems(context: modelContext)
+            DedupService.enforceDeletedItemTombstones(context: modelContext)
             return insertedTotal
         } catch {
             lastSyncResult = .error("Background sync failed: \(error.localizedDescription)")
@@ -874,6 +970,11 @@ class HealthKitService {
         UserDefaults.standard.removeObject(forKey: lastBackgroundSyncDateKey)
         lastSyncDate = nil
         dlog("Manual reset of Health sync cache")
+        // Also clear deleted/tombstoned keys to allow re-imports
+        deletedWorkoutKeys.removeAll()
+        UserDefaults.standard.removeObject(forKey: deletedWorkoutsDefaultsKey)
+        NSUbiquitousKeyValueStore.default.removeObject(forKey: deletedWorkoutsDefaultsKey)
+        NSUbiquitousKeyValueStore.default.synchronize()
     }
 
     @discardableResult
@@ -970,10 +1071,13 @@ class HealthKitService {
 
         let itemsToRemove = items.filter { isImportedFromHealthKit($0) }
 
-        // Remove from model and clear 'seen' cache entries for their UUIDs so they can re-import
+        // Remove from model and mark their UUIDs as deleted to avoid automatic re-imports across devices
         let uuids = itemsToRemove.compactMap { $0.healthKitWorkoutUUID }
         for item in itemsToRemove { modelContext.delete(item) }
-        if !uuids.isEmpty { removeSeenWorkoutKeys(uuids) }
+        if !uuids.isEmpty {
+            for u in uuids { deletedWorkoutKeys.insert(u) }
+            persistDeletedWorkoutKeys()
+        }
 
         dayLog.items = items.filter { !isImportedFromHealthKit($0) }
     }
@@ -1027,12 +1131,27 @@ class HealthKitService {
             }
             
             try modelContext.save()
-            
+
             // Set success result
             lastSyncResult = .success(workoutCount: totalImportedWorkouts)
             let now = Date()
             UserDefaults.standard.set(now, forKey: lastBackgroundSyncDateKey)
             lastSyncDate = now
+
+            // Mark seen for imported workouts that exist in DB so background ticks skip them
+            for (_, dayWorkouts) in workoutsByDay {
+                for w in dayWorkouts {
+                    let key = workoutKey(w)
+                    if hasImportedWorkout(uuidString: key, modelContext: modelContext) {
+                        seenWorkoutKeys.insert(key)
+                    }
+                }
+            }
+            persistSeenWorkoutKeys()
+
+            // Post-merge cleanup to collapse any duplicates and enforce tombstones
+            DedupService.cleanupDuplicateExerciseItems(context: modelContext)
+            DedupService.enforceDeletedItemTombstones(context: modelContext)
             
         } catch {
             lastSyncResult = .error("Failed to sync workouts: \(error.localizedDescription)")

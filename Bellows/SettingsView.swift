@@ -13,6 +13,7 @@ import UIKit
 #elseif os(macOS)
 import AppKit
 #endif
+import UniformTypeIdentifiers
 
 @MainActor
 struct SettingsView: View {
@@ -22,12 +23,108 @@ struct SettingsView: View {
     @Bindable private var healthKitService = HealthKitService.shared
     @State private var showingManageExerciseTypes = false
     @State private var showingHealthKitInfo = false
+    // Data export/import state
+    @State private var showingFileExporter = false
+    @State private var showingFileImporter = false
+    @State private var exportTempURL: URL? = nil
+    @State private var dataTransferMessage: String? = nil
+    @State private var showingImportReview = false
+    @State private var importReviewVM: ImportReviewViewModel? = nil
+    // Review UI controls import mode; default starts in merge mode, toggle inside review to restore
+    @State private var isImportingData = false
+    @State private var pendingShowImportReview = false
     
     var body: some View {
         #if os(iOS)
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: DS.Metrics.spacing) {
+                    // Data Management
+                    Text("Data").font(.headline)
+                    SectionCard {
+                        VStack(spacing: 12) {
+                            HStack(spacing: 10) {
+                                Button {
+                                    do {
+                                        let data = try DataExportService.exportAll(modelContext: modelContext)
+                                        let fm = FileManager.default
+                                        let tmp = fm.temporaryDirectory
+                                        let df = DateFormatter(); df.dateFormat = "yyyyMMdd-HHmm"
+                                        let name = "Bellows-\(df.string(from: Date())).json"
+                                        let url = tmp.appendingPathComponent(name)
+                                        try data.write(to: url)
+                                        exportTempURL = url
+                                        showingFileExporter = true
+                                    } catch {
+                                        dataTransferMessage = "Export failed: \(error.localizedDescription)"
+                                    }
+                                } label: {
+                                    Label("Export Data", systemImage: "square.and.arrow.up")
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 10)
+                                        .background(DS.ColorToken.accent.opacity(0.12))
+                                        .foregroundStyle(DS.ColorToken.accent)
+                                        .clipShape(RoundedRectangle(cornerRadius: DS.Metrics.chipCorner, style: .continuous))
+                                }
+                                .buttonStyle(.plain)
+
+                                Button {
+                                    showingFileImporter = true
+                                } label: {
+                                    Label("Import Data…", systemImage: "square.and.arrow.down")
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 10)
+                                        .background(DS.ColorToken.card)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: DS.Metrics.chipCorner, style: .continuous)
+                                                .stroke(DS.ColorToken.accent.opacity(0.3), lineWidth: 1)
+                                        )
+                                        .clipShape(RoundedRectangle(cornerRadius: DS.Metrics.chipCorner, style: .continuous))
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            .fileExporter(
+                                isPresented: $showingFileExporter,
+                                document: exportTempURL.map { URLDocument(url: $0) },
+                                contentType: .json,
+                                defaultFilename: exportTempURL?.lastPathComponent ?? "Bellows-Export.json"
+                            ) { result in
+                                // Remove temp file after export attempt
+                                if let url = exportTempURL { try? FileManager.default.removeItem(at: url) }
+                                exportTempURL = nil
+                                if case .failure(let error) = result {
+                                    dataTransferMessage = "Export failed: \(error.localizedDescription)"
+                                } else {
+                                    dataTransferMessage = "Export complete."
+                                }
+                            }
+                            .fileImporter(
+                                isPresented: $showingFileImporter,
+                                allowedContentTypes: [.json, .text, .plainText, .data],
+                                allowsMultipleSelection: false
+                            ) { result in
+                                switch result {
+                                case .success(let urls):
+                                    guard let url = urls.first else { return }
+                                    Task { await handleSelectedImportURL(url) }
+                                case .failure(let error):
+                                    dataTransferMessage = "Import canceled: \(error.localizedDescription)"
+                                }
+                            }
+
+                            if isImportingData {
+                                HStack(spacing: 8) {
+                                    ProgressView().controlSize(.small)
+                                    Text("Preparing import…")
+                                }
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            } else if let msg = dataTransferMessage {
+                                Text(msg).font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+
                     // Exercise Types
                     Text("Exercise Types").font(.headline)
                     SectionCard {
@@ -229,11 +326,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    // Data Export
-                    Text("Data Management").font(.headline)
-                    SectionCard {
-                        HStack { Text("Export Data"); Spacer(); Text("Coming Soon").foregroundStyle(.secondary) }
-                    }
+                    
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
@@ -241,6 +334,9 @@ struct SettingsView: View {
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { ToolbarItem(placement: .cancellationAction) { Button("Done") { dismiss() } } }
+            .navigationDestination(item: $importReviewVM) { vm in
+                ImportReviewView(viewModel: vm)
+            }
             .sheet(isPresented: $showingManageExerciseTypes) { ManageExerciseTypesView() }
             .sheet(isPresented: $showingHealthKitInfo) {
                 ImportRecentWorkoutsSheet()
@@ -254,6 +350,87 @@ struct SettingsView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: DS.Metrics.spacing) {
+                    // Data
+                    Text("Data").font(.headline)
+                    SectionCard {
+                        VStack(spacing: 12) {
+                            HStack(spacing: 10) {
+                                Button {
+                                    do {
+                                        let data = try DataExportService.exportAll(modelContext: modelContext)
+                                        let fm = FileManager.default
+                                        let tmp = fm.temporaryDirectory
+                                        let df = DateFormatter(); df.dateFormat = "yyyyMMdd-HHmm"
+                                        let name = "Bellows-\(df.string(from: Date())).json"
+                                        let url = tmp.appendingPathComponent(name)
+                                        try data.write(to: url)
+                                        exportTempURL = url
+                                        showingFileExporter = true
+                                    } catch {
+                                        dataTransferMessage = "Export failed: \(error.localizedDescription)"
+                                    }
+                                } label: {
+                                    Label("Export Data", systemImage: "square.and.arrow.up")
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 10)
+                                        .background(DS.ColorToken.accent.opacity(0.12))
+                                        .foregroundStyle(DS.ColorToken.accent)
+                                        .clipShape(RoundedRectangle(cornerRadius: DS.Metrics.chipCorner, style: .continuous))
+                                }
+                                .buttonStyle(.plain)
+
+                                Button {
+                                    showingFileImporter = true
+                                } label: {
+                                    Label("Import Data…", systemImage: "square.and.arrow.down")
+                                        .frame(maxWidth: .infinity)
+                                        .padding(.vertical, 10)
+                                        .background(DS.ColorToken.card)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: DS.Metrics.chipCorner, style: .continuous)
+                                                .stroke(DS.ColorToken.accent.opacity(0.3), lineWidth: 1)
+                                        )
+                                        .clipShape(RoundedRectangle(cornerRadius: DS.Metrics.chipCorner, style: .continuous))
+                                }
+                                .buttonStyle(.plain)
+
+                                // Advanced Restore removed — Import Data now opens review by default
+                            }
+                            .fileExporter(
+                                isPresented: $showingFileExporter,
+                                document: exportTempURL.map { URLDocument(url: $0) },
+                                contentType: .json,
+                                defaultFilename: exportTempURL?.lastPathComponent ?? "Bellows-Export.json"
+                            ) { result in
+                                // Remove temp file after export attempt
+                                if let url = exportTempURL { try? FileManager.default.removeItem(at: url) }
+                                exportTempURL = nil
+                                if case .failure(let error) = result {
+                                    dataTransferMessage = "Export failed: \(error.localizedDescription)"
+                                } else {
+                                    dataTransferMessage = "Export complete."
+                                }
+                            }
+                            .fileImporter(
+                                isPresented: $showingFileImporter,
+                                allowedContentTypes: [.json, .text, .plainText, .data],
+                                allowsMultipleSelection: false
+                            ) { result in
+                                switch result {
+                                case .success(let urls):
+                                    guard let url = urls.first else { return }
+                                    Task { await handleSelectedImportURL(url) }
+                                case .failure(let error):
+                                    dataTransferMessage = "Import canceled: \(error.localizedDescription)"
+                                }
+                            }
+
+                            if let msg = dataTransferMessage {
+                                Text(msg).font(.caption).foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+
                     // Exercise Types
                     Text("Exercise Types").font(.headline)
                     SectionCard {
@@ -419,11 +596,7 @@ struct SettingsView: View {
                         }
                     }
 
-                    // Data Export
-                    Text("Data Management").font(.headline)
-                    SectionCard {
-                        HStack { Text("Export Data"); Spacer(); Text("Coming Soon").foregroundStyle(.secondary) }
-                    }
+                    // (Data section moved to top to match iOS)
                 }
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
@@ -437,11 +610,77 @@ struct SettingsView: View {
             .task {
                 await healthKitService.checkSetupStatus()
             }
+            // No-op: iOS sheet sequencing handled via small async delay when setting importReviewVM
             .macPresentationFitted()
             .frame(minWidth: 380, idealWidth: 460, maxWidth: 560)
             .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
         }
+        .sheet(item: $importReviewVM) { vm in
+            ImportReviewView(viewModel: vm)
+        }
         #endif
+    }
+    
+    // MARK: - Import Helpers
+    @MainActor
+    private func handleSelectedImportURL(_ url: URL) async {
+        isImportingData = true
+        dataTransferMessage = nil
+        let needsStop = url.startAccessingSecurityScopedResource()
+        defer { if needsStop { url.stopAccessingSecurityScopedResource() } }
+        do {
+            let data = try await loadDataHandlingICloud(url)
+            try presentImportPlanner(with: data)
+        } catch {
+            dataTransferMessage = error.localizedDescription
+        }
+        isImportingData = false
+    }
+
+    private func loadDataHandlingICloud(_ url: URL) async throws -> Data {
+        var rv = try url.resourceValues(forKeys: [.isUbiquitousItemKey, .ubiquitousItemDownloadingStatusKey])
+        if rv.isUbiquitousItem == true, rv.ubiquitousItemDownloadingStatus != .current {
+            _ = try? FileManager.default.startDownloadingUbiquitousItem(at: url)
+            // Poll up to ~30s for availability
+            for _ in 0..<60 {
+                try await Task.sleep(nanoseconds: 500_000_000)
+                let status = try url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey]).ubiquitousItemDownloadingStatus
+                if status == .current { break }
+            }
+            rv = try url.resourceValues(forKeys: [.ubiquitousItemDownloadingStatusKey])
+            if rv.ubiquitousItemDownloadingStatus != .current {
+                throw NSError(domain: "BellowsImport", code: 106, userInfo: [NSLocalizedDescriptionKey: "Still downloading from iCloud. Please try again shortly."])
+            }
+        }
+        // Load data off the main actor to avoid UI stalls
+        return try await Task.detached { try Data(contentsOf: url) }.value
+    }
+
+    @MainActor
+    private func presentImportPlanner(with data: Data) throws {
+        // Default to merge mode; user can toggle Restore inside the review
+        let vm = ImportReviewViewModel(modelContext: modelContext, data: data, restoreMode: false)
+        try vm.loadPlan()
+        // Always open review; this is now the default import flow
+        importReviewVM = vm
+    }
+}
+
+// Simple FileDocument wrapper to export a temp file via fileExporter
+struct URLDocument: FileDocument {
+    static var readableContentTypes: [UTType] { [.json] }
+    var url: URL
+
+    init(url: URL) { self.url = url }
+
+    init(configuration: ReadConfiguration) throws {
+        // Reading is not supported for this helper document used only for export
+        throw CocoaError(.fileReadUnknown)
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        let data = try Data(contentsOf: url)
+        return FileWrapper(regularFileWithContents: data)
     }
 }
 

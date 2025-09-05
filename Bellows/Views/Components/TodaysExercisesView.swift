@@ -16,7 +16,7 @@ struct TodaysExercisesView: View {
             
             if let dayLog = dayLog, !dayLog.unwrappedItems.isEmpty {
                 VStack(spacing: 8) {
-                    ForEach(dayLog.unwrappedItems, id: \.persistentModelID) { item in
+                    ForEach(dayLog.unwrappedItems.sorted(by: { $0.createdAt > $1.createdAt }), id: \.persistentModelID) { item in
                         ExerciseRowView(
                             item: item,
                             onEdit: { onEditItem(item) },

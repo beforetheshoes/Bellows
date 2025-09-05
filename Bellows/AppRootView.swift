@@ -92,10 +92,13 @@ private struct PhoneLayout: View {
         }
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
-                // Clean up any duplicates that might have been created by CloudKit sync
+                // Clean up and enforce invariants post-CloudKit merge
+                DedupService.cleanupDuplicateExerciseItems(context: modelContext)
                 DedupService.cleanupDuplicateDayLogs(context: modelContext)
                 DedupService.cleanupDuplicateExerciseTypes(context: modelContext)
                 DedupService.cleanupDuplicateUnitTypes(context: modelContext)
+                DedupService.enforceUnitAmountInvariant(context: modelContext)
+                DedupService.enforceDeletedItemTombstones(context: modelContext)
 
                 // Start background observers and perform a throttled foreground sync
                 hk.startBackgroundObserversIfPossible(modelContext: modelContext)
@@ -127,10 +130,13 @@ private struct SplitLayout: View {
         .navigationSplitViewColumnWidth(min: 260, ideal: 300, max: 360)
         .onChange(of: scenePhase) { _, newPhase in
             if newPhase == .active {
-                // Clean up any duplicates that might have been created by CloudKit sync
+                // Clean up and enforce invariants post-CloudKit merge
+                DedupService.cleanupDuplicateExerciseItems(context: modelContext)
                 DedupService.cleanupDuplicateDayLogs(context: modelContext)
                 DedupService.cleanupDuplicateExerciseTypes(context: modelContext)
                 DedupService.cleanupDuplicateUnitTypes(context: modelContext)
+                DedupService.enforceUnitAmountInvariant(context: modelContext)
+                DedupService.enforceDeletedItemTombstones(context: modelContext)
 
                 // Start background observers and perform a throttled foreground sync
                 hk.startBackgroundObserversIfPossible(modelContext: modelContext)

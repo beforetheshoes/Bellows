@@ -166,7 +166,7 @@ struct HistoryView: View {
                 } else {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 10) {
-                            ForEach(day.unwrappedItems) { item in
+                            ForEach(day.unwrappedItems.sorted(by: { $0.createdAt < $1.createdAt })) { item in
                                 HStack(alignment: .firstTextBaseline) {
                                     HStack(spacing: 6) {
                                         Text(item.exercise?.name ?? "Exercise")
