@@ -225,10 +225,14 @@ class HealthKitService {
     var lastSyncResult: SyncResult?
     var syncEnabled = true { // User preference for auto-sync
         didSet {
+            // Always persist locally
             UserDefaults.standard.set(syncEnabled, forKey: "hk_sync_enabled_v1")
-            let kv = NSUbiquitousKeyValueStore.default
-            kv.set(syncEnabled, forKey: "hk_sync_enabled_v1")
-            kv.synchronize()
+            // Avoid pushing seed during bootstrap
+            if !isBootstrappingPreferences {
+                let kv = NSUbiquitousKeyValueStore.default
+                kv.set(syncEnabled, forKey: "hk_sync_enabled_v1")
+                kv.synchronize()
+            }
         }
     }
     var lastSyncDate: Date?
@@ -251,13 +255,17 @@ class HealthKitService {
         }
     }
     private let importPreferenceKey = "hk_import_unit_preference_v1"
+    private var isBootstrappingPreferences = true
     var importUnitPreference: ImportUnitPreference = .time {
         didSet {
+            // Always persist locally
             UserDefaults.standard.set(importUnitPreference.rawValue, forKey: importPreferenceKey)
-            // Mirror to iCloud KVS so other devices stay in sync
-            let kv = NSUbiquitousKeyValueStore.default
-            kv.set(importUnitPreference.rawValue, forKey: importPreferenceKey)
-            kv.synchronize()
+            // Avoid pushing default seed to iCloud during bootstrap to prevent cross‑device stomping
+            if !isBootstrappingPreferences {
+                let kv = NSUbiquitousKeyValueStore.default
+                kv.set(importUnitPreference.rawValue, forKey: importPreferenceKey)
+                kv.synchronize()
+            }
         }
     }
     
@@ -301,6 +309,9 @@ class HealthKitService {
         if NSClassFromString("XCTestCase") != nil {
             self.importUnitPreference = .time
         }
+        // Finish bootstrap; subsequent changes should sync to iCloud
+        isBootstrappingPreferences = false
+
         // Observe iCloud KVS changes
         NotificationCenter.default.addObserver(forName: NSUbiquitousKeyValueStore.didChangeExternallyNotification, object: NSUbiquitousKeyValueStore.default, queue: .main) { [weak self] note in
             guard let self else { return }
