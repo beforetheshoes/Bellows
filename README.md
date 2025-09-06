@@ -8,9 +8,15 @@ A SwiftUI exercise tracking app that helps you fan the flames of your fitness jo
 - **Enjoyment & Intensity Ratings**: Rate each exercise on a 1-5 scale for both enjoyment and intensity
 - **Streak Tracking**: Visual motivation with flame animations showing your consecutive days of activity
 - **Daily Summaries**: View average enjoyment and intensity scores for each day
-- **History View**: Browse past workouts and see patterns over time
+- **History View**: Browse past workouts and see patterns over time with calendar navigation
 - **Timestamp Display**: Each logged exercise shows when it was completed
 - **Cross-Platform**: Native support for both macOS and iOS
+- **Smart Default Units**: Exercise types automatically suggest appropriate measurement units
+- **Theme Support**: Dark/light theme system with appearance independence
+- **Apple Health Integration**: Import exercises from HealthKit with configurable units and deduplication
+- **Data Export/Import**: Comprehensive data portability features
+- **Enhanced Streak Display**: Prominent streak visualization with intensity-based flame animations
+- **Apple Watch Support**: Companion app with complications for quick workout logging
 
 ## Screenshots
 
@@ -108,24 +114,30 @@ We welcome contributions! Please follow these guidelines:
 5. Ensure all tests pass
 6. Submit a pull request
 
-## Features Roadmap
-
-- [ ] Calendar view with exercise indicators
-- [ ] Default units based on exercise type
-- [ ] Water intake tracking
-- [ ] Data export/import functionality
-- [ ] Dark/light theme support
-- [ ] Apple Health integration
-- [ ] Exercise intensity affecting flame animations
-- [ ] More prominent streak display
-
 ## License
 
-This project is proprietary software. All rights reserved.
+MIT License
 
-## Acknowledgments
+Copyright (c) 2025 Ryan Williams
 
-Built with the assistance of Claude Code.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 
 ## Support
 
