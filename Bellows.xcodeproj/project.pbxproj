@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		940439882E6B5336003873CF /* BellowsWatch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 940439682E6B5334003873CF /* BellowsWatch Watch App.app */; platformFilter = ios; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		9404399A2E6B7898003873CF /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 940439992E6B7898003873CF /* WidgetKit.framework */; };
+		9404399C2E6B7898003873CF /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9404399B2E6B7898003873CF /* SwiftUI.framework */; };
+		940439A72E6B78A0003873CF /* BellowsWatchComplicationExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 940439972E6B7898003873CF /* BellowsWatchComplicationExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		948475212E65FC7200A1AE4B /* DayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9484751F2E65FC7200A1AE4B /* DayDetailView.swift */; };
 		9484757E2E67A6B500A1AE4B /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9484757D2E67A6B100A1AE4B /* SettingsView.swift */; };
 		E50000101A00000100000001 /* BellowsApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = E50000AA1A00000100000001 /* BellowsApp.swift */; };
@@ -41,6 +45,34 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		940439752E6B5336003873CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E50000001A00000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 940439672E6B5334003873CF;
+			remoteInfo = "BellowsWatch Watch App";
+		};
+		9404397F2E6B5336003873CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E50000001A00000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 940439672E6B5334003873CF;
+			remoteInfo = "BellowsWatch Watch App";
+		};
+		940439862E6B5336003873CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E50000001A00000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 940439672E6B5334003873CF;
+			remoteInfo = "BellowsWatch Watch App";
+		};
+		940439A52E6B78A0003873CF /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E50000001A00000100000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 940439962E6B7898003873CF;
+			remoteInfo = BellowsWatchComplicationExtension;
+		};
 		9484750C2E65FAFE00A1AE4B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E50000001A00000100000001 /* Project object */;
@@ -50,8 +82,40 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		9404398C2E6B5336003873CF /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				940439882E6B5336003873CF /* BellowsWatch Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439AC2E6B78A0003873CF /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				940439A72E6B78A0003873CF /* BellowsWatchComplicationExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		940055DE2E64678F006840C8 /* Bellows.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Bellows.entitlements; sourceTree = "<group>"; };
+		940439682E6B5334003873CF /* BellowsWatch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BellowsWatch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		940439742E6B5336003873CF /* BellowsWatch Watch AppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BellowsWatch Watch AppTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9404397E2E6B5336003873CF /* BellowsWatch Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "BellowsWatch Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		940439972E6B7898003873CF /* BellowsWatchComplicationExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = BellowsWatchComplicationExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		940439992E6B7898003873CF /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		9404399B2E6B7898003873CF /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		940439B02E6B7A5B003873CF /* BellowsWatchComplicationExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = BellowsWatchComplicationExtension.entitlements; sourceTree = "<group>"; };
 		948475082E65FAFE00A1AE4B /* BellowsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BellowsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9484751F2E65FC7200A1AE4B /* DayDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayDetailView.swift; sourceTree = "<group>"; };
 		9484757D2E67A6B100A1AE4B /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
@@ -88,11 +152,55 @@
 		E50020A31A00000100000001 /* Views/ImportItemDiffView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Views/ImportItemDiffView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		940439A82E6B78A0003873CF /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 940439962E6B7898003873CF /* BellowsWatchComplicationExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		940439692E6B5334003873CF /* BellowsWatch Watch App */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BellowsWatch Watch App"; sourceTree = "<group>"; };
+		940439772E6B5336003873CF /* BellowsWatch Watch AppTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BellowsWatch Watch AppTests"; sourceTree = "<group>"; };
+		940439812E6B5336003873CF /* BellowsWatch Watch AppUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "BellowsWatch Watch AppUITests"; sourceTree = "<group>"; };
+		9404399D2E6B7898003873CF /* BellowsWatchComplication */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (940439A82E6B78A0003873CF /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = BellowsWatchComplication; sourceTree = "<group>"; };
 		948475092E65FAFE00A1AE4B /* BellowsTests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = BellowsTests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		940439652E6B5334003873CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439712E6B5336003873CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9404397B2E6B5336003873CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439942E6B7898003873CF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9404399C2E6B7898003873CF /* SwiftUI.framework in Frameworks */,
+				9404399A2E6B7898003873CF /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		948475052E65FAFE00A1AE4B /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -110,11 +218,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		940439982E6B7898003873CF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				940439992E6B7898003873CF /* WidgetKit.framework */,
+				9404399B2E6B7898003873CF /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		E50000031A00000100000001 = {
 			isa = PBXGroup;
 			children = (
+				940439B02E6B7A5B003873CF /* BellowsWatchComplicationExtension.entitlements */,
 				E50000181A00000100000001 /* Bellows */,
 				948475092E65FAFE00A1AE4B /* BellowsTests */,
+				940439692E6B5334003873CF /* BellowsWatch Watch App */,
+				940439772E6B5336003873CF /* BellowsWatch Watch AppTests */,
+				940439812E6B5336003873CF /* BellowsWatch Watch AppUITests */,
+				9404399D2E6B7898003873CF /* BellowsWatchComplication */,
+				940439982E6B7898003873CF /* Frameworks */,
 				E50000061A00000100000001 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -124,6 +247,10 @@
 			children = (
 				E50000051A00000100000001 /* Bellows.app */,
 				948475082E65FAFE00A1AE4B /* BellowsTests.xctest */,
+				940439682E6B5334003873CF /* BellowsWatch Watch App.app */,
+				940439742E6B5336003873CF /* BellowsWatch Watch AppTests.xctest */,
+				9404397E2E6B5336003873CF /* BellowsWatch Watch AppUITests.xctest */,
+				940439972E6B7898003873CF /* BellowsWatchComplicationExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -171,6 +298,98 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		940439672E6B5334003873CF /* BellowsWatch Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 940439892E6B5336003873CF /* Build configuration list for PBXNativeTarget "BellowsWatch Watch App" */;
+			buildPhases = (
+				940439642E6B5334003873CF /* Sources */,
+				940439652E6B5334003873CF /* Frameworks */,
+				940439662E6B5334003873CF /* Resources */,
+				940439AC2E6B78A0003873CF /* Embed Foundation Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				940439A62E6B78A0003873CF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				940439692E6B5334003873CF /* BellowsWatch Watch App */,
+			);
+			name = "BellowsWatch Watch App";
+			packageProductDependencies = (
+			);
+			productName = "BellowsWatch Watch App";
+			productReference = 940439682E6B5334003873CF /* BellowsWatch Watch App.app */;
+			productType = "com.apple.product-type.application";
+		};
+		940439732E6B5336003873CF /* BellowsWatch Watch AppTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9404398D2E6B5336003873CF /* Build configuration list for PBXNativeTarget "BellowsWatch Watch AppTests" */;
+			buildPhases = (
+				940439702E6B5336003873CF /* Sources */,
+				940439712E6B5336003873CF /* Frameworks */,
+				940439722E6B5336003873CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				940439762E6B5336003873CF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				940439772E6B5336003873CF /* BellowsWatch Watch AppTests */,
+			);
+			name = "BellowsWatch Watch AppTests";
+			packageProductDependencies = (
+			);
+			productName = "BellowsWatch Watch AppTests";
+			productReference = 940439742E6B5336003873CF /* BellowsWatch Watch AppTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		9404397D2E6B5336003873CF /* BellowsWatch Watch AppUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 940439902E6B5336003873CF /* Build configuration list for PBXNativeTarget "BellowsWatch Watch AppUITests" */;
+			buildPhases = (
+				9404397A2E6B5336003873CF /* Sources */,
+				9404397B2E6B5336003873CF /* Frameworks */,
+				9404397C2E6B5336003873CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				940439802E6B5336003873CF /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				940439812E6B5336003873CF /* BellowsWatch Watch AppUITests */,
+			);
+			name = "BellowsWatch Watch AppUITests";
+			packageProductDependencies = (
+			);
+			productName = "BellowsWatch Watch AppUITests";
+			productReference = 9404397E2E6B5336003873CF /* BellowsWatch Watch AppUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		940439962E6B7898003873CF /* BellowsWatchComplicationExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 940439A92E6B78A0003873CF /* Build configuration list for PBXNativeTarget "BellowsWatchComplicationExtension" */;
+			buildPhases = (
+				940439932E6B7898003873CF /* Sources */,
+				940439942E6B7898003873CF /* Frameworks */,
+				940439952E6B7898003873CF /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				9404399D2E6B7898003873CF /* BellowsWatchComplication */,
+			);
+			name = BellowsWatchComplicationExtension;
+			packageProductDependencies = (
+			);
+			productName = BellowsWatchComplicationExtension;
+			productReference = 940439972E6B7898003873CF /* BellowsWatchComplicationExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		948475072E65FAFE00A1AE4B /* BellowsTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 948475102E65FAFE00A1AE4B /* Build configuration list for PBXNativeTarget "BellowsTests" */;
@@ -201,10 +420,12 @@
 				E50000011A00000100000001 /* Sources */,
 				E50000021A00000100000001 /* Frameworks */,
 				E50000031A00000100000002 /* Resources */,
+				9404398C2E6B5336003873CF /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				940439872E6B5336003873CF /* PBXTargetDependency */,
 			);
 			name = Bellows;
 			productName = Bellows;
@@ -221,6 +442,20 @@
 				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 2600;
 				TargetAttributes = {
+					940439672E6B5334003873CF = {
+						CreatedOnToolsVersion = 26.0;
+					};
+					940439732E6B5336003873CF = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 940439672E6B5334003873CF;
+					};
+					9404397D2E6B5336003873CF = {
+						CreatedOnToolsVersion = 26.0;
+						TestTargetID = 940439672E6B5334003873CF;
+					};
+					940439962E6B7898003873CF = {
+						CreatedOnToolsVersion = 26.0;
+					};
 					948475072E65FAFE00A1AE4B = {
 						CreatedOnToolsVersion = 26.0;
 						TestTargetID = E50000041A00000100000001;
@@ -245,11 +480,43 @@
 			targets = (
 				E50000041A00000100000001 /* Bellows */,
 				948475072E65FAFE00A1AE4B /* BellowsTests */,
+				940439672E6B5334003873CF /* BellowsWatch Watch App */,
+				940439732E6B5336003873CF /* BellowsWatch Watch AppTests */,
+				9404397D2E6B5336003873CF /* BellowsWatch Watch AppUITests */,
+				940439962E6B7898003873CF /* BellowsWatchComplicationExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		940439662E6B5334003873CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439722E6B5336003873CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9404397C2E6B5336003873CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439952E6B7898003873CF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		948475062E65FAFE00A1AE4B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -268,6 +535,34 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		940439642E6B5334003873CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439702E6B5336003873CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9404397A2E6B5336003873CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		940439932E6B7898003873CF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		948475042E65FAFE00A1AE4B /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -315,6 +610,27 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		940439762E6B5336003873CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 940439672E6B5334003873CF /* BellowsWatch Watch App */;
+			targetProxy = 940439752E6B5336003873CF /* PBXContainerItemProxy */;
+		};
+		940439802E6B5336003873CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 940439672E6B5334003873CF /* BellowsWatch Watch App */;
+			targetProxy = 9404397F2E6B5336003873CF /* PBXContainerItemProxy */;
+		};
+		940439872E6B5336003873CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			platformFilter = ios;
+			target = 940439672E6B5334003873CF /* BellowsWatch Watch App */;
+			targetProxy = 940439862E6B5336003873CF /* PBXContainerItemProxy */;
+		};
+		940439A62E6B78A0003873CF /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 940439962E6B7898003873CF /* BellowsWatchComplicationExtension */;
+			targetProxy = 940439A52E6B78A0003873CF /* PBXContainerItemProxy */;
+		};
 		9484750D2E65FAFE00A1AE4B /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E50000041A00000100000001 /* Bellows */;
@@ -323,6 +639,424 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		9404398A2E6B5336003873CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "BellowsWatch Watch App/BellowsWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_PREVIEWS = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Bellows;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.ryanleewilliams.Bellows;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ryanleewilliams.Bellows.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Debug;
+		};
+		9404398B2E6B5336003873CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = "BellowsWatch Watch App/BellowsWatch Watch App.entitlements";
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = Bellows;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.ryanleewilliams.Bellows;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ryanleewilliams.Bellows.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Release;
+		};
+		9404398E2E6B5336003873CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 777XX46HDU;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ryanleewilliams.BellowsWatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BellowsWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BellowsWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Debug;
+		};
+		9404398F2E6B5336003873CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 777XX46HDU;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ryanleewilliams.BellowsWatch-Watch-AppTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BellowsWatch Watch App.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BellowsWatch Watch App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Release;
+		};
+		940439912E6B5336003873CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 777XX46HDU;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ryanleewilliams.BellowsWatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "BellowsWatch Watch App";
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Debug;
+		};
+		940439922E6B5336003873CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 777XX46HDU;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.ryanleewilliams.BellowsWatch-Watch-AppUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "BellowsWatch Watch App";
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Release;
+		};
+		940439AA2E6B78A0003873CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BellowsWatchComplicationExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BellowsWatchComplication/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BellowsWatchComplication;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ryanleewilliams.Bellows.watchkitapp.BellowsWatchComplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Debug;
+		};
+		940439AB2E6B78A0003873CF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_ENTITLEMENTS = BellowsWatchComplicationExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BellowsWatchComplication/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = BellowsWatchComplication;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+					"@executable_path/../../../../Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ryanleewilliams.Bellows.watchkitapp.BellowsWatchComplication;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				VALIDATE_PRODUCT = YES;
+				WATCHOS_DEPLOYMENT_TARGET = 10.6;
+			};
+			name = Release;
+		};
 		9484750E2E65FAFE00A1AE4B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -437,6 +1171,7 @@
 				INFOPLIST_FILE = Bellows/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bellows;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bellows would like to access your workout data from Apple Health to automatically track your exercise activities and help maintain your daily movement streak.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -448,6 +1183,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryanleewilliams.Bellows;
 				PRODUCT_NAME = Bellows;
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -471,6 +1207,7 @@
 				INFOPLIST_FILE = Bellows/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Bellows;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Bellows would like to access your workout data from Apple Health to automatically track your exercise activities and help maintain your daily movement streak.";
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UIRequiresFullScreen = NO;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
@@ -482,6 +1219,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 14.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.ryanleewilliams.Bellows;
 				PRODUCT_NAME = Bellows;
+				REGISTER_APP_GROUPS = YES;
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -570,6 +1308,42 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		940439892E6B5336003873CF /* Build configuration list for PBXNativeTarget "BellowsWatch Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9404398A2E6B5336003873CF /* Debug */,
+				9404398B2E6B5336003873CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9404398D2E6B5336003873CF /* Build configuration list for PBXNativeTarget "BellowsWatch Watch AppTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9404398E2E6B5336003873CF /* Debug */,
+				9404398F2E6B5336003873CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		940439902E6B5336003873CF /* Build configuration list for PBXNativeTarget "BellowsWatch Watch AppUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				940439912E6B5336003873CF /* Debug */,
+				940439922E6B5336003873CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		940439A92E6B78A0003873CF /* Build configuration list for PBXNativeTarget "BellowsWatchComplicationExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				940439AA2E6B78A0003873CF /* Debug */,
+				940439AB2E6B78A0003873CF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		948475102E65FAFE00A1AE4B /* Build configuration list for PBXNativeTarget "BellowsTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

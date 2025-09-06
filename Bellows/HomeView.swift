@@ -133,6 +133,10 @@ struct HomeView: View {
             Button("Delete", role: .destructive) {
                 DedupService.deleteItemWithTombstone(item, context: modelContext)
                 ensureToday()
+                // Trigger immediate watch broadcast for local deletion
+                #if os(iOS)
+                NotificationCenter.default.post(name: Notification.Name("BellowsDataChanged"), object: nil)
+                #endif
             }
         }
     }

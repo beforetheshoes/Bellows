@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 import SwiftData
 import CloudKit
 import HealthKit
@@ -1271,6 +1274,362 @@ extension Date {
     func startOfDay(calendar: Calendar = .current) -> Date {
         calendar.startOfDay(for: self)
     }
+}
+
+// MARK: - Watch Connectivity (Abstractions + Coordinator + VM)
+
+// Lightweight protocol so we can unit test WatchConnectivity behavior without WCSession.
+@MainActor
+protocol WatchConnectivityClient: AnyObject {
+    var delegate: WatchConnectivityClientDelegate? { get set }
+    var isReachable: Bool { get }
+    func activate()
+    func sendMessage(_ message: [String: Any], replyHandler: (([String: Any]) -> Void)?, errorHandler: ((Error) -> Void)?)
+    func updateApplicationContext(_ context: [String: Any]) throws
+}
+
+@MainActor
+protocol WatchConnectivityClientDelegate: AnyObject {
+    func wcClient(_ client: WatchConnectivityClient, didReceiveMessage message: [String: Any])
+    func wcClient(_ client: WatchConnectivityClient, didReceiveMessage message: [String: Any], reply: (([String: Any]) -> Void)?)
+    func wcClient(_ client: WatchConnectivityClient, didReceiveApplicationContext context: [String: Any])
+    func wcClient(_ client: WatchConnectivityClient, didReceiveComplicationUserInfo userInfo: [String: Any])
+    func wcClientReachabilityDidChange(_ client: WatchConnectivityClient, reachable: Bool)
+}
+
+// Provide a default implementation for the optional reply-capable message handler
+extension WatchConnectivityClientDelegate {
+    func wcClient(_ client: WatchConnectivityClient, didReceiveMessage message: [String: Any], reply: (([String: Any]) -> Void)?) {
+        wcClient(client, didReceiveMessage: message)
+    }
+    
+    // Default empty implementation for complication user info - can be overridden
+    func wcClient(_ client: WatchConnectivityClient, didReceiveComplicationUserInfo userInfo: [String: Any]) {
+        // Default: do nothing, delegate can override if needed
+    }
+}
+
+// Small protocol to abstract sync operations for coordinator tests.
+@MainActor
+protocol HealthSyncing: AnyObject {
+    var syncEnabled: Bool { get }
+    var isSyncing: Bool { get }
+    var lastSyncDate: Date? { get set }
+    func foregroundSyncIfNeeded(modelContext: ModelContext, minimumInterval: TimeInterval) async
+}
+
+extension HealthKitService: HealthSyncing {}
+
+enum WatchConnectivitySchemaV1 {
+    static let versionKey = "v"
+    static let typeKey = "type"
+    static let reasonKey = "reason"
+    static let payloadKey = "payload"
+    static let appCtxLastSyncKey = "lastSyncAt"
+    static let appCtxSyncEnabledKey = "syncEnabled"
+    static let appCtxStreakKey = "streak"
+    static let appCtxIntensityKey = "emberIntensity"
+    static let version = 1
+}
+
+@MainActor
+final class WatchNudgeCoordinator: WatchConnectivityClientDelegate {
+    private let client: WatchConnectivityClient
+    private let health: HealthSyncing
+    private let modelContext: ModelContext
+    private let minimumNudgeInterval: TimeInterval
+
+    private(set) var lastNudgeAt: Date?
+    private(set) var lastNudgeReason: String?
+    private(set) var nudgeCount: Int = 0
+
+    init(client: WatchConnectivityClient, health: HealthSyncing, modelContext: ModelContext, minimumNudgeInterval: TimeInterval = 120) {
+        self.client = client
+        self.health = health
+        self.modelContext = modelContext
+        self.minimumNudgeInterval = minimumNudgeInterval
+        self.client.delegate = self
+        self.client.activate()
+        // Push initial state on startup so watch sees current status
+        broadcastStateToWatch()
+    }
+
+    // MARK: - WatchConnectivityClientDelegate
+    func wcClient(_ client: WatchConnectivityClient, didReceiveMessage message: [String : Any]) {
+        handleMessage(message)
+    }
+
+    func wcClient(_ client: WatchConnectivityClient, didReceiveMessage message: [String : Any], reply: (([String : Any]) -> Void)?) {
+        // If a reply handler is provided, respond based on message type
+        let type = message[WatchConnectivitySchemaV1.typeKey] as? String
+        if type == "add_entry" {
+            handleAddEntry(message: message)
+            if let reply { reply(currentStatePayload()) }
+            return
+        } else if type == "request_state" {
+            if let reply { reply(currentStatePayload()) }
+            return
+        } else if let reply {
+            reply(currentStatePayload())
+        }
+        handleMessage(message)
+    }
+
+    func wcClient(_ client: WatchConnectivityClient, didReceiveApplicationContext context: [String : Any]) {
+        // No-op for now on iOS side.
+    }
+
+    func wcClientReachabilityDidChange(_ client: WatchConnectivityClient, reachable: Bool) {
+        // No-op for now.
+    }
+
+    // MARK: - Message Handling
+    func handleMessage(_ message: [String: Any]) {
+        // Validate schema version and type
+        guard let v = message[WatchConnectivitySchemaV1.versionKey] as? Int, v == WatchConnectivitySchemaV1.version,
+              let type = message[WatchConnectivitySchemaV1.typeKey] as? String else {
+            return
+        }
+        switch type {
+        case "nudge":
+            let reason = (message[WatchConnectivitySchemaV1.reasonKey] as? String) ?? "unknown"
+            // Respect sync enablement and current syncing state
+            guard health.syncEnabled, !health.isSyncing else { return }
+            // Throttle frequent nudges
+            let now = Date()
+            if let last = lastNudgeAt, now.timeIntervalSince(last) < minimumNudgeInterval { return }
+            // Record telemetry
+            lastNudgeAt = now; lastNudgeReason = reason; nudgeCount += 1
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                await self.health.foregroundSyncIfNeeded(modelContext: self.modelContext, minimumInterval: 0)
+                self.broadcastStateToWatch()
+            }
+        case "add_entry":
+            handleAddEntry(message: message)
+        case "request_state":
+            broadcastStateToWatch()
+        default:
+            return
+        }
+    }
+
+    private func handleAddEntry(message: [String: Any]) {
+        guard let payload = message[WatchConnectivitySchemaV1.payloadKey] as? [String: Any] else { return }
+        let exerciseName = (payload["exerciseName"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let unitName = (payload["unitName"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let amount = payload["amount"] as? Double
+        let enjoyment = (payload["enjoyment"] as? Int) ?? 3
+        let intensity = (payload["intensity"] as? Int) ?? 3
+        guard let exName = exerciseName, !exName.isEmpty, let amt = amount, amt > 0 else { return }
+
+        do {
+            // Fetch or create today's DayLog
+            let allDays = try modelContext.fetch(FetchDescriptor<DayLog>())
+            let today = Date().startOfDay()
+            let calendar = Calendar.current
+            let dayLog = allDays.first { calendar.isDate($0.date, inSameDayAs: today) } ?? {
+                let d = DayLog(date: today)
+                modelContext.insert(d)
+                return d
+            }()
+            // Find exercise
+            let allExercises = try modelContext.fetch(FetchDescriptor<ExerciseType>())
+            func normalize(_ s: String) -> String {
+                s.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+            }
+            let ex: ExerciseType = {
+                if let m = allExercises.first(where: { normalize($0.name) == normalize(exName) }) { return m }
+                return allExercises.first(where: { normalize($0.name) == "other" }) ?? allExercises.first ?? ExerciseType(name: exName, baseMET: 4.0, repWeight: 0.15, defaultPaceMinPerMi: 10.0, defaultUnit: nil)
+            }()
+            if ex.persistentModelID.entityName.isEmpty { modelContext.insert(ex) }
+            // Find unit
+            let allUnits = try modelContext.fetch(FetchDescriptor<UnitType>())
+            let un = unitName
+            let unit: UnitType = {
+                if let n = un, let m = allUnits.first(where: { normalize($0.name) == normalize(n) || normalize($0.abbreviation) == normalize(n) }) { return m }
+                if let def = ex.defaultUnit { return def }
+                if let minutes = allUnits.first(where: { normalize($0.name) == "minutes" || normalize($0.abbreviation) == "min" }) { return minutes }
+                // As a last resort, create Minutes
+                let minutes = UnitType(name: "Minutes", abbreviation: "min", stepSize: 0.5, displayAsInteger: false)
+                modelContext.insert(minutes)
+                return minutes
+            }()
+            // Insert item
+            let item = ExerciseItem(exercise: ex, unit: unit, amount: amt, note: "Logged from Apple Watch", enjoyment: enjoyment, intensity: intensity)
+            if dayLog.items == nil { dayLog.items = [] }
+            dayLog.items?.append(item)
+            try modelContext.save()
+            // After add, broadcast updated state
+            broadcastStateToWatch()
+        } catch {
+            // ignore errors for now
+        }
+    }
+
+    func broadcastStateToWatch() {
+        let ctx = currentStatePayload()
+        try? client.updateApplicationContext(ctx)
+        #if os(iOS)
+        // Ensure the watch receives a background update even if the app isn't active
+        if WCSession.isSupported() {
+            // Use complication-specific pipeline for prompt complication refreshes, but only when streak changes
+            if let newStreak = ctx[WatchConnectivitySchemaV1.appCtxStreakKey] as? Int {
+                let lastSentKey = "last_sent_complication_streak"
+                let lastSent = UserDefaults.standard.integer(forKey: lastSentKey)
+                if newStreak != lastSent {
+                    WCSession.default.transferCurrentComplicationUserInfo(ctx)
+                    UserDefaults.standard.set(newStreak, forKey: lastSentKey)
+                }
+            }
+            // Fallback/general pipeline as a backup delivery path
+            WCSession.default.transferUserInfo(ctx)
+        }
+        #endif
+        #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+        #endif
+    }
+
+    private func currentStatePayload() -> [String: Any] {
+        var ctx: [String: Any] = [
+            WatchConnectivitySchemaV1.versionKey: WatchConnectivitySchemaV1.version,
+            WatchConnectivitySchemaV1.appCtxSyncEnabledKey: health.syncEnabled
+        ]
+        if let last = (health as? HealthKitService)?.lastSyncDate {
+            ctx[WatchConnectivitySchemaV1.appCtxLastSyncKey] = ISO8601DateFormatter().string(from: last)
+        }
+        if let days = try? modelContext.fetch(FetchDescriptor<DayLog>()) {
+            let streak = Analytics.currentStreak(days: days)
+            let intensity = Analytics.enhancedEmberIntensity(streak: streak, days: days)
+            ctx[WatchConnectivitySchemaV1.appCtxStreakKey] = streak
+            ctx[WatchConnectivitySchemaV1.appCtxIntensityKey] = intensity
+            if let defaults = UserDefaults(suiteName: "group.com.ryanleewilliams.Bellows") {
+                defaults.set(streak, forKey: "complication_streak")
+                defaults.set(intensity, forKey: "complication_intensity")
+            }
+        }
+        return ctx
+    }
+}
+
+// A tiny, platform-neutral VM used by the future watch app.
+@MainActor
+@Observable
+final class WatchStatusViewModel {
+    private let client: WatchConnectivityClient
+    private(set) var isReachable: Bool
+    private(set) var lastSyncDate: Date?
+    private(set) var syncEnabled: Bool = true
+
+    init(client: WatchConnectivityClient) {
+        self.client = client
+        self.isReachable = client.isReachable
+        self.client.delegate = self
+        self.client.activate()
+    }
+
+    func manualTriggerImport() -> Bool {
+        guard client.isReachable else { return false }
+        let msg: [String: Any] = [
+            WatchConnectivitySchemaV1.versionKey: WatchConnectivitySchemaV1.version,
+            WatchConnectivitySchemaV1.typeKey: "nudge",
+            WatchConnectivitySchemaV1.reasonKey: "manual_trigger"
+        ]
+        client.sendMessage(msg, replyHandler: nil, errorHandler: nil)
+        return true
+    }
+}
+
+extension WatchStatusViewModel: WatchConnectivityClientDelegate {
+    func wcClient(_ client: WatchConnectivityClient, didReceiveMessage message: [String : Any]) {
+        // No-op on watch VM for raw message; watch would be sender.
+    }
+
+    func wcClient(_ client: WatchConnectivityClient, didReceiveApplicationContext context: [String : Any]) {
+        // Decode schema v1 application context
+        guard let v = context[WatchConnectivitySchemaV1.versionKey] as? Int, v == WatchConnectivitySchemaV1.version else { return }
+        if let iso = context[WatchConnectivitySchemaV1.appCtxLastSyncKey] as? String {
+            let df = ISO8601DateFormatter()
+            if let d = df.date(from: iso) { self.lastSyncDate = d }
+        }
+        if let enabled = context[WatchConnectivitySchemaV1.appCtxSyncEnabledKey] as? Bool { self.syncEnabled = enabled }
+    }
+
+    func wcClientReachabilityDidChange(_ client: WatchConnectivityClient, reachable: Bool) {
+        self.isReachable = reachable
+    }
+}
+
+// MARK: - Client factory and fallbacks
+
+@MainActor
+final class NoopWCClient: WatchConnectivityClient {
+    weak var delegate: WatchConnectivityClientDelegate?
+    var isReachable: Bool { false }
+    func activate() {}
+    func sendMessage(_ message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?) {}
+    func updateApplicationContext(_ context: [String : Any]) throws {}
+}
+
+#if os(iOS)
+import WatchConnectivity
+
+@MainActor
+final class DefaultIOSWCSessionClient: NSObject, WatchConnectivityClient {
+    weak var delegate: WatchConnectivityClientDelegate?
+    var isReachable: Bool { WCSession.default.isReachable }
+    func activate() {
+        guard WCSession.isSupported() else { return }
+        let s = WCSession.default
+        if s.delegate == nil { s.delegate = self }
+        if s.activationState != .activated { s.activate() }
+    }
+    func sendMessage(_ message: [String : Any], replyHandler: (([String : Any]) -> Void)?, errorHandler: ((Error) -> Void)?) {
+        guard WCSession.isSupported() else { return }
+        WCSession.default.sendMessage(message, replyHandler: replyHandler, errorHandler: errorHandler)
+    }
+    func updateApplicationContext(_ context: [String : Any]) throws {
+        guard WCSession.isSupported() else { return }
+        try WCSession.default.updateApplicationContext(context)
+    }
+}
+
+extension DefaultIOSWCSessionClient: WCSessionDelegate {
+    nonisolated func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {}
+    nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}
+    nonisolated func sessionDidDeactivate(_ session: WCSession) {}
+    nonisolated func sessionReachabilityDidChange(_ session: WCSession) {
+        Task { @MainActor in
+            self.delegate?.wcClientReachabilityDidChange(self, reachable: session.isReachable)
+        }
+    }
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String : Any]) {
+        Task { @MainActor in
+            self.delegate?.wcClient(self, didReceiveMessage: message)
+        }
+    }
+
+    nonisolated func session(_ session: WCSession, didReceiveMessage message: [String : Any], replyHandler: @escaping ([String : Any]) -> Void) {
+        Task { @MainActor in
+            self.delegate?.wcClient(self, didReceiveMessage: message, reply: replyHandler)
+        }
+    }
+    nonisolated func session(_ session: WCSession, didReceiveApplicationContext applicationContext: [String : Any]) {
+        Task { @MainActor in
+            self.delegate?.wcClient(self, didReceiveApplicationContext: applicationContext)
+        }
+    }
+}
+#endif
+
+@MainActor
+func makeDefaultWCClient() -> WatchConnectivityClient {
+    #if os(iOS)
+    return DefaultIOSWCSessionClient()
+    #else
+    return NoopWCClient()
+    #endif
 }
 
 extension ProcessInfo {

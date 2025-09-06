@@ -9,22 +9,33 @@ struct AppRootView: View {
     @Bindable private var hkService = HealthKitService.shared
     @Query(sort: \ExerciseType.name) private var exerciseTypes: [ExerciseType]
     @Query(sort: \UnitType.name) private var unitTypes: [UnitType]
+    @Query(sort: \DayLog.date, order: .reverse) private var dayLogs: [DayLog]
+    
+    #if os(iOS)
+    @State private var lastBroadcastStreak: Int = -1
+    #endif
 
     var body: some View {
         Group {
             #if os(iOS)
             if hSizeClass == .regular {
-                SplitLayout()
+                SplitLayout(nudgeCoordinator: nudgeCoordinator)
             } else {
-                PhoneLayout()
+                PhoneLayout(nudgeCoordinator: nudgeCoordinator)
             }
             #else
-            SplitLayout()
+            SplitLayout(nudgeCoordinator: nil)
             #endif
         }
         .background(DS.ColorToken.background)
         .preferredColorScheme(themeManager.currentAppearanceMode.colorScheme)
-        .onAppear { seedDefaultsIfNeeded() }
+        .onAppear {
+            seedDefaultsIfNeeded()
+            #if os(iOS)
+            // Initialize WatchConnectivity nudge coordinator once when the root appears
+            initializeWatchNudgesIfNeeded()
+            #endif
+        }
         // Tiny toast for first background import
         .overlay(alignment: .top) {
             if let msg = hkService.backgroundToastMessage {
@@ -50,6 +61,20 @@ struct AppRootView: View {
                 }
             }
         }
+        #if os(iOS)
+        .onChange(of: dayLogs) { _, _ in
+            // Broadcast to watch when streak changes (covers local edits and CloudKit merges)
+            let currentStreak = Analytics.currentStreak(days: dayLogs)
+            if currentStreak != lastBroadcastStreak {
+                lastBroadcastStreak = currentStreak
+                nudgeCoordinator?.broadcastStateToWatch()
+            }
+        }
+        .onReceive(watchBroadcastTrigger) { _ in
+            // Immediate broadcast when data changes (covers immediate deletion feedback)
+            nudgeCoordinator?.broadcastStateToWatch()
+        }
+        #endif
     }
 
     // Idempotent seeding: ensure defaults exist without creating duplicates.
@@ -57,6 +82,19 @@ struct AppRootView: View {
         SeedService.seedDefaultExercises(context: modelContext)
         SeedService.seedDefaultUnits(context: modelContext)
     }
+
+    #if os(iOS)
+    @State private var nudgeCoordinator: WatchNudgeCoordinator? = nil
+    private let watchBroadcastTrigger = NotificationCenter.default.publisher(for: Notification.Name("BellowsDataChanged"))
+    private func initializeWatchNudgesIfNeeded() {
+        if nudgeCoordinator == nil {
+            let client = makeDefaultWCClient()
+            let coord = WatchNudgeCoordinator(client: client, health: HealthKitService.shared, modelContext: modelContext)
+            coord.broadcastStateToWatch()
+            nudgeCoordinator = coord
+        }
+    }
+    #endif
 }
 
 @MainActor
@@ -75,6 +113,7 @@ private struct PhoneLayout: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
     private let hk = HealthKitService.shared
+    let nudgeCoordinator: WatchNudgeCoordinator?
     
     var body: some View {
         TabView {
@@ -102,7 +141,17 @@ private struct PhoneLayout: View {
 
                 // Start background observers and perform a throttled foreground sync
                 hk.startBackgroundObserversIfPossible(modelContext: modelContext)
-                Task { await hk.foregroundSyncIfNeeded(modelContext: modelContext) }
+                Task { 
+                    await hk.foregroundSyncIfNeeded(modelContext: modelContext) 
+                    // Broadcast updated state to watch after foreground sync completes
+                    await MainActor.run {
+                        #if os(iOS)
+                        if let coordinator = nudgeCoordinator {
+                            coordinator.broadcastStateToWatch()
+                        }
+                        #endif
+                    }
+                }
             }
         }
     }
@@ -117,6 +166,7 @@ private struct SplitLayout: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var modelContext
     private let hk = HealthKitService.shared
+    let nudgeCoordinator: WatchNudgeCoordinator?
     
     var body: some View {
         NavigationSplitView {
@@ -140,7 +190,17 @@ private struct SplitLayout: View {
 
                 // Start background observers and perform a throttled foreground sync
                 hk.startBackgroundObserversIfPossible(modelContext: modelContext)
-                Task { await hk.foregroundSyncIfNeeded(modelContext: modelContext) }
+                Task { 
+                    await hk.foregroundSyncIfNeeded(modelContext: modelContext) 
+                    // Broadcast updated state to watch after foreground sync completes
+                    await MainActor.run {
+                        #if os(iOS)
+                        if let coordinator = nudgeCoordinator {
+                            coordinator.broadcastStateToWatch()
+                        }
+                        #endif
+                    }
+                }
             }
         }
     }
