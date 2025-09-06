@@ -6,5 +6,7 @@
 	<array>
 		<string>remote-notification</string>
 	</array>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>Bellows uses HealthKit to sync your exercise data and provide comprehensive fitness tracking across your Apple devices.</string>
 </dict>
 </plist>
