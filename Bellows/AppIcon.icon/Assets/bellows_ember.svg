@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="emberGrad" cx="0.48" cy="0.46" r="0.65">
+      <stop offset="0%" stop-color="#FFD36E"/>
+      <stop offset="40%" stop-color="#FF9A3E"/>
+      <stop offset="78%" stop-color="#E84C1B"/>
+      <stop offset="100%" stop-color="#7A160A"/>
+    </radialGradient>
+  </defs>
+  <!-- Slightly irregular ember shape (no cracks), positioned lower-right -->
+  <path d="M860 730
+           C 860 780 820 810 780 820
+           C 740 830 700 810 690 770
+           C 680 730 700 690 740 670
+           C 780 650 830 660 855 695
+           C 860 705 860 720 860 730 Z"
+        fill="url(#emberGrad)"/>
+  <!-- Subtle dark rim to break perfection -->
+  <path d="M860 730
+           C 860 780 820 810 780 820
+           C 740 830 700 810 690 770
+           C 680 730 700 690 740 670
+           C 780 650 830 660 855 695
+           C 860 705 860 720 860 730 Z"
+        fill="none" stroke="#000000" stroke-opacity="0.25" stroke-width="6" stroke-linejoin="round"
+        stroke-dasharray="24 54" stroke-dashoffset="8"/>
+</svg>

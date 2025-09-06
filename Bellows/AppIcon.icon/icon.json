@@ -1,0 +1,117 @@
+{
+  "fill" : {
+    "automatic-gradient" : "extended-srgb:0.00000,0.53333,1.00000,1.00000"
+  },
+  "groups" : [
+    {
+      "layers" : [
+        {
+          "blend-mode" : "hard-light",
+          "glass" : false,
+          "image-name" : "bellows_wind.svg",
+          "name" : "bellows_wind",
+          "opacity" : 0.75,
+          "position" : {
+            "scale" : 1.75,
+            "translation-in-points" : [
+              50,
+              0
+            ]
+          }
+        },
+        {
+          "blend-mode" : "overlay",
+          "glass" : false,
+          "image-name" : "bellows_ember.svg",
+          "name" : "bellows_ember",
+          "position" : {
+            "scale" : 1.2,
+            "translation-in-points" : [
+              -75,
+              -75
+            ]
+          }
+        },
+        {
+          "blend-mode" : "hard-light",
+          "glass" : false,
+          "image-name" : "bellows_ember_glow.svg",
+          "name" : "bellows_ember_glow",
+          "position" : {
+            "scale" : 1.2,
+            "translation-in-points" : [
+              -75,
+              -75
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "blend-mode" : "hard-light",
+          "fill" : "none",
+          "glass" : false,
+          "image-name" : "bellows_stars.svg",
+          "name" : "bellows_stars",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 2,
+            "translation-in-points" : [
+              150,
+              150
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    },
+    {
+      "layers" : [
+        {
+          "glass" : true,
+          "image-name" : "bellows_bg.svg",
+          "name" : "bellows_bg",
+          "opacity" : 1,
+          "position" : {
+            "scale" : 1.25,
+            "translation-in-points" : [
+              0,
+              0
+            ]
+          }
+        }
+      ],
+      "shadow" : {
+        "kind" : "neutral",
+        "opacity" : 0.5
+      },
+      "translucency" : {
+        "enabled" : true,
+        "value" : 0.5
+      }
+    }
+  ],
+  "supported-platforms" : {
+    "circles" : [
+      "watchOS"
+    ],
+    "squares" : "shared"
+  }
+}
